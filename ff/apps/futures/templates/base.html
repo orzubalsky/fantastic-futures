@@ -37,38 +37,6 @@
             	<a>A1482324</a><br><a class="selected">ALPHA OMEGA</a><br><a>POTATO</a><br><a>39JASKN</a><br><a>LISTEN</a><br><a>FOXTROT</a>
             	</div>
             </div>    
-
-            <!--------ADD SOUND-------->
-            <div id="addSound">
-            	<canvas id="addSoundTriangle" width="20" height="20"></canvas>
-            	<script type="text/javascript">
-            		var c=document.getElementById("addSoundTriangle");
-            		var ctx=c.getContext("2d");
-            		ctx.fillStyle="#005fff";
-            		ctx.moveTo(20,0);
-            		ctx.lineTo(0,20);
-            		ctx.lineTo(20,20);
-            		//ctx.stroke();
-            		ctx.fill();
-            	</script>
-
-            	<form id="addSoundForm" action="/videos/add/" method="post" enctype="multipart/form-data">	
-                	<div id="ajaxUploadContainer">
-                		<ul>
-                			<li><input id="filename" type="text" name="filename" value="FIND THE FILE"></li>
-                			<li><input id="id_author" type="text" maxlength="255" name="id_author" value="YOUR NAME"></li>
-                			<li><textarea id="story" type="text" name="story" class="optional">STORY ABOUT THIS SOUND (OPTIONAL)</textarea></li>
-                			<button type="past">PAST?</button><button type="past">PRESENT?</button><button type="past">FUTURE?</button>
-                			<li><input id="submit" type="submit" value="UPLOAD"></li>
-                		</ul>	
-
-                		<div id="addSoundCheck">
-                			:) SOUND ADDED!
-                		</div>	
-                	</div>
-            	</form>
-            </div>
-            <!--------ADD SOUND ENDED-------->
         </div>
         
         <!--------ADD SOUND-------->
