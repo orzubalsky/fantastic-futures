@@ -115,6 +115,7 @@ INSTALLED_APPS = (
     'django.contrib.gis',    
     'south',                        # intelligent schema and data migrations
     'pytz',                         # python timezone library
+    'taggit',                       # tagging app
     'chronograph',                  # admin based cron job management
     'mailer',                       # handle outgoing email queue
     'futures',                      # fantastic futures!
