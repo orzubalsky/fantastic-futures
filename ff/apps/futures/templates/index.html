@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% load humanize i18n l10n %}
+
+{% block content %}
+<div id="map">
+<div id="customZoom">
+    <a href="#customZoomIn" id="customZoomIn">+</a>
+    <a href="#customZoomOut" id="customZoomOut">-</a>
+</div></div>
+
+<div id="interface"></div>
+{% endblock content %}
+
+{% block extra_js %}
+<script type="text/javascript" src="{{ MEDIA_URL }}js/lib/kinetic.js"></script>
+<script type="text/javascript" src="{{ MEDIA_URL }}js/lib/OpenLayers.js"></script>
+<script type="text/javascript" src="{{ MEDIA_URL }}js/lib/dymax.js"></script>
+<script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?key=AIzaSyAzVOmIBHkXBtO40P6WNrCulot3RcL5cQ0&sensor=false"></script>
+<script type="text/javascript" src="{{ MEDIA_URL }}js/map.js"></script>
+<script type="text/javascript" src="{{ MEDIA_URL }}js/interface_7.js"></script>
+{% endblock extra_js %}

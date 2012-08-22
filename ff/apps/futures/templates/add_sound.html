@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% load humanize i18n l10n %}
+
+{% block content %}
+<script type="text/javascript">
+var DATA_LAYERS = {{ layers|safe }};
+</script>
+
+<div id="map" style="width:900px;height:600px;">
+</div>
+{% endblock content %}
+
+{% block extra_js %}
+<script type="text/javascript" src="{{ MEDIA_URL }}js/lib/kinetic.js"></script>
+<script type="text/javascript" src="{{ MEDIA_URL }}js/lib/OpenLayers.js"></script>
+<script type="text/javascript" src="{{ MEDIA_URL }}js/lib/dymax.js"></script>
+<script type="text/javascript" src="{{ MEDIA_URL }}js/map.js"></script>
+{% endblock extra_js %}

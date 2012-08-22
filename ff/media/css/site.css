@@ -1,0 +1,359 @@
+body {
+	font-family:"Andale Mono", "Droid Sans", Helvetica, Arial, sans-serif;
+	font-size:10px;
+	line-height:12px;
+	color:#000; 
+	
+}
+/* saf3+, chrome1+ argh! */
+
+a {
+	cursor:pointer;
+	text-decoration:none;
+}
+h1, h2, h3, h4, h5, h6 {
+}
+h2 {
+	font-size:10px;
+	font-weight:normal;
+	line-height:12px;
+	color: #005fff;
+}
+#logo {
+	background:url(../images/logo2.png);
+	width:143px;
+	height:14px;
+	display:block;
+}
+
+
+/*addSound buttons*/
+#addSoundText {
+	position:absolute;
+	right:-30px;
+	width:100px;
+	bottom:125px;
+	z-index:1;
+}
+
+/*constellation menu*/
+#constellationMenu {
+	width:140px;
+	position:absolute;
+	left:15px;
+	bottom:0px;
+	height:140px;
+	z-index:1;
+}
+#constellationMenuContent {
+	color:#AAA;
+	display:none;
+}
+#constellationMenuContent .selected {
+	color:#000;
+}
+
+/*addSound addConstellation forms*/
+#addSound, #locateSound {
+	position:absolute;
+	right:165px;
+	bottom:15px;
+	display:none;
+	z-index: 5;
+}
+/* saf3+, chrome1+ argh! */
+@media screen and (-webkit-min-device-pixel-ratio:0) {
+	#addSound, #locateSound {
+		position:absolute;
+		bottom:40px;
+		z-index: 5;
+	}
+}
+#addSoundTriangle {
+	position:relative;
+	left:-20px;
+	top:35px;
+	border:none;
+}
+#addConstellation {
+	position:absolute;
+	left:0px;
+	top:60px;
+	display:none;
+	z-index:2;
+}
+#addConstellationTriangle {
+	position:relative;
+	left:20px;
+	top:3px;
+	border:none;
+}
+#addSoundForm, #addConstellationForm, #locateSoundForm {
+	background-color:#005fff;
+	color:#FFF;
+	font-family:"Andale Mono", "Droid Sans", Helvetica, Arial, sans-serif;
+	font-size:1em;
+	line-height:12px;
+	padding:5px 15px 5px 10px;
+	width:240px;
+	min-height:60px;
+}
+	
+#addSoundForm input, #addSoundForm textarea, #addConstellationForm input, #addConstellationForm textarea, #locateSoundForm input {
+	background-color: #FFF;
+	color:#005fff;
+	width: 240px;
+	border:none;
+	margin:0 0 10px;
+	padding:2px;
+	font-family:"Andale Mono", "Droid Sans", Helvetica, Arial, sans-serif;
+	font-size:1em;
+}
+#addSoundForm button, #addConstellationForm button {
+	border:none;
+	background:transparent;
+	padding-left:0;
+	margin-left:0;
+	color:#FFF;
+	font-family:"Andale Mono", "Droid Sans", Helvetica, Arial, sans-serif;
+	font-size:1em;
+	cursor:pointer;
+}
+#addSoundForm input#submit, #addConstellationForm input#submit, #locateSoundForm input#submit {
+	border:none;
+	background-color:transparent;
+	color:#FFF;
+	text-align:right;
+	padding:0;
+	margin:0;
+	cursor:pointer;
+}
+#addSoundForm ul, #addConstellationForm ul, #locateSound ul {
+	margin-left:0;
+	padding-left:0;
+	/*display:none;*/
+}
+#addSoundForm li, #addConstellationForm li, #locateSound li {
+	list-style: none;
+}
+#addSoundCheck, #addConstellationCheck {
+	text-align:center;
+	color:#FFF;
+	position:relative;
+	top:40px;
+	display:none;
+}
+#addSoundForm .optional, #addConstellationForm .optional {
+	/*background-color: #DEF0FF;*/
+	/* IE 8 */
+  -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=70)";
+
+  /* IE 5-7 */
+  filter: alpha(opacity=70);
+
+  /* Netscape */
+  -moz-opacity: 0.7;
+
+  /* Safari 1.x */
+  -khtml-opacity: 0.7;
+
+  /* Good browsers */
+  opacity: 0.7;
+}
+
+/*error*/
+#error {
+	margin:auto;
+	width:130px;
+	display:none;
+	z-index:2;
+	position:relative;
+	
+}
+#errorText {
+	z-index:10;
+}
+#errorTriangle {
+	position:relative;
+	left:110px;
+	top:97px;
+	border:none;
+}
+#errorMessage {
+	width:80px;
+	background:#ff0000;
+	padding:5px 15px;
+	color:#FFF;
+}
+
+/*about*/
+#aboutContainer {
+	position:absolute;
+	top:40px;
+	width:100%;
+	z-index:2;
+}
+#about {
+    position:relative;
+    top:40px;
+	width:250px;
+	padding:45px 40px;
+	display:none;
+	background-color:#005fff;
+	margin:auto;
+	text-align:center;
+	z-index:2;
+}
+#about .description {
+	color:#FFF;
+	margin:60px 0 90px;
+	text-align:left;
+}
+/*new*/
+#about .description.english {
+	display:none;
+}
+#about .description.arabic {
+	font-family:Tahoma, sans-serif;
+	text-align:right;
+	font-size:1.2em;
+	line-height:1.4em;
+}
+#about #aboutLinks {
+	position:relative;
+	left:-80px;
+	bottom:-45px;
+	}
+#about #aboutLinks li{
+	list-style:none;
+	float:left;
+	width:55px;
+	height:25px;
+	color:#005fff;
+	text-transform:uppercase;
+	padding:7px;
+	display:block;
+}
+#aboutLinks #toggleLanguage {
+	background-color:#70c3f9;
+}
+#aboutLinks #toggleEn {
+	display:none;
+}
+#aboutLinks #toggleAr {
+}
+#aboutLinks #classicSite {
+	background-color:#9eceff;
+}
+#aboutLinks #contactUs {
+	background-color:#bddeff;
+}
+
+/*feedback form*/
+/*---------FEEDBACK FORM------------*/
+#feedback {
+	position:fixed;
+	width:270px;
+	right:-300px;
+	right:0px;
+	top:88px;
+	background: #005fff;
+	color:white;
+	font-weight:normal;
+	padding: 15px;
+	z-index: 110;
+	line-height: 1.2em;
+	display:none;
+}
+#feedback h1 {
+	color: white;
+	font-size: 1em;
+	font-weight:normal;
+	letter-spacing: 1px;
+	margin-bottom: 15px;
+	text-transform:uppercase;
+}
+#feedback ul {
+	margin:0;
+	padding:0;
+	}
+#feedback li {
+	list-style:none;
+	}
+#feedback textarea, #feedback input {
+	font-weight:normal;
+	display:block;
+	width:258px;
+	margin-top: 10px;
+	border: none;
+	color: #005fff;
+	padding: 5px;
+	background: #fff;
+	margin-bottom: 10px;
+}
+#feedback .formSubmit {
+	font-family:"Andale Mono", "Droid Sans", Helvetica, Arial, sans-serif;
+	width: 270px;
+	padding: 0px;
+	background: transparent;	
+	color:white;
+	text-align:right;
+	
+}
+#feedback #feedback_tab {
+	background:url(../images/feedback_sm.png) no-repeat 0px 5px;
+	cursor: pointer;	
+	background-color: red;
+	position:absolute;
+	width:20px;
+	height:73px;
+	left:-20px;
+	top:0px; 
+}
+
+/* KineticJS canvas */
+#interface, #map {
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    z-index: 1;
+    width: 100%;
+    height: 100%;
+}
+
+#topMenu, #bottomMenu {
+    z-index: 10;
+    position: absolute;    
+}
+#topMenu {
+
+}
+#bottomMenu {
+ 	position:absolute;
+	right:165px;
+	bottom:0px;
+	z-index:1;   
+}
+#customZoom {
+    position:absolute;
+    top:10px;
+    right:10px;
+    z-index:2000;
+}
+a#customZoomIn, a#customZoomOut {
+    width:15px;
+    height:15px;
+    background-color:#005fff;
+    border:none;
+    text-align:center;
+    color:white;
+    display:block;
+    cursor:pointer;
+}
+#customZoomIn {
+    padding-top:1px;
+}
+#customZoomOut {
+    top:25px;
+    margin-top:2px;
+}

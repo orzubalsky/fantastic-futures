@@ -1,0 +1,204 @@
+{% load i18n %}
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Fantastic Futures</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta name="description" content="" />
+	<meta name="keywords" content="" />
+	<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/site.css" />	
+	{% block extra_css %}{% endblock %}
+</head>
+<script type="text/javascript">
+	var MEDIA_URL = '{{ MEDIA_URL }}';
+    var DATA_LAYERS = {{ layers|safe }};	
+</script>
+<body>
+	<div id="container">
+	    	    
+        {% block content %}
+        {% endblock content %}
+        
+        <div id="topMenu">
+            <!--------LOGO-------->
+            <a href="#" id="logo"></a>   
+            <a href="#" id="addConstellationText"><h2>SAVE A CONSTELLATION?</h2></a>
+            <a href="#" id="errorText"><h2>SHOW AN ERROR</h2></a>
+        </div>             
+
+        <div id="bottomMenu">
+            <!--------ADD SOUND-------->
+            <a href="#" id="addSoundText"><h2>+ ADD A SOUND</h2></a>
+
+            <!--------CONSTELLATION MENU-------->
+            <div id="constellationMenu">
+            	<a href="#"><h2>CONSTELLATIONS</h2></a>
+            	<div id="constellationMenuContent">
+            	<a>A1482324</a><br><a class="selected">ALPHA OMEGA</a><br><a>POTATO</a><br><a>39JASKN</a><br><a>LISTEN</a><br><a>FOXTROT</a>
+            	</div>
+            </div>    
+
+            <!--------ADD SOUND-------->
+            <div id="addSound">
+            	<canvas id="addSoundTriangle" width="20" height="20"></canvas>
+            	<script type="text/javascript">
+            		var c=document.getElementById("addSoundTriangle");
+            		var ctx=c.getContext("2d");
+            		ctx.fillStyle="#005fff";
+            		ctx.moveTo(20,0);
+            		ctx.lineTo(0,20);
+            		ctx.lineTo(20,20);
+            		//ctx.stroke();
+            		ctx.fill();
+            	</script>
+
+            	<form id="addSoundForm" action="/videos/add/" method="post" enctype="multipart/form-data">	
+                	<div id="ajaxUploadContainer">
+                		<ul>
+                			<li><input id="filename" type="text" name="filename" value="FIND THE FILE"></li>
+                			<li><input id="id_author" type="text" maxlength="255" name="id_author" value="YOUR NAME"></li>
+                			<li><textarea id="story" type="text" name="story" class="optional">STORY ABOUT THIS SOUND (OPTIONAL)</textarea></li>
+                			<button type="past">PAST?</button><button type="past">PRESENT?</button><button type="past">FUTURE?</button>
+                			<li><input id="submit" type="submit" value="UPLOAD"></li>
+                		</ul>	
+
+                		<div id="addSoundCheck">
+                			:) SOUND ADDED!
+                		</div>	
+                	</div>
+            	</form>
+            </div>
+            <!--------ADD SOUND ENDED-------->
+        </div>
+        
+        <!--------LOCATE SOUND-------->
+        <div id="locateSound">
+        	<canvas id="addSoundTriangle" width="20" height="20"></canvas>
+        	<script type="text/javascript">
+        		var c=document.getElementById("addSoundTriangle");
+        		var ctx=c.getContext("2d");
+        		ctx.fillStyle="#005fff";
+        		ctx.moveTo(20,0);
+        		ctx.lineTo(0,20);
+        		ctx.lineTo(20,20);
+        		//ctx.stroke();
+        		ctx.fill();
+        	</script>
+
+        	<form id="locateSoundForm" action="/sound/add/" method="post" enctype="multipart/form-data">	
+        		<ul>
+        			<li><input id="address" type="text" maxlength="255" name="address" value="MAP YOUR SOUND OR ENTER LOCATION"></li>
+        			<li><input id="submit" type="submit" value="CONTINUE"></li>
+        		</ul>	
+        	</form>
+        </div>
+        <!--------LOCATE SOUND ENDED-------->        
+            	 
+        <!--------CONSTELLATION------>
+        <div id="addConstellation">
+        	<canvas id="addConstellationTriangle" width="20" height="20"></canvas>
+        	<script type="text/javascript">
+        		var c=document.getElementById("addConstellationTriangle");
+        		var ctx=c.getContext("2d");
+        		ctx.fillStyle="#005fff";
+        		ctx.moveTo(20,0);
+        		ctx.lineTo(0,20);
+        		ctx.lineTo(20,20);
+        		//ctx.stroke();
+        		ctx.fill();
+        	</script>
+
+        	<form id="addConstellationForm" action="/constellation/add/" method="post">		
+        		<ul>
+        			<li><input id="filename" type="text" name="filename" value="NAME YOUR CONSTELLATION"></li>
+        			<li><input id="id_author" type="text" maxlength="255" name="id_author" value="YOUR NAME"></li>
+        			<li><input id="id_author" type="text" maxlength="255" name="id_author" class="optional" value="YOUR CITY, STATE, COUNTRY (OPTIONAL)"></li>
+        			<li><input id="submit" type="submit" value="SAVE"></li>
+        		</ul>	
+
+        		<div id="addConstellationCheck">
+        			:) CONSTELLATION ADDED!
+        		</div>	
+        	</form>
+        </div>
+        <!--------CONSTELLATION ENDED--------->
+
+      
+        <!--------SHOWING CONCERN-------->
+        <div id="error">
+        	<canvas id="errorTriangle" width="20" height="20"></canvas>
+        	<script type="text/javascript">
+        		var c=document.getElementById("errorTriangle");
+        		var ctx=c.getContext("2d");
+        		ctx.fillStyle="#ff0000";
+        		ctx.moveTo(0,0);
+        		ctx.lineTo(0,20);
+        		ctx.lineTo(20,20);
+        		//ctx.stroke();
+        		ctx.fill();
+        	</script>
+
+        	<div id="errorMessage">			
+        		<p>SOMETHING IS NOT WORKING PROPERLY.</p>
+        		<p>CONTACT US AND TRY AGAIN.</p>
+        	</div>
+        </div>
+        <!--------SHOWING CONCERN ENDED--------->
+
+        <!--------ABOUT-------->      
+        <div id="about">
+          	<img src="{{ MEDIA_URL }}images/logo_en_white.png"/><br/><br/>
+          	<img src="{{ MEDIA_URL }}images/logo_ar_white.png"/>
+          	<div class="description english">
+          		<p>Fantastic Futures is a collaborative group of individuals from Iraq and the United States. Together, we've created this online platform for mixing and sharing of recorded sounds and stories across cultures. Our goal is to connect citizens from nations in conflict in an open dialogue based around the sharing of field recordings, songs, and interviews. Hopefully, this might help to collapse the barriers of physical space that contribute to the misunderstandings between cultures and to emphasize the subversive value of sharing experiences across political borders.</p>
+
+          		<p>This online platform is maintained with support by Rhizome at the New Museum.</p>
+          	</div>
+          		<div class="description arabic">
+          		<p>مشروع المستقبل الرائع هو مجموعة مشتركة ومتعاونة من طلبة العراق والولايات المتحدة. وقد قمنا شوية بخلق هذا المنبر المباشر على الانترنيت لخلط ومشاركة الاصوات المسجلة والقصص من ثقافات مختلفة. وهدفنا الاساس هو وصل الشعوب من امم مختلفة مع بعضهم وفتح الحوار المباشر بينهم اعتمادا على التسجيلات المشتركة والاغاني والمقابلات.</p>
+
+          		<p>نحن نأمل, ومن خلال هذا العمل, ان نقلص من الحواجز التي ساهمت في خلق سوء الفهم بين  الحضارات المختلفة.</p>
+
+          		<p>ان هذا المنبر مدعوم من قبل ريزوم. </p>
+          	</div>
+          	<img src="{{ MEDIA_URL }}images/rhizome_logo.png"/>
+          	<div id="aboutLinks">
+          	<ul>
+          		<li id="toggleLanguage"><a id="toggleAr">Read in Arabic</a><a id="toggleEn">Read in English</a></li>
+          		<li id="classicSite"><a>Classic Site</a></li>
+          		<li id="contactUs"><a>Contact Us</a></li>
+          	</ul>
+          </div>
+        </div>
+        <!--------ABOUT ENDED--------->
+
+        <!--------FEEDBACK-------->
+        <div id="feedback">
+              <div id="feedback_tab"></div>
+              <h1>Thanks for taking a minute to give us feedback.</h1>
+              <form class="feedbackForm" method="post" enctype="multipart/form-data" action="/sounds">
+                  <ul>
+                      <li>
+                          <p>
+                              <span>Please leave us any comments or questions.</span>
+                              <textarea id="function" name="function"></textarea> 
+                          </p>				
+                      </li>
+                      <li>
+                          <p>				
+                              <label for="email">Email (Optional)</label>
+                              <input type="text" name="email" id="email" class="text" value="" />
+                          </p>		
+                      </li>
+                  </ul>
+          	      <input class="formSubmit" type="submit" value="SUBMIT" />
+              </form>
+          </div>
+        <!--------FEEDBACK ENDED-------->
+	</div>
+	<script type="text/javascript" src="{{ MEDIA_URL }}js/lib/jquery.js"></script>	
+	<script type="text/javascript" src="{{ MEDIA_URL }}js/lib.js"></script>
+	<script type="text/javascript" src="{{ MEDIA_URL }}js/site.js"></script>
+	{% block extra_js %}{% endblock %}	
+</body>
+</html>
