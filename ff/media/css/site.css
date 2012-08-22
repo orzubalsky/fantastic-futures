@@ -273,8 +273,7 @@ h2 {
 #feedback {
 	position:fixed;
 	width:270px;
-	right:-300px;
-	right:0px;
+	right:-322px;
 	top:88px;
 	background: #005fff;
 	color:white;
@@ -282,7 +281,6 @@ h2 {
 	padding: 15px;
 	z-index: 110;
 	line-height: 1.2em;
-	display:none;
 }
 #feedback h1 {
 	color: white;

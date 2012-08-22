@@ -40,6 +40,15 @@
         	    e.preventDefault();
         	    site.map.codeAddress($('#address').val());
         	});
+        	$('#contactUs a').click(function(e)
+        	{
+        	    e.preventDefault();
+        	    $('#feedback').animate(
+        	        {
+        	            right: 0
+        	        }, 1000
+        	    );
+        	});
 		};
 	};
 })(jQuery);

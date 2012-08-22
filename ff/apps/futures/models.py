@@ -2,6 +2,7 @@ from django.conf import settings
 from django.contrib.gis.db import models 
 from django.utils.timezone import utc
 from django_countries import CountryField
+from taggit.managers import TaggableManager
 from datetime import *
 import os, sys, pytz, uuid, random
 
@@ -47,8 +48,12 @@ class Sound(models.Model):
     point               = models.PointField(null=True, blank=True)
     created_by          = models.CharField(max_length=60, blank=False, null=True, default="")
     is_active           = models.BooleanField(default=1, verbose_name="Active")
+    tags                = TaggableManager()    
     
     objects = models.GeoManager()
     
     def __unicode__(self):
-        return self.title 
+        return self.title
+        
+    def get_tags(self):
+        return ",".join([tag.name for tag in self.tags.all()])        
