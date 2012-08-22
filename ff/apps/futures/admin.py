@@ -7,8 +7,8 @@ class GeoAdmin(admin.OSMGeoAdmin):
     default_zoom = 10
 
 class SoundAdmin(GeoAdmin):
-    list_display        = ( 'title', 'created_by', 'location', 'story','is_active')
-    fields              = ( 'title', 'slug', 'created_by', 'location', 'story', 'point', 'is_active' )
+    list_display        = ( 'title', 'created_by', 'location', 'story', 'get_tags', 'is_active')
+    fields              = ( 'title', 'slug', 'created_by', 'location', 'story', 'tags', 'point', 'is_active' )
     prepopulated_fields = {'slug': ('title',)}    
 
 class AuthorAdmin(admin.ModelAdmin):
