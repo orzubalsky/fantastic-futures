@@ -38,11 +38,11 @@
         
         this.resetRotation = function()
         {
+            var self = this;
+            
             var rotation_interval = setInterval(function() 
             {
-                rotation.x = (rotation.x > 0) ? rotation.x - deg_to_rad(3) : 0;
-                rotation.y = (rotation.y > 0) ? rotation.y - deg_to_rad(3) : 0;
-                rotation.z = (rotation.z > 0) ? rotation.z - deg_to_rad(3) : 0;
+                self.rotateTo(0,0,0);
                 
                 if ( rotation.x == 0 && rotation.y == 0 && rotation.z == 0)
                 {
@@ -51,6 +51,19 @@
                     $('#map').fadeIn(500);
                 }
             }, 1000/30);            
+        };
+        
+        this.rotateTo = function(x,y,z)
+        {
+            
+            rotation.x = (rotation.x > x) ? rotation.x - rotation.x/30 : x;
+            rotation.y = (rotation.y > y) ? rotation.y - rotation.y/30 : y;
+            rotation.z = (rotation.z > z) ? rotation.z - rotation.z/30 : z;
+            
+            /*
+            rotation.x = (rotation.x > x) ? rotation.x - deg_to_rad(3) : x;
+            rotation.y = (rotation.y > y) ? rotation.y - deg_to_rad(3) : y;
+            rotation.z = (rotation.z > z) ? rotation.z - deg_to_rad(3) : z;   */         
         };
         
         function setup()

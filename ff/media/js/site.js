@@ -17,7 +17,7 @@
         	  $("#about").fadeToggle("fast", "linear");
         	});
         	$("#addSoundText").click(function() {
-        	  $("#locateSound").fadeToggle("fast", "linear");
+        	  $("#addSound").fadeToggle("fast", "linear");
               site.ffinterface.resetRotation();        	  
         	});
         	$("#addConstellationText").click(function() {

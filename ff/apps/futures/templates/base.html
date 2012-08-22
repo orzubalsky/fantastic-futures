@@ -71,9 +71,12 @@
             <!--------ADD SOUND ENDED-------->
         </div>
         
-        <!--------LOCATE SOUND-------->
-        <div id="locateSound">
-        	<canvas id="addSoundTriangle" width="20" height="20"></canvas>
+        <!--------ADD SOUND-------->
+        <div id="addSound" class="tran1">
+        	<canvas id="addSoundTriangle" width="20" height="20">
+        	Your browser does not support the HTML5 canvas tag.
+        	</canvas>
+
         	<script type="text/javascript">
         		var c=document.getElementById("addSoundTriangle");
         		var ctx=c.getContext("2d");
@@ -85,14 +88,24 @@
         		ctx.fill();
         	</script>
 
-        	<form id="locateSoundForm" action="/sound/add/" method="post" enctype="multipart/form-data">	
+        	<form action="/videos/add/" method="post" enctype="multipart/form-data" id="addSoundForm">		
+        		<input type="hidden" class="hidden" name="page_id" value="{{ page.id }}">
         		<ul>
-        			<li><input id="address" type="text" maxlength="255" name="address" value="MAP YOUR SOUND OR ENTER LOCATION"></li>
-        			<li><input id="submit" type="submit" value="CONTINUE"></li>
+        			<li><input id="filename" type="text" name="filename" value="FIND THE FILE"></li>
+        			<li><input id="id_author" type="text" maxlength="255" name="id_author" value="YOUR NAME"></li>
+        			<li><input id="id_author" type="text" maxlength="255" name="id_author"  value="CITY, STATE, COUNTRY"></li>
+        			<li><textarea id="story" type="text" name="story" class="optional">STORY ABOUT THIS SOUND (OPTIONAL)</textarea></li>
+        			<button type="past">PAST?</button><button type="past">PRESENT?</button><button type="past">FUTURE?</button>
+        			<!--	{{ form.as_ul }}-->
+        			<li><input id="submit" type="submit" value="UPLOAD"></li>
         		</ul>	
+
+        		<div id="addSoundCheck">
+        			:) SOUND ADDED!
+        		</div>	
         	</form>
         </div>
-        <!--------LOCATE SOUND ENDED-------->        
+        <!--------ADD SOUND ENDED-------->
             	 
         <!--------CONSTELLATION------>
         <div id="addConstellation">

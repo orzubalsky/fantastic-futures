@@ -29,21 +29,21 @@ h2 {
 
 /*addSound buttons*/
 #addSoundText {
-	position:absolute;
-	right:-30px;
-	width:100px;
-	bottom:125px;
-	z-index:1;
+	position:relative;
+	right:-70px;
+	width:60px;
+	bottom:25px;
+    z-index:10;
 }
 
 /*constellation menu*/
 #constellationMenu {
 	width:140px;
-	position:absolute;
-	left:15px;
-	bottom:0px;
-	height:140px;
-	z-index:1;
+	position:relative;
+	left:160px;
+	bottom:25px;
+	height:160px;
+	z-index:10;
 }
 #constellationMenuContent {
 	color:#AAA;
@@ -56,10 +56,11 @@ h2 {
 /*addSound addConstellation forms*/
 #addSound, #locateSound {
 	position:absolute;
-	right:165px;
+	right:-8px;
 	bottom:15px;
 	display:none;
 	z-index: 5;
+	margin-top:0px;
 }
 /* saf3+, chrome1+ argh! */
 @media screen and (-webkit-min-device-pixel-ratio:0) {
@@ -67,6 +68,7 @@ h2 {
 		position:absolute;
 		bottom:40px;
 		z-index: 5;
+		margin-top:0px;
 	}
 }
 #addSoundTriangle {
@@ -330,9 +332,9 @@ h2 {
 }
 #bottomMenu {
  	position:absolute;
-	right:165px;
+	right:140px;
 	bottom:0px;
-	z-index:1;   
+	z-index:10;   
 }
 #customZoom {
     position:absolute;
