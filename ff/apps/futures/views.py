@@ -23,7 +23,13 @@ def index(request):
     }
     layer_json = json.dumps(layers)    
 
-    return render_to_response('index.html', { 'layers': layer_json }, context_instance=RequestContext(request))
+    feedback_form = FeedbackForm()
+
+    return render_to_response(
+        'index.html', { 
+            'layers'        : layer_json,
+            'feedback_form' : feedback_form,
+        }, context_instance=RequestContext(request))
 
 def view_sound(request, sound_slug):
     pass

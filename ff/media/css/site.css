@@ -138,7 +138,7 @@ h2 {
 #addSoundForm li, #addConstellationForm li, #locateSound li {
 	list-style: none;
 }
-#addSoundCheck, #addConstellationCheck {
+#addSoundCheck, #addConstellationCheck, #feedbackCheck {
 	text-align:center;
 	color:#FFF;
 	position:relative;
@@ -188,6 +188,10 @@ h2 {
 	color:#FFF;
 }
 
+#feedback input.error, 
+#feedback textarea.error {
+    background: #ff0000;
+}
 /*about*/
 #aboutContainer {
 	position:absolute;
@@ -256,6 +260,7 @@ h2 {
 #feedback {
 	position:fixed;
 	width:270px;
+	height: 191px;
 	right:-322px;
 	top:88px;
 	background: #005fff;
@@ -290,6 +295,9 @@ h2 {
 	padding: 5px;
 	background: #fff;
 	margin-bottom: 10px;
+}
+#feedback textarea {
+    height: 26px;
 }
 #feedback .formSubmit {
 	font-family:"Andale Mono", "Droid Sans", Helvetica, Arial, sans-serif;
