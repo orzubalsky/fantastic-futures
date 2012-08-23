@@ -52,6 +52,7 @@ STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
     'django.contrib.staticfiles.finders.DefaultStorageFinder',
+    'dajaxice.finders.DajaxiceFinder',    
 )
 
 LOCALE_PATHS = (
@@ -62,7 +63,7 @@ LOCALE_PATHS = (
 TEMPLATE_LOADERS = (
     'django.template.loaders.filesystem.Loader',
     'django.template.loaders.app_directories.Loader',
-#     'django.template.loaders.eggs.Loader',
+    'django.template.loaders.eggs.Loader',
 )
 
 TEMPLATE_CONTEXT_PROCESSORS = (
@@ -70,8 +71,9 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     "django.core.context_processors.debug",
     "django.core.context_processors.i18n",
     "django.core.context_processors.media",
-    'django.contrib.messages.context_processors.messages',
+    'django.core.context_processors.static',
     "django.core.context_processors.request",
+    'django.contrib.messages.context_processors.messages',    
 )
 
 MIDDLEWARE_CLASSES = (
@@ -115,6 +117,7 @@ INSTALLED_APPS = (
     'django.contrib.gis',    
     'south',                        # intelligent schema and data migrations
     'pytz',                         # python timezone library
+    'dajaxice',                     # django ajax app
     'taggit',                       # tagging app
     'chronograph',                  # admin based cron job management
     'mailer',                       # handle outgoing email queue
@@ -139,11 +142,20 @@ LOGGING = {
             'level': 'ERROR',
             'filters': ['require_debug_false'],
             'class': 'django.utils.log.AdminEmailHandler'
-        }
+        },
+        'console':{
+            'level':'DEBUG',
+            'class':'logging.StreamHandler'
+        },        
     },
     'loggers': {
         'django.request': {
             'handlers': ['mail_admins'],
+            'level': 'ERROR',
+            'propagate': True,
+        },
+        'dajaxice': {
+            'handlers': ['console'],
             'level': 'ERROR',
             'propagate': True,
         },
