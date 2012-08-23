@@ -19,6 +19,14 @@ h2 {
 	line-height:12px;
 	color: #005fff;
 }
+#loadingGif {
+	width:100%;
+	height:100%;
+	position:absolute;
+	left:0;
+	top:0;
+
+}
 #logo {
 	background:url(../images/logo2.png);
 	width:143px;
@@ -230,13 +238,14 @@ h2 {
 }
 /*new*/
 #about .description.english {
-	display:none;
+	
 }
 #about .description.arabic {
 	font-family:Tahoma, sans-serif;
 	text-align:right;
 	font-size:1.2em;
 	line-height:1.4em;
+	display:none;
 }
 #about #aboutLinks {
 	position:relative;
@@ -254,15 +263,16 @@ h2 {
 	display:block;
 }
 #aboutLinks #toggleLanguage {
-	background-color:#70c3f9;
+	/*background-color:#70c3f9;*/
+	background-color:#9eceff;
 }
 #aboutLinks #toggleEn {
 	display:none;
 }
 #aboutLinks #toggleAr {
 }
-#aboutLinks #classicSite {
-	background-color:#9eceff;
+#aboutLinks li#classicSite {
+	display:none;
 }
 #aboutLinks #contactUs {
 	background-color:#bddeff;
