@@ -15,18 +15,18 @@ TEMPLATE_DEBUG = DEBUG
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.',    # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': '',                         # Or path to database file if using sqlite3.
-        'USER': '',                         # Not used with sqlite3.
-        'PASSWORD': '',                     # Not used with sqlite3.
-        'HOST': '',                         # Set to empty string for localhost. Not used with sqlite3.
-        'PORT': '',                         # Set to empty string for default. Not used with sqlite3.
+        'ENGINE': 'django.contrib.gis.db.backends.postgis',      # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
+        'NAME': '',                                              # Or path to database file if using sqlite3.
+        'USER': '',                                              # Not used with sqlite3.
+        'PASSWORD': '',                                          # Not used with sqlite3.
+        'HOST': '',                                              # Set to empty string for localhost. Not used with sqlite3.
+        'PORT': '',                                              # Set to empty string for default. Not used with sqlite3.
     }
 }
  
 # Absolute path to the directory that holds media.
 # Example: "/home/media/media.lawrence.com/"
-MEDIA_URL = 'http://127.0.0.1:8000/static/'
+MEDIA_URL = 'http://127.0.0.1:8000/media/'
 
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
