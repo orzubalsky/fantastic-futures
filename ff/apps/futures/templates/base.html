@@ -1,4 +1,4 @@
-{% load i18n %}
+{% load i18n dajaxice_templatetags %}
 <!DOCTYPE html>
 <html>
 <head>
@@ -157,27 +157,20 @@
         <div id="feedback">
               <div id="feedback_tab"></div>
               <h1>Thanks for taking a minute to give us feedback.</h1>
-              <form class="feedbackForm" method="post" enctype="multipart/form-data" action="/sounds">
-                  <ul>
-                      <li>
-                          <p>
-                              <span>Please leave us any comments or questions.</span>
-                              <textarea id="function" name="function"></textarea> 
-                          </p>				
-                      </li>
-                      <li>
-                          <p>				
-                              <label for="email">Email (Optional)</label>
-                              <input type="text" name="email" id="email" class="text" value="" />
-                          </p>		
-                      </li>
-                  </ul>
-          	      <input class="formSubmit" type="submit" value="SUBMIT" />
+              <form id="feedbackForm" method="post" action="">
+                  {% csrf_token %}
+                  {{ feedback_form }}
+                  <input class="formSubmit" type="submit" value="SUBMIT" />
               </form>
+              
+              <div id="feedbackCheck">
+                  :) SENT!
+              </div>              
           </div>
         <!--------FEEDBACK ENDED-------->
 	</div>
 	<script type="text/javascript" src="{{ MEDIA_URL }}js/lib/jquery.js"></script>	
+    {% dajaxice_js_import %}
 	<script type="text/javascript" src="{{ MEDIA_URL }}js/lib.js"></script>
 	<script type="text/javascript" src="{{ MEDIA_URL }}js/site.js"></script>
 	{% block extra_js %}{% endblock %}	
