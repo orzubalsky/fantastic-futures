@@ -7,6 +7,7 @@
 	<meta name="description" content="" />
 	<meta name="keywords" content="" />
 	<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/site.css" />	
+	
 	{% block extra_css %}{% endblock %}
 </head>
 <script type="text/javascript">
@@ -18,7 +19,8 @@
 	    	    
         {% block content %}
         {% endblock content %}
-        <div id="loadingGif"><img src="{{ MEDIA_URL }}images/loading.gif" width="100%" height="100%"/></div>
+        <div id="loadingGif"><!--img src="{{ MEDIA_URL }}images/loading8.gif" width="100%" height="100%"/--></div>
+		
         <div id="topMenu">
             <!--------LOGO-------->
             <a href="#" id="logo"></a>   
@@ -33,12 +35,15 @@
             <!--------CONSTELLATION MENU-------->
             <div id="constellationMenu">
             	<a href="#"><h2>CONSTELLATIONS</h2></a>
-            	<div id="constellationMenuContent">
-            	<a>A1482324</a><br><a class="selected">ALPHA OMEGA</a><br><a>POTATO</a><br><a>39JASKN</a><br><a>LISTEN</a><br><a>FOXTROT</a>
-            	</div>
-            </div>    
+            	<div id="scrollUp"></div>
+					<div id="constellationMenuContent">
+						<a>A1482324</a><br><a class="selected">ALPHA OMEGA</a><br><a>POTATO</a><br><a>39JASKN</a><br><a>LISTEN</a><br><a>FOXTROT</a><br/><a>A1482324</a><br><a class="selected">ALPHA OMEGA</a><br><a>POTATO</a><br><a>39JASKN</a><br><a>LISTEN</a><br><a>FOXTROT</a><br/><a>A1482324</a><br><a class="selected">ALPHA OMEGA</a><br><a>POTATO</a><br><a>39JASKN</a><br><a>LISTEN</a><br><a>FOXTROT</a>
+					</div>
+            	
+            	<div id="scrollDown"></div>
+            </div>            
         </div>
-        
+	
         <!--------ADD SOUND-------->
         <div id="addSound" class="tran1">
         	<canvas id="addSoundTriangle" width="20" height="20">
@@ -73,7 +78,7 @@
         		</div>	
         	</form>
         </div>
-        <!--------ADD SOUND ENDED-------->
+        <!--------ADD SOUND ENDED------->
             	 
         <!--------CONSTELLATION------>
         <div id="addConstellation">
@@ -170,9 +175,40 @@
         <!--------FEEDBACK ENDED-------->
 	</div>
 	<script type="text/javascript" src="{{ MEDIA_URL }}js/lib/jquery.js"></script>	
+	<script type="text/javascript" src="{{ MEDIA_URL }}js/lib/jquery.scrollTo-1.4.3.js"></script>
     {% dajaxice_js_import %}
 	<script type="text/javascript" src="{{ MEDIA_URL }}js/lib.js"></script>
 	<script type="text/javascript" src="{{ MEDIA_URL }}js/site.js"></script>
 	{% block extra_js %}{% endblock %}	
+	<script type="text/javascript">
+           /*$('#scrollDown').mouseover(function(){
+           		$('#constellationMenuContent').scrollTo('+=10px',500, { axis: 'y'});
+           });*/
+           
+           if ($.browser.mozilla) {
+          		speed=10;
+			} else { 
+				speed=3;
+			}
+		
+           $('#scrollUp').bind('mouseenter', function() {
+				this.iid = setInterval(function() {
+				   // do something 
+				   $('#constellationMenuContent').scrollTo('-='+speed+'px', { axis: 'y'});
+				}, 25);
+			}).bind('mouseleave', function(){
+				this.iid && clearInterval(this.iid);
+			});
+
+           $('#scrollDown').bind('mouseenter', function() {
+				this.iid = setInterval(function() {
+				   // do something 
+				   $('#constellationMenuContent').scrollTo('+='+speed+'px', { axis: 'y'});
+				}, 25);
+			}).bind('mouseleave', function(){
+				this.iid && clearInterval(this.iid);
+			});
+
+    </script>
 </body>
 </html>

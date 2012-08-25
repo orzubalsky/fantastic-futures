@@ -48,6 +48,7 @@
                 {
                     clearInterval(rotation_interval);
                     $('#interface').fadeOut(2000);
+                    $('#map').css('opacity','1');
                     $('#map').fadeIn(500);
                 }
             }, 1000/30);            
@@ -79,6 +80,7 @@
             }            
             sphereRefresh();
             initPoints();
+            $("#loadingGif").fadeToggle("fast", "linear");
         }
         
         function initPoints()
@@ -186,8 +188,9 @@
                 draggable   : true,
                 dragBounds: { top: 0, right: 0, bottom: 0, left: 0 },
                 start_x     : 0,
-                start_y     : 0
+                start_y     : 0 
 		    });	
+		     
             sound.on("mouseover", function() {
                 $('#container').css({'cursor':'pointer'});
                 if (!this.active)
@@ -214,7 +217,7 @@
                         c.index_1 = lastClick;
                         c.index_2 = this.getAttrs().index;
                         sphere.connections.push(c);                        
-                        addConnectionToLayer(c);  
+                        addConnectionToLayer(c);
                     }
 
                     lastClick = this.getAttrs().index;
