@@ -5,12 +5,11 @@
 	    this.csrvToken;
 		this.init = function() 
 		{
-            // Dajaxice.futures.sayhello(function(data) { lib.log(data); });         
-		    
-            this.csrvToken = $('input[name="csrfmiddlewaretoken"]').val();		    
 		    this.menus();
+		    this.formValues();
 		    this.WIDTH  = $('#interface').width();
 		    this.HEIGHT = $('#interface').height();
+		    site.ajaxUpload.init();
 		    site.map.init();
 		};
 		
@@ -63,6 +62,28 @@
                 var data = $(this).serialize();
                 Dajaxice.futures.submit_feedback(self.feedback_callback, {'form':data});
         	});
+		};
+		
+    	this.formValues = function() 
+		{		    
+            this.inputDefaultValue($('#id_created_by'));
+            this.inputDefaultValue($('#id_location'));
+            this.inputDefaultValue($('#id_story'));
+		};		
+		
+		this.inputDefaultValue = function(element)
+		{
+            // the input box's default value 
+            var defaultValue = $(element).val();
+        
+            $(element).live('focus', function() {
+            	$(this).val('');
+            })
+            .live('blur', function() {
+            	if ($(this).val().length < 1) {
+            		$(element).val(defaultValue);
+            	}
+            });
 		};
 		
 		this.feedback_callback = function(data)

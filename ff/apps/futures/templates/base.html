@@ -6,8 +6,14 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	<meta name="description" content="" />
 	<meta name="keywords" content="" />
+<<<<<<< HEAD
 	<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/site.css" />	
 	
+=======
+	<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/site.css" />
+	<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/fileuploader.css" />
+	<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/ajaxUpload.css" />	
+>>>>>>> 66801f5dae7ddfde567ff068005914e4dfc7e055
 	{% block extra_css %}{% endblock %}
 </head>
 <script type="text/javascript">
@@ -61,17 +67,24 @@
         		ctx.fill();
         	</script>
 
-        	<form action="/videos/add/" method="post" enctype="multipart/form-data" id="addSoundForm">		
-        		<input type="hidden" class="hidden" name="page_id" value="{{ page.id }}">
-        		<ul>
-        			<li><input id="filename" type="text" name="filename" value="FIND THE FILE"></li>
-        			<li><input id="id_author" type="text" maxlength="255" name="id_author" value="YOUR NAME"></li>
-        			<li><input id="id_author" type="text" maxlength="255" name="id_author"  value="CITY, STATE, COUNTRY"></li>
-        			<li><textarea id="story" type="text" name="story" class="optional">STORY ABOUT THIS SOUND (OPTIONAL)</textarea></li>
-        			<button type="past">PAST?</button><button type="past">PRESENT?</button><button type="past">FUTURE?</button>
-        			<!--	{{ form.as_ul }}-->
-        			<li><input id="submit" type="submit" value="UPLOAD"></li>
-        		</ul>	
+        	<form action="{% url add-sound %}" method="post" enctype="multipart/form-data" id="addSoundForm">		
+                {{ add_sound_form.non_field_errors }}
+                {% csrf_token %}  
+            	<div id="ajaxUploadContainer">
+    				<a href="#" id="uploadText">CHOOSE FILE</a>            	    
+    				<div id="file-uploader"></div>
+    				<div class="progressBarContainer">
+    					<div class="progressBar">
+    						<div class="progress"></div>
+    					</div>
+    				</div>
+    			</div>       
+    		    {{ add_sound_form.filename }}    			           
+    		    {{ add_sound_form.created_by }}
+    		    {{ add_sound_form.location }}        			    
+    		    {{ add_sound_form.story }}        			    
+    			<button type="past">PAST?</button><button type="past">PRESENT?</button><button type="past">FUTURE?</button>
+    		    <input id="submit" type="submit" value="UPLOAD">
 
         		<div id="addSoundCheck">
         			:) SOUND ADDED!
@@ -174,11 +187,17 @@
           </div>
         <!--------FEEDBACK ENDED-------->
 	</div>
+<<<<<<< HEAD
 	<script type="text/javascript" src="{{ MEDIA_URL }}js/lib/jquery.js"></script>	
 	<script type="text/javascript" src="{{ MEDIA_URL }}js/lib/jquery.scrollTo-1.4.3.js"></script>
+=======
+	<script type="text/javascript" src="{{ MEDIA_URL }}js/lib/jquery.js"></script>
+>>>>>>> 66801f5dae7ddfde567ff068005914e4dfc7e055
     {% dajaxice_js_import %}
+	<script type="text/javascript" src="{{ MEDIA_URL }}js/lib/fileuploader.js"></script>
 	<script type="text/javascript" src="{{ MEDIA_URL }}js/lib.js"></script>
 	<script type="text/javascript" src="{{ MEDIA_URL }}js/site.js"></script>
+	<script type="text/javascript" src="{{ MEDIA_URL }}js/ajaxUpload.js"></script>
 	{% block extra_js %}{% endblock %}	
 	<script type="text/javascript">
            /*$('#scrollDown').mouseover(function(){

@@ -76,45 +76,9 @@
 				    })
 				],
 			});
-			
-           OpenLayers.Control.Click = OpenLayers.Class(OpenLayers.Control, {                
-                defaultHandlerOptions: {
-                    'single': true,
-                    'double': false,
-                    'pixelTolerance': 0,
-                    'stopSingle': false,
-                    'stopDouble': false
-                },
-                initialize: function(options) {
-                    this.handlerOptions = OpenLayers.Util.extend({}, this.defaultHandlerOptions);
-                    OpenLayers.Control.prototype.initialize.apply(this, arguments); 
-                    this.handler = new OpenLayers.Handler.Click(
-                        this, {
-                            'click': this.trigger
-                        }, this.handlerOptions
-                    );
-                }, 
-                trigger: function(e) {
-                    var pixel = new OpenLayers.Pixel(e.x, e.y);
-                    var coord = map.getLonLatFromPixel(pixel).transform(
-                       new OpenLayers.Projection("DYMAX"),
-                       new OpenLayers.Projection("EPSG:4326")
-                    );;
-                    lib.log(coord);
-                    
-                              
-                    
-                    
-                    $('#locateSound').css({'left':e.x+'px', 'top':(e.y-20)+'px'});
-                    codeLatLng(coord.lat, coord.lon);
-                    // lib.log(lonlat.lat + " " + lonlat.lon);
-                }
-            });			
-            var click = new OpenLayers.Control.Click();
-            map.addControl(click);
-            click.activate();			
+			           
 			map.addLayers( [ triFill, kml ] );
-			map.zoomTo(2.5);
+			map.zoomTo(2);
 
 			// *** TRIANGLE STUFF ***
 			/* define the 19 triangles */

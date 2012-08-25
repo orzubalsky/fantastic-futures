@@ -13,3 +13,12 @@ def submit_feedback(request, form):
         
         return json.dumps({'success':True})
     return json.dumps({'success':False, 'errors': feedback_form.errors})
+    
+@dajaxice_register(method='POST')    
+def submit_sound(request, form):
+    add_sound_form = GeoSoundForm(deserialize_form(form))
+    if add_sound_form.is_valid():
+        # save sound
+        
+        return json.dumps({'success':True})
+    return json.dumps({'success':False, 'errors': add_sound_form.errors})    

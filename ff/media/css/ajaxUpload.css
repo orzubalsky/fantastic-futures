@@ -1,0 +1,94 @@
+#ajaxUploadContainer {
+    background-color: white;
+    color: #005FFF;
+    width: 240px;
+    border: none;
+    position: relative;
+    margin: 0 0 10px;
+    padding: 2px;
+    font-family: "Andale Mono", "Droid Sans", Helvetica, Arial, sans-serif;
+    font-size: 1em;
+}
+#ajaxUploadContainer.progress {
+}
+#ajaxUploadContainer.complete {
+}
+#ajaxUploadContainer #file-uploader .qq-upload-button {
+	margin:0;
+	display:block;
+    background: transparent;
+    cursor: pointer;
+    padding: 0;
+    border: none;
+    text-indent: -99999px;
+}
+#ajaxUploadContainer #file-uploader .qq-upload-button-hover {
+}
+#ajaxUploadContainer #file-uploader .qq-upload-button-focus {
+    outline:none;
+}
+#ajaxUploadContainer #uploadText {
+    color: #005FFF;
+    width: 100%;
+    display: block;   
+    position: absolute;
+    top: 2.4px;     
+}
+#ajaxUploadContainer #uploadText:hover {
+    color: #f00;
+}
+#ajaxUploadContainer.progress #uploadText {
+
+}
+#ajaxUploadContainer.complete #uploadText {
+
+}
+
+#ajaxUploadContainer .progressBarContainer {
+    background-color: yellow;
+    display: none;
+    width: 244px;    
+    height: 16px;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+#ajaxUploadContainer.progress .progressBarContainer {
+    display: block;
+}
+#ajaxUploadContainer.complete .progressBarContainer {
+    display: none;
+}
+#ajaxUploadContainer .progressBarContainer .progressBar {
+    height: 100%;
+    width: 100%;
+    background-color: white;	
+}
+#ajaxUploadContainer .progressBarContainer .progressBar .progress {
+    background-color: blue;
+    width: 70%;
+    height: 100%;	
+}
+#ajaxUploadContainer.complete .progressBarContainer .progressBar .progress {
+    background-color: yellow;
+}
+
+#ajaxUploadContainer .qq-upload-list {
+    margin:15px 35px; padding:0; list-style:none;
+}
+
+#ajaxUploadContainer .qq-upload-file,
+#ajaxUploadContainer .qq-upload-size,
+#ajaxUploadContainer .qq-upload-cancel {
+    display: none;
+}
+
+#ajaxUploadContainer .qq-upload-spinner {
+    position: absolute;
+    left: 48%;
+    top: 45%;
+    z-index: 100;    
+}
+#ajaxUploadContainer .qq-upload-list {
+    display: none;
+}
