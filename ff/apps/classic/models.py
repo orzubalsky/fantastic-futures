@@ -114,7 +114,11 @@ class SoundManager(Manager):
             lat, lng = gmaps.address_to_latlng(data['location'])
             print lat
             print lng
-            point = Point(lat, lng)
+            point = Point(lng, lat, srid=4326)
+            point2= Point(lng, lat, srid=4326)
+            print point
+            print point2
+            
 
             # save geosound
             geosound = GeoSound(pk=data['id'], sound=data['filename'], title=data['title'], location=data['location'], story=data['story'], created_by=user.username, user=user, slug=slug, point=point, created=created)
