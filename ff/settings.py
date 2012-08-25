@@ -103,6 +103,8 @@ MEDIA_ROOT = os.path.join(PROJECT_DIR, 'media')
 
 ADMIN_MEDIA_PREFIX = '/admin/media/'
 
+AUTH_PROFILE_MODULE = 'futures.UserProfile'
+
 INSTALLED_APPS = (
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -118,9 +120,11 @@ INSTALLED_APPS = (
     'south',                        # intelligent schema and data migrations
     'pytz',                         # python timezone library
     'dajaxice',                     # django ajax app
+    'ajaxuploader',                 # ajax file uploader
     'taggit',                       # tagging app
     'chronograph',                  # admin based cron job management
     'mailer',                       # handle outgoing email queue
+    'classic',                      # ff v2 datamodels, used here mostly for migrating data
     'futures',                      # fantastic futures!
 )
 
