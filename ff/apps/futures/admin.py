@@ -6,16 +6,16 @@ class GeoAdmin(admin.OSMGeoAdmin):
     default_lat = 4976132.48641
     default_zoom = 10
 
-class SoundAdmin(GeoAdmin):
-    list_display        = ( 'title', 'created_by', 'location', 'story', 'get_tags', 'is_active')
+class GeoSoundAdmin(GeoAdmin):
+    list_display        = ( 'title', 'created_by', 'location', 'point', 'story', 'get_tags', 'is_active')
     fields              = ( 'title', 'slug', 'created_by', 'location', 'story', 'tags', 'point', 'is_active' )
     prepopulated_fields = {'slug': ('title',)}    
 
-class AuthorAdmin(admin.ModelAdmin):
-    list_display        = ( 'username', 'display_name', 'email', 'city','state', 'country')
-    fields              = ( 'username', 'display_name', 'slug', 'email', 'city','state', 'country', 'country_code', 'number')
+class UserProfileAdmin(admin.ModelAdmin):
+    list_display        = ( 'display_name', 'city','state', 'country')
+    fields              = ( 'display_name', 'slug', 'city','state', 'country', 'country_code', 'number')
     prepopulated_fields = {'slug': ('display_name',)}
     
-admin.site.register(Sound, SoundAdmin)
-admin.site.register(Author, AuthorAdmin)
+admin.site.register(GeoSound, GeoSoundAdmin)
+admin.site.register(UserProfile, UserProfileAdmin)
 
