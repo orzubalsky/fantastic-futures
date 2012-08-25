@@ -25,8 +25,12 @@ h2 {
 	position:absolute;
 	left:0;
 	top:0;
+<<<<<<< HEAD
+	background:url(../images/loading.gif);
+=======
 	display: none;
 
+>>>>>>> 66801f5dae7ddfde567ff068005914e4dfc7e055
 }
 #logo {
 	background:url(../images/logo2.png);
@@ -56,6 +60,7 @@ h2 {
 }
 
 /*constellation menu*/
+
 #constellationMenu {
 	width:140px;
 	position:relative;
@@ -64,9 +69,32 @@ h2 {
 	height:160px;
 	z-index:2;
 }
+#constellationMenu #scrollDown {
+	height:10px;
+	width:100px;
+	display:block;
+	display:none;
+	position:relative;
+	top:-5px;
+}
+#constellationMenu #scrollUp {
+	height:10px;
+	width:100px;
+	display:block;
+	display:none;
+	position:relative;
+	top:-5px;
+}
+#contContentContainer {
+	
+}
 #constellationMenuContent {
 	color:#AAA;
 	display:none;
+	overflow:hidden;
+	height:97px;
+	position:relative;
+	top:-5px;
 }
 #constellationMenuContent .selected {
 	color:#000;
@@ -362,6 +390,9 @@ h2 {
     z-index: 1;
     width: 100%;
     height: 100%;
+}
+#map {
+	opacity:0;
 }
 #customZoom {
     position:absolute;

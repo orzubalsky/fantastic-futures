@@ -32,6 +32,8 @@
         	});
         	$("#constellationMenu h2").click(function() {
         	  $("#constellationMenuContent").fadeToggle("fast", "linear");
+        	  $("#constellationMenu #scrollUp").fadeToggle("fast", "linear");
+        	  $("#constellationMenu #scrollDown").fadeToggle("fast", "linear");
         	});		
         	$("#toggleLanguage").click(function() {
         	  $("#about .description.arabic").fadeToggle("fast", "linear");
