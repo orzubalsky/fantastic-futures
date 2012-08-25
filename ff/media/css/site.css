@@ -25,6 +25,7 @@ h2 {
 	position:absolute;
 	left:0;
 	top:0;
+	display: none;
 
 }
 #logo {
@@ -81,6 +82,12 @@ h2 {
 	margin-top:0px;
 	padding-top:0px;
 }
+#addSound label {
+    position: absolute;
+    top: 2.4px;
+    left: 3px;
+    color: #005fff;    
+}
 /* saf3+, chrome1+ argh! */
 @media screen and (-webkit-min-device-pixel-ratio:0) {
 	#addSound {
@@ -118,7 +125,7 @@ h2 {
 	font-family:"Andale Mono", "Droid Sans", Helvetica, Arial, sans-serif;
 	font-size:1em;
 	line-height:12px;
-	padding:5px 15px 5px 10px;
+	padding:13px 15px 5px 10px;
 	width:240px;
 	min-height:60px;
 }
@@ -162,6 +169,7 @@ h2 {
 }
 #addSoundForm li, #addConstellationForm li, #locateSound li {
 	list-style: none;
+	position: relative;
 }
 #addSoundCheck, #addConstellationCheck, #feedbackCheck {
 	text-align:center;

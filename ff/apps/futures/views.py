@@ -7,6 +7,7 @@ from futures.models import *
 from futures.forms import *
 from django.template.defaultfilters import slugify
 from django.utils import simplejson as json
+from ajaxuploader.views import AjaxFileUploader
 
 
 def index(request):
@@ -23,41 +24,23 @@ def index(request):
     }
     layer_json = json.dumps(layers)    
 
-    feedback_form = FeedbackForm()
+    feedback_form   = FeedbackForm()
+    add_sound_form  = GeoSoundForm(initial={'created_by': 'YOUR NAME', 'location': 'CITY, STATE, COUNTRY', 'story': 'STORY ABOUT THIS SOUND (OPTIONAL)'})
 
     return render_to_response(
         'index.html', { 
             'layers'        : layer_json,
             'feedback_form' : feedback_form,
+            'add_sound_form': add_sound_form,
         }, context_instance=RequestContext(request))
 
 def view_sound(request, sound_slug):
     pass
 
-def add_sound(request):
-    layers = {}
-        
-    layers["sounds"] = {  
-            'title': "sounds",
-            'url': reverse('sound-layer'),
-            # 'style_shape': art.type.mapdisplay_graphic_type,
-            # 'style_fill_color': art.type.mapdisplay_fill_color,
-            # 'style_fill_opacity': art.type.mapdisplay_fill_opacity, 
-            # 'style_stroke_color': art.type.mapdisplay_stroke_color,
-            # 'style_stroke_opacity': art.type.mapdisplay_stroke_opacity,
-            # 'style_size': art.type.mapdisplay_size 
-    }
-    layer_json = json.dumps(layers)    
-    
-    return render_to_response('add_sound.html', { 'layers': layer_json }, context_instance=RequestContext(request))
-
 def sound_layer(request):
-    sounds = Sound.objects.all()
-    geo_json = ''
-    crs = None # where should this come from?
+    sounds = GeoSound.objects.all()
 
     results = []
-
     for datum in list(sounds):
         if not datum.point:
             continue
@@ -68,7 +51,6 @@ def sound_layer(request):
         'type':'FeatureCollection',
         'features': results,
     }
-
     geo_json = json.dumps(result_data) 
 
     from django.utils.safestring import mark_safe
@@ -91,3 +73,39 @@ def _datum_to_json(datum,thickness='thin'):
                         "thickness": thickness }
         }
     return data
+    
+
+def start(request):
+    csrf_token = get_token(request)
+    return render_to_response('import.html', {'csrf_token': csrf_token}, context_instance = RequestContext(request))
+
+import_uploader = AjaxFileUploader()
+
+def add_sound(request):    
+    if request.method == 'POST':
+        add_sound_form = GeoSoundForm(request.POST)
+        if add_sound_form.is_valid():
+            validForm = add_sound_form.save(commit=False)
+            uploaded_file = add_sound_form.cleaned_data.get('filename')            
+            validForm.save_upload(uploaded_file)
+    else:
+        add_sound_form  = GeoSoundForm(initial={'created_by': 'YOUR NAME', 'location': 'CITY, STATE, COUNTRY', 'story': 'STORY ABOUT THIS SOUND (OPTIONAL)'})
+    feedback_form   = FeedbackForm()        
+    layers = {}
+    layers["sounds"] = {  
+           'title': "sounds",
+           'url': reverse('sound-layer'),
+           # 'style_shape': art.type.mapdisplay_graphic_type,
+           # 'style_fill_color': art.type.mapdisplay_fill_color,
+           # 'style_fill_opacity': art.type.mapdisplay_fill_opacity, 
+           # 'style_stroke_color': art.type.mapdisplay_stroke_color,
+           # 'style_stroke_opacity': art.type.mapdisplay_stroke_opacity,
+           # 'style_size': art.type.mapdisplay_size 
+    }
+    layer_json = json.dumps(layers)
+    return render_to_response(
+        'index.html', { 
+            'layers'        : layer_json,
+            'feedback_form' : feedback_form,
+            'add_sound_form': add_sound_form,
+        }, context_instance=RequestContext(request))
