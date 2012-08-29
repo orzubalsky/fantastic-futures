@@ -84,9 +84,11 @@ import_uploader = AjaxFileUploader()
 def add_sound(request):    
     if request.method == 'POST':
         add_sound_form = GeoSoundForm(request.POST)
+        print add_sound_form.errors
         if add_sound_form.is_valid():
             validForm = add_sound_form.save(commit=False)
             uploaded_file = add_sound_form.cleaned_data.get('filename')            
+            print uploaded_file
             validForm.save_upload(uploaded_file)
     else:
         add_sound_form  = GeoSoundForm(initial={'created_by': 'YOUR NAME', 'location': 'CITY, STATE, COUNTRY', 'story': 'STORY ABOUT THIS SOUND (OPTIONAL)'})

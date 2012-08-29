@@ -11,10 +11,10 @@ eggs/
 parts/
 
 # ignore static files (for now):
-ts/static/
+ff/static/
 
-# ignore the migration app
-ts/apps/migration/
+# ignore user uploaded files
+ff/media/uploads/
 
 # ignore sql data dump:
 sample_data.json
