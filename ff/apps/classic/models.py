@@ -108,17 +108,10 @@ class SoundManager(Manager):
         # generate point from location
         from django.contrib.gis.geos import Point
         from googlemaps import GoogleMaps
-        gmaps = GoogleMaps("AIzaSyAzVOmIBHkXBtO40P6WNrCulot3RcL5cQ0")
-        print data['location']
+        gmaps = GoogleMaps(settings.GOOGLE_API_KEY)
         try:
             lat, lng = gmaps.address_to_latlng(data['location'])
-            print lat
-            print lng
             point = Point(lng, lat, srid=4326)
-            point2= Point(lng, lat, srid=4326)
-            print point
-            print point2
-            
 
             # save geosound
             geosound = GeoSound(pk=data['id'], sound=data['filename'], title=data['title'], location=data['location'], story=data['story'], created_by=user.username, user=user, slug=slug, point=point, created=created)
@@ -126,16 +119,11 @@ class SoundManager(Manager):
 
             # get tags
             tags = []
-            if SoundsXTags.objects.filter(sound_id=int(data['id'])).exists():
-                tag_old_join_rows = SoundsXTags.objects.filter(sound_id=int(data['id']))
+            if SoundsXTags.objects.using('classic').filter(sound_id=int(data['id'])).exists():
+                tag_old_join_rows = SoundsXTags.objects.using('classic').filter(sound_id=int(data['id']))
                 for tag_old_join_row in tag_old_join_rows:
-                    tag = Tag.objects.get(pk=tag_old_join_row.tag_id)
-                    print tag
-                    tags.append(tag.title)
-            print tags
-            if len(tags) > 0:
-                tags = ",".join([tag in tags])        
-                geosound.tags.add(tags)
+                    tag = Tag.objects.using('classic').get(pk=tag_old_join_row.tag_id)
+                    geosound.tags.add(tag.title)
         except:
             pass
 

@@ -78,7 +78,7 @@
 			});
 			           
 			map.addLayers( [ triFill, kml ] );
-			map.zoomTo(2);
+			map.zoomTo(2.5);
 
 			// *** TRIANGLE STUFF ***
 			/* define the 19 triangles */

@@ -27,6 +27,7 @@
                 {
                 	$('.qq-upload-file, .qq-upload-size, .qq-upload-cancel').hide();
                 	var percentage=Math.round((loaded/total)*100);
+                	lib.log(percentage);
                 	$('#ajaxUploadContainer').addClass('progress');		
                 	$('.progressBarContainer .progress').css({'width':percentage+'%'});		
                 },

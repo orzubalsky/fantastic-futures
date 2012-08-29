@@ -2,9 +2,15 @@ from django.conf import settings
 from django.contrib.gis.db.models import *
 from django.utils.timezone import utc
 from django.contrib.auth.models import User
+from django.core.files.base import ContentFile        	
+from django.conf import settings
+from django.core.files import File
+from django.core.files.storage import default_storage as storage        
+from django.contrib.gis.geos import Point  
 from django_countries import CountryField
-from taggit.managers import TaggableManager
+from taggit.managers import TaggableManager      
 from datetime import *
+from futures.validators import *
 import os, sys, pytz, uuid, random
 
 class Base(Model):
@@ -36,9 +42,9 @@ class UserProfile(Base):
 
 class GeoSound(Base):
                   
-    sound               = FileField(db_column="filename", upload_to="uploads", max_length=150)
+    sound               = FileField(upload_to="uploads", max_length=150)
     title               = CharField(max_length=100, blank=True, null=True)
-    location            = CharField(max_length=150, blank=False, null=True)
+    location            = CharField(max_length=150, blank=False, null=True, validators=[validate_address])
     story               = TextField(blank=True, null=True)
     created_by          = CharField(max_length=100, blank=False, null=True)    
     user                = ForeignKey(User, blank=True, null=True)
@@ -49,23 +55,28 @@ class GeoSound(Base):
     objects = GeoManager()
     
     def save_upload(self, filename, *args, **kwargs):
-        from django.core.files.base import ContentFile        	
-        from django.conf import settings
-        from django.core.files import File
-        from django.core.files.storage import default_storage as storage
-        
-
-        path = settings.MEDIA_ROOT + '/uploads/' + filename
-        f = open(path, 'w')
-        myfile = File(f)
-                
-        #file_content = ContentFile(myfile.read())
-        self.filename.save(filename, myfile)
-        
-        if storage.exists(filename):
-            storage.delete(filename)
-        
-        super(Sound, self).save(*args, **kwargs)
+        "save geosound after ajax uploading an mp3 file"
+        try:
+            # get coordinates from address
+            lat, lng = coords_from_address(self.location)
+            
+            # store point from coordinates
+            point = Point(lng, lat, srid=4326)
+            
+            # construct path to ajax uploaded file
+            path = settings.MEDIA_ROOT + '/uploads/' + filename
+            
+            # open file and create a django File object from it
+            f = open(path, 'w')
+            sound_file = File(f)
+            
+            # save the model's sound file
+            self.sound.save(filename, sound_file)
+    
+            # save model
+            super(GeoSound, self).save(*args, **kwargs)
+        except:
+            pass
 
     def __unicode__(self):
         return self.title
