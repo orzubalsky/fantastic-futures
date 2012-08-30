@@ -62,29 +62,36 @@
         		ctx.fill();
         	</script>
 
-        	<form action="{% url add-sound %}" method="post" enctype="multipart/form-data" id="addSoundForm">		
-                {{ add_sound_form.non_field_errors }}
-                {% csrf_token %}  
-            	<div id="ajaxUploadContainer">
-    				<a href="#" id="uploadText">CHOOSE FILE</a>            	    
-    				<div id="file-uploader"></div>
-    				<div class="progressBarContainer">
-    					<div class="progressBar">
-    						<div class="progress"></div>
-    					</div>
-    				</div>
-    			</div>       
-    		    {{ add_sound_form.filename }}    			           
-    		    {{ add_sound_form.created_by }}
-    		    {{ add_sound_form.location }}        			    
-    		    {{ add_sound_form.story }}        			    
-    			<button type="past">PAST?</button><button type="past">PRESENT?</button><button type="past">FUTURE?</button>
-    		    <input id="submit" type="submit" value="UPLOAD">
-
-        		<div id="addSoundCheck">
-        			:) SOUND ADDED!
-        		</div>	
-        	</form>
+          <form id="addSoundForm" method="post" action="{% url home %}" enctype="multipart/form-data">
+            {% csrf_token %}  
+            <div class="errors">
+              {{ add_sound_form.filename.errors }}
+              {{ add_sound_form.created_by.errors }}
+              {{ add_sound_form.location.errors }}
+              {{ add_sound_form.story.errors }}
+            </div>
+            <div id="ajaxUploadContainer">
+              <a href="#" id="uploadText">CHOOSE FILE</a>
+              <div id="file-uploader"></div>
+                <div class="progressBarContainer">
+                  <div class="progressBar">
+                    <div class="progress"></div>
+                  </div>
+                </div>
+              </div>
+              {{ add_sound_form.filename }}
+              {{ add_sound_form.lat }}
+              {{ add_sound_form.lon }}
+              
+              {{ add_sound_form.created_by }}
+              {{ add_sound_form.location }}
+              {{ add_sound_form.story }}
+              <button type="past">PAST?</button><button type="past">PRESENT?</button><button type="past">FUTURE?</button>
+              <input id="submit" type="submit" value="UPLOAD">
+              <div id="addSoundCheck">
+                :) SOUND ADDED!
+              </div>	
+            </form>
         </div>
         <!--------ADD SOUND ENDED------->
             	 
@@ -184,7 +191,8 @@
 	</div>
 	<script type="text/javascript" src="{{ MEDIA_URL }}js/lib/jquery.js"></script>	
 	<script type="text/javascript" src="{{ MEDIA_URL }}js/lib/jquery.scrollTo-1.4.3.js"></script>
-    {% dajaxice_js_import %}
+  {% dajaxice_js_import %}
+  <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?key={{ google_api_key }}&sensor=false"></script>  
 	<script type="text/javascript" src="{{ MEDIA_URL }}js/lib/fileuploader.js"></script>
 	<script type="text/javascript" src="{{ MEDIA_URL }}js/lib.js"></script>
 	<script type="text/javascript" src="{{ MEDIA_URL }}js/site.js"></script>

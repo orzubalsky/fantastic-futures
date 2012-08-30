@@ -6,17 +6,16 @@
 		this.init = function() 
 		{
 		    this.menus();
-		    this.formValues();
 		    this.WIDTH  = $('#interface').width();
 		    this.HEIGHT = $('#interface').height();
 		    site.ajaxUpload.init();
-		    site.map.init();
+		    //site.map.init();
 		};
 		
 		this.menus = function()
 		{
 		    var self = this;
-		    
+        	
         	$("#logo").click(function() {
         	  $("#about").fadeToggle("fast", "linear");
         	});
@@ -62,28 +61,50 @@
                 var data = $(this).serialize();
                 Dajaxice.futures.submit_feedback(self.feedback_callback, {'form':data});
         	});
+            $('#addSoundForm').submit(function(e)
+            {                
+                e.preventDefault();
+                
+                $('input[name=lat]').val('');
+                $('input[name=lon]').val('');      
+    		    $('#addSoundForm input, #addSoundForm textarea').removeClass('error');
+    		    $('#addSoundForm .errors').empty();                          
+                
+                var address = $('input[name=location]').val();
+                var geocoder = new google.maps.Geocoder();                        
+                geocoder.geocode( { 'address': address}, function(results, status) 
+                {
+                    if (status == google.maps.GeocoderStatus.OK) 
+                    {
+                       $('input[name=lat]').val( results[0].geometry.location.lat() );
+                       $('input[name=lon]').val( results[0].geometry.location.lng() );                     
+                    } 
+                    else 
+                    {
+                        lib.log(status);
+                    }
+                    var data = $('#addSoundForm').serialize();
+                    Dajaxice.futures.submit_sound(self.addSound_callback, {'form':data});                    
+                });            
+            });
 		};
 		
-    	this.formValues = function() 
-		{		    
-            this.inputDefaultValue($('#id_created_by'));
-            this.inputDefaultValue($('#id_location'));
-            this.inputDefaultValue($('#id_story'));
-		};		
-		
-		this.inputDefaultValue = function(element)
+		this.addSound_callback = function(data)
 		{
-            // the input box's default value 
-            var defaultValue = $(element).val();
-        
-            $(element).live('focus', function() {
-            	$(this).val('');
-            })
-            .live('blur', function() {
-            	if ($(this).val().length < 1) {
-            		$(element).val(defaultValue);
-            	}
-            });
+		    lib.log(data);
+		    if (data.success == true)
+		    {
+		        
+		    }
+		    else 
+		    {		        
+                for (field in data.errors)
+                {   
+                    var error = data.errors[field][0];
+                    $('#addSoundForm .errors').append('<p>' + error + '</p>');
+                    $('#id_' + field).addClass('error');
+                }		        
+		    }		    
 		};
 		
 		this.feedback_callback = function(data)
@@ -125,6 +146,11 @@
                     $('#id_' + field).addClass('error');
                 }
             }
+		};
+		
+		this.appendFormError = function(form, message)
+		{
+            $('.errors', form).append('<p>' + message + '</p>');		    
 		};
 	};
 })(jQuery);

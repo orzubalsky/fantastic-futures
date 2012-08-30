@@ -13,6 +13,16 @@ class GeoSoundForm(forms.ModelForm):
         model = GeoSound
         fields = ['created_by', 'location', 'story']
         widgets = {
-            'story'     : forms.Textarea(attrs={'class':'optional'}),
-            }        
+            'created_by': forms.TextInput(attrs={'placeholder':'YOUR NAME'}),
+            'location': forms.TextInput(attrs={'placeholder':'CITY, STATE, COUNTRY'}),            
+            'story'     : forms.Textarea(attrs={'placeholder':'STORY ABOUT THIS SOUND (OPTIONAL)', 'class':'optional'}),
+            }
+
+    def __init__(self, *args, **kwargs):
+         "Sets custom meta data to the form's fields"
+         super(forms.ModelForm, self).__init__(*args, **kwargs)
+         self.fields['created_by'].error_messages['required'] = "please enter your name"
+
     filename    = forms.CharField(widget=forms.HiddenInput, error_messages={'required': 'Please upload an mp3 file'})
+    lat         = forms.CharField(error_messages={'required':'Please enter a valid address'})
+    lon         = forms.CharField(required=False)     

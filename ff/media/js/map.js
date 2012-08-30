@@ -197,17 +197,11 @@
                 if (status == google.maps.GeocoderStatus.OK) {
                     var lat = results[0].geometry.location.lat();
                     var lon = results[0].geometry.location.lng();
-                    placeMarker(lat, lon);
-                    // return {lat: lat, lon: lon};
+                    return [lat, lon];
                 } else {
                     lib.log(status);
                 }
             });
-        };
-        
-        function placeMarker(lat, lon)
-        {
-            lib.log(sound_layer);
         };
 	};
 })(jQuery);	

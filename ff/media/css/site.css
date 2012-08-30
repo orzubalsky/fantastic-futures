@@ -168,6 +168,15 @@ h2 {
 	font-family:"Andale Mono", "Droid Sans", Helvetica, Arial, sans-serif;
 	font-size:1em;
 }
+::-webkit-input-placeholder {
+	color:#005fff;
+}
+:-moz-placeholder {
+	color:#005fff;
+}
+:-ms-input-placeholder {
+	color:#005fff;
+}
 #addSoundForm textarea {
 	height:20px;
 }

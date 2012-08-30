@@ -44,7 +44,7 @@ class GeoSound(Base):
                   
     sound               = FileField(upload_to="uploads", max_length=150)
     title               = CharField(max_length=100, blank=True, null=True)
-    location            = CharField(max_length=150, blank=False, null=True, validators=[validate_address])
+    location            = CharField(max_length=150, blank=True, null=True)
     story               = TextField(blank=True, null=True)
     created_by          = CharField(max_length=100, blank=False, null=True)    
     user                = ForeignKey(User, blank=True, null=True)
@@ -54,14 +54,14 @@ class GeoSound(Base):
     
     objects = GeoManager()
     
-    def save_upload(self, filename, *args, **kwargs):
+    def save_upload(self, filename, lat, lon, *args, **kwargs):
         "save geosound after ajax uploading an mp3 file"
         try:
             # get coordinates from address
-            lat, lng = coords_from_address(self.location)
+            #lat, lng = coords_from_address(self.location)
             
             # store point from coordinates
-            point = Point(lng, lat, srid=4326)
+            point = Point(lon, lat, srid=4326)
             
             # construct path to ajax uploaded file
             path = settings.MEDIA_ROOT + '/uploads/' + filename
