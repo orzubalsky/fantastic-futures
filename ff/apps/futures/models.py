@@ -56,27 +56,31 @@ class GeoSound(Base):
     
     def save_upload(self, filename, lat, lon, *args, **kwargs):
         "save geosound after ajax uploading an mp3 file"
+
+        # store point from coordinates
+        self.point = Point(lon, lat, srid=4326)
+
+        # try finding an existing user by the "created_by" field
         try:
-            # get coordinates from address
-            #lat, lng = coords_from_address(self.location)
-            
-            # store point from coordinates
-            point = Point(lon, lat, srid=4326)
-            
-            # construct path to ajax uploaded file
-            path = settings.MEDIA_ROOT + '/uploads/' + filename
-            
-            # open file and create a django File object from it
-            f = open(path, 'w')
-            sound_file = File(f)
-            
-            # save the model's sound file
-            self.sound.save(filename, sound_file)
-    
-            # save model
-            super(GeoSound, self).save(*args, **kwargs)
-        except:
+            self.user = User.objects.get(username=self.created_by)
+        except User.DoesNotExist:
             pass
+        
+        # create a title for the sound
+        self.title = "by %s, recorded in %s" % (self.created_by, self.location)
+        
+        # construct path to ajax uploaded file
+        path = settings.MEDIA_ROOT + '/uploads/' + filename
+        
+        # open file and create a django File object from it
+        f = open(path, 'w')
+        sound_file = File(f)
+        
+        # save the model's sound file
+        self.sound.save(filename, sound_file)
+                    
+        # save model
+        super(GeoSound, self).save(*args, **kwargs)
 
     def __unicode__(self):
         return self.title

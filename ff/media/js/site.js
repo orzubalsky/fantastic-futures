@@ -81,7 +81,6 @@
                     } 
                     else 
                     {
-                        lib.log(status);
                     }
                     var data = $('#addSoundForm').serialize();
                     Dajaxice.futures.submit_sound(self.addSound_callback, {'form':data});                    
@@ -91,10 +90,12 @@
 		
 		this.addSound_callback = function(data)
 		{
-		    lib.log(data);
 		    if (data.success == true)
 		    {
-		        
+		        // show success message
+		        // hide form
+                // show sound on map
+                // hide map
 		    }
 		    else 
 		    {		        

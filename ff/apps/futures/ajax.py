@@ -21,6 +21,8 @@ def submit_sound(request, form):
     if add_sound_form.is_valid():
         validForm = add_sound_form.save(commit=False)
         uploaded_file = add_sound_form.cleaned_data.get('filename')
-        validForm.save_upload(uploaded_file, add_sound_form.cleaned_data.get('lat'), add_sound_form.cleaned_data.get('lon'))
+        lat = add_sound_form.cleaned_data.get('lat')
+        lon = add_sound_form.cleaned_data.get('lon')
+        validForm.save_upload(uploaded_file, float(lat), float(lon))
         return json.dumps({'success':True})
     return json.dumps({'success':False, 'errors': add_sound_form.errors})
