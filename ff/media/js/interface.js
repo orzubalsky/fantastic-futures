@@ -1,44 +1,56 @@
 ;(function($){
 	var ffinterface = window.site.ffinterface = new function() 
 	{	
-	    var width           = $('#interface').width();
-	    var height          = $('#interface').height();
-	    var lastClick       = -1;
-        var sphere          = new Sphere3D();
-        var rotation        = { x: deg_to_rad(0), y: deg_to_rad(0), z: deg_to_rad(0) };
-        var distance        = 2000;
-        var map_points      = [];
-        var points_2D       = [];
-        var connections_2D  = [];
-        var stage           = new Kinetic.Stage({
-            container: "interface",
-            width: width,
-            height: height,                     
-        });
-        var rotation_layer      = new Kinetic.Layer();
-        var points_layer        = new Kinetic.Layer();        
-        var connections_layer   = new Kinetic.Layer();
+	    this.width;
+	    this.height;
+	    this.lastClick       = -1;
+        this.sphere;
+        this.rotation;
+        this.distance        = 2000;
+        this.map_points      = [];
+        this.points_2D       = [];
+        this.connections_2D  = [];
+        this.stage;
+        this.rotation_layer;
+        this.points_layer;       
+        this.connections_layer;
 
         /* set up the interface and run it */
         this.init = function()
-        {           
-            setup();            
+        {
+            var self = this;
+            
+            self.rotation           = { x: self.deg_to_rad(0), y: self.deg_to_rad(0), z: self.deg_to_rad(0) };            
+    	    self.width              = $('#interface').width();
+    	    self.height             = $('#interface').height();            
+            self.sphere             = new self.Sphere3D();
+            self.stage              = new Kinetic.Stage({
+                container: "interface",
+                width: self.width,
+                height: self.height,                     
+            });
+            self.rotation_layer      = new Kinetic.Layer();
+            self.points_layer        = new Kinetic.Layer();        
+            self.connections_layer   = new Kinetic.Layer();            
+            
+            self.setup();            
 
             // Set framerate to 30 fps
             var framerate = 1000/30;
             
             // run update-draw loop
-            setInterval(function() { update(); draw(); }, framerate);
+            setInterval(function() { self.update(); self.draw(); }, framerate);
         };
         
         this.setPoints = function(points)
         {
-            map_points = points;
+            this.map_points = points;
         };
         
         this.resetRotation = function()
         {
             var self = this;
+            var rotation = self.rotation;
             
             var rotation_interval = setInterval(function() 
             {
@@ -56,6 +68,7 @@
         
         this.rotateTo = function(x,y,z)
         {
+            var rotation = self.rotation;
             
             rotation.x = (rotation.x > x) ? rotation.x - rotation.x/30 : x;
             rotation.y = (rotation.y > y) ? rotation.y - rotation.y/30 : y;
@@ -67,83 +80,91 @@
             rotation.z = (rotation.z > z) ? rotation.z - deg_to_rad(3) : z;   */         
         };
         
-        function setup()
+        this.setup = function()
         {   
-            setupStageDragging();
-            for(var i=0; i<map_points.length; i++)
+            var self = this;
+            
+            self.setupStageDragging();
+            for(var i=0; i<self.map_points.length; i++)
             {
-                p = new Point3D();
+                p = new self.Point3D();
                 p.z = lib.random(14,-7);
-                p.x = reverse_projection(map_points[i].x, p.z, width/2.0, 100.0, distance)
-                p.y = reverse_projection(map_points[i].y, p.z, height/2.0, 100.0, distance)
-                sphere.point.push( p );             
+                p.x = self.reverse_projection(self.map_points[i].x, p.z, self.width/2.0, 100.0, self.distance)
+                p.y = self.reverse_projection(self.map_points[i].y, p.z, self.height/2.0, 100.0, self.distance)
+                self.sphere.point.push( p );             
             }            
-            sphereRefresh();
-            initPoints();
+            self.sphereRefresh();
+            self.initPoints();
             $("#loadingGif").fadeToggle("fast", "linear");
         }
         
-        function initPoints()
+        this.initPoints = function()
         {
-
-            for(var i=0; i<points_2D.length; i++) {
-                addPointToLayer(points_2D[i]);   
-            }            
-            stage.add(points_layer);
+            var self = this;
             
-            for (var i=0; i<sphere.connections.length; i++)
+            for(var i=0; i<self.points_2D.length; i++) {
+                self.addPointToLayer(self.points_2D[i]);   
+            }            
+            self.stage.add(self.points_layer);
+            
+            for (var i=0; i<self.sphere.connections.length; i++)
             {                
-                addConnectionToLayer(sphere.connections[i]);
+                self.addConnectionToLayer(self.sphere.connections[i]);
             }
-            stage.add(connections_layer);
+            self.stage.add(self.connections_layer);
         }
         
-        function update()
-        {               
+        this.update = function()
+        {      
+            var self = this;
+            var rotation = self.rotation;
+             
             // stage drag rotation calculation
-            var rotation_canvas = rotation_layer.getChildren()[0];
+            var rotation_canvas = self.rotation_layer.getChildren()[0];
             if (rotation_canvas.isDragging()) {
-                 var mousePos = stage.getMousePosition();
+                 var mousePos = self.stage.getMousePosition();
                  
                  var s = 10;
-                 var x = ((mousePos.x * 2*s) - width*s) / width;
-                 var y = ((mousePos.y * 2*s) - height*s) / height;
-                 rotation.y -= deg_to_rad(x);
-                 rotation.y = (rotation.y >= deg_to_rad(360)) ? deg_to_rad(0) : rotation.y;
-                 rotation.x += deg_to_rad(y); 
-                 rotation.x = (rotation.x >= deg_to_rad(360)) ? deg_to_rad(0) : rotation.x;
+                 var x = ((mousePos.x * 2*s) - self.width*s) / self.width;
+                 var y = ((mousePos.y * 2*s) - self.height*s) / self.height;
+                 rotation.y -= self.deg_to_rad(x);
+                 rotation.y = (rotation.y >= self.deg_to_rad(360)) ? self.deg_to_rad(0) : rotation.y;
+                 rotation.x += self.deg_to_rad(y); 
+                 rotation.x = (rotation.x >= self.deg_to_rad(360)) ? self.deg_to_rad(0) : rotation.x;
                  
             }
             
             // sound drag volume calculation
-            for (var i=0; i<points_layer.getChildren().length; i++)
+            for (var i=0; i<self.points_layer.getChildren().length; i++)
             {
-                var group = points_layer.getChildren()[i];
+                var group = self.points_layer.getChildren()[i];
                 
                 if (group.isDragging()) 
                 {                     
                     var group_y = group.getY();                     
-                    var value = stage.getMousePosition().y;
-                    var volume = map(value, group_y+40, group_y-40, 0.2, 0.9, true);
-                    var radius = map(value, group_y+40, group_y-40, 5, 20, true);                    
+                    var value = self.stage.getMousePosition().y;
+                    var volume = self.map(value, group_y+40, group_y-40, 0.2, 0.9, true);
+                    var radius = self.map(value, group_y+40, group_y-40, 5, 20, true);                    
                     var halo = group.getChildren()[0];
                     halo.setRadius(radius);
                 }                
             }
             
             // rebuild projected 2d point array
-            sphereRefresh();
+            self.sphereRefresh();
         }
         
-        function draw()
+        this.draw = function()
         {
-            points_layer.clear();
-            connections_layer.clear();
+            var self = this;
+            
+            self.points_layer.clear();
+            self.connections_layer.clear();
                                            
-            for(var i=0; i<points_layer.getChildren().length; i++)
+            for(var i=0; i<self.points_layer.getChildren().length; i++)
             {
-                var point = points_2D[i];
-                var sound = points_layer.getChildren()[i];
+                var point = self.points_2D[i];
+                var sound = self.points_layer.getChildren()[i];
                 var halo = sound.getChildren()[0];
                 var core = sound.getChildren()[1];
                 
@@ -158,25 +179,27 @@
                 sound.setAttrs(attrs);
             }                        
             
-            for(var i=0; i<connections_layer.getChildren().length; i++)
+            for(var i=0; i<self.connections_layer.getChildren().length; i++)
             {
-                var connection = sphere.connections[i];
-                var child = connections_layer.getChildren()[i];
+                var connection = self.sphere.connections[i];
+                var child = self.connections_layer.getChildren()[i];
 
-                var p1 = points_2D[connection.index_1];
-                var p2 = points_2D[connection.index_2];
+                var p1 = self.points_2D[connection.index_1];
+                var p2 = self.points_2D[connection.index_2];
     
                 child.setPoints([ {x: p1.x, y: p1.y}, {x: p2.x, y: p2.y} ]);
             }            
             
-            rotation_layer.draw();
-            points_layer.draw();
-            connections_layer.draw();
+            self.rotation_layer.draw();
+            self.points_layer.draw();
+            self.connections_layer.draw();
         }
         
         
-		function addPointToLayer(point)
-		{		    
+		this.addPointToLayer = function(point)
+		{	
+		    var self = this;
+		    	    
 		    // Kinetic group to store coordinates and meta data about the sound
 		    var sound = new Kinetic.Group({
                 x           : point.x,
@@ -211,16 +234,16 @@
                 {
                     this.getChildren()[1].setFill('#005fff');
 
-                    if (lastClick != -1) 
+                    if (self.lastClick != -1) 
                     {
-                        c = new Connection3D();
-                        c.index_1 = lastClick;
+                        c = new self.Connection3D();
+                        c.index_1 = self.lastClick;
                         c.index_2 = this.getAttrs().index;
-                        sphere.connections.push(c);                        
-                        addConnectionToLayer(c);
+                        self.sphere.connections.push(c);                        
+                        self.addConnectionToLayer(c);
                     }
 
-                    lastClick = this.getAttrs().index;
+                    self.lastClick = this.getAttrs().index;
                 }
                 else 
                 {
@@ -246,13 +269,15 @@
             
             sound.add(halo);
             sound.add(core);
-            points_layer.add(sound);	
+            self.points_layer.add(sound);	
 		};
 		
-		function addConnectionToLayer(connection)
+		this.addConnectionToLayer = function(connection)
 		{	
-		    var p1 = points_2D[connection.index_1];
-		    var p2 = points_2D[connection.index_2];
+		    var self = this;
+		    
+		    var p1 = self.points_2D[connection.index_1];
+		    var p2 = self.points_2D[connection.index_2];
 		    		    		    
             var line = new Kinetic.Line({
                 points          : [p1.x, p1.y, p2.x, p2.y],
@@ -261,39 +286,43 @@
                 lineCap         : "round",
                 lineJoin        : "round",
             });
-            connections_layer.add(line);	
+            self.connections_layer.add(line);	
 		};
 		
-		function setupStageDragging()
+		this.setupStageDragging = function()
 		{
+		    var self = this;
+		    
 		    var rotationCanvas = new Kinetic.Rect({
 		        x       : 0,
 		        y       : 0,
-		        width   : width,
-		        height  : height,
+		        width   : self.width,
+		        height  : self.height,
 		        fill    : "transparent",
                 draggable: true,
                 dragBounds: { top: 0, right: 0, bottom: 0, left: 0 }
 		    });
-		    rotation_layer.add(rotationCanvas);
-		    stage.add(rotation_layer);		    
+		    self.rotation_layer.add(rotationCanvas);
+		    self.stage.add(self.rotation_layer);		    
 		}
 				
-        function Point3D() 
+        this.Point3D = function() 
         {
             this.x = 0;
             this.y = 0;
             this.z = 0;
         }
         
-        function Connection3D()
+        this.Connection3D = function()
         {
             this.index_1 = 0;
             this.index_2 = 0;
         }
 
-        function Sphere3D(radius) 
+        this.Sphere3D = function(radius) 
         {
+            var self = this;
+            
             this.point       = new Array();
             this.connections = new Array();
             this.radius      = (typeof(radius) == "undefined") ? 10.0 : radius;
@@ -355,17 +384,19 @@
         }
 
         
-        function sphereRefresh()
+        this.sphereRefresh = function()
         {
+            var self = this;
+            
             // empty points array
-            points_2D = [];
+            self.points_2D = [];
                           
             // repopulate points array after projecting the points onto 2d
-            for(var i = 0; i < sphere.point.length; i++) 
+            for(var i = 0; i < self.sphere.point.length; i++) 
             {
-                var coordinates = project3dPoint(sphere.point[i]);
+                var coordinates = self.project3dPoint(self.sphere.point[i]);
 
-                points_2D.push({
+                self.points_2D.push({
                     x       : coordinates.x_2d,       // 2d x 
                     y       : coordinates.y_2d,       // 2d y
                     point_3d: coordinates.point_3d,   // Point3D object
@@ -374,26 +405,29 @@
             }
         }
         
-        function project3dPoint(point)
+        this.project3dPoint = function(point)
         {
-            var p = new Point3D();
+            var self = this;
+            var rotation = self.rotation;
+            
+            var p = new self.Point3D();
             
             p.x = point.x;
             p.y = point.y;
             p.z = point.z;
                             
-            rotateX(p, rotation.x);
-            rotateY(p, rotation.y);
-            rotateZ(p, rotation.z);
+            self.rotateX(p, rotation.x);
+            self.rotateY(p, rotation.y);
+            self.rotateZ(p, rotation.z);
 
-            var x = projection(p.x, p.z, width/2.0, 100.0, distance);
-            var y = projection(p.y, p.z, height/2.0, 100.0, distance);            
+            var x = self.projection(p.x, p.z, self.width/2.0, 100.0, self.distance);
+            var y = self.projection(p.y, p.z, self.height/2.0, 100.0, self.distance);            
             
             return {x_2d: x, y_2d: y, point_3d: p};
             
         }
 
-        function rotateX(point, radians) {
+        this.rotateX = function(point, radians) {
             var y = point.y;
             point.y = (y * Math.cos(radians)) + (point.z * Math.sin(radians) * -1.0);
             point.z = (y * Math.sin(radians)) + (point.z * Math.cos(radians));
@@ -401,7 +435,7 @@
             return point;
         }
 
-        function rotateY(point, radians) {
+        this.rotateY = function(point, radians) {
             var x = point.x;
             point.x = (x * Math.cos(radians)) + (point.z * Math.sin(radians) * -1.0);
             point.z = (x * Math.sin(radians)) + (point.z * Math.cos(radians));
@@ -409,7 +443,7 @@
             return point;            
         }
 
-        function rotateZ(point, radians) {
+        this.rotateZ = function(point, radians) {
             var x = point.x;
             point.x = (x * Math.cos(radians)) + (point.y * Math.sin(radians) * -1.0);
             point.y = (x * Math.sin(radians)) + (point.y * Math.cos(radians));
@@ -417,21 +451,21 @@
             return point;            
         }
 
-        function projection(xy, z, xyOffset, zOffset, distance) {
+        this.projection = function(xy, z, xyOffset, zOffset, distance) {
             return ((distance * xy) / (z - zOffset)) + xyOffset;
         }
         
-        function reverse_projection(xy_2d, z_3d, xyOffset, zOffset, distance)
+        this.reverse_projection = function(xy_2d, z_3d, xyOffset, zOffset, distance)
         {
             return ((xy_2d * z_3d) - (xy_2d * zOffset) - (xyOffset * z_3d) + (xyOffset * zOffset)) / distance;
         }
         
-        function deg_to_rad(degrees)
+        this.deg_to_rad = function(degrees)
         {
             return degrees * Math.PI / 180.0;
         }
         
-        function map(value, istart, istop, ostart, ostop, confine) 
+        this.map = function(value, istart, istop, ostart, ostop, confine) 
         {
       	   var result = ostart + (ostop - ostart) * ((value - istart) / (istop - istart));
       	   if (confine)
