@@ -39,7 +39,7 @@
                 onComplete: function( id, fileName, responseJSON ) 
                 {
                 	$('.qq-upload-file, .qq-upload-size, .qq-upload-cancel').hide();	
-                	$('#id_filename').val(fileName);
+                	$('#id_filename').val('uploads/' + fileName);
                 },
                 onAllComplete: function( uploads ) {
                 // uploads is an array of maps

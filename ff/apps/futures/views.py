@@ -8,7 +8,9 @@ from futures.models import *
 from futures.forms import *
 from django.template.defaultfilters import slugify
 from django.utils import simplejson as json
+from django.utils.safestring import mark_safe
 from ajaxuploader.views import AjaxFileUploader
+
 
 
 def index(request):
@@ -43,36 +45,29 @@ def sound_layer(request):
     sounds = GeoSound.objects.all()
 
     results = []
-    for datum in list(sounds):
-        if not datum.point:
-            continue
-        data = _datum_to_json(datum)
+    for sound in list(sounds):
+        data = object_to_json(sound)
         results.append(data)
               
     result_data = {
         'type':'FeatureCollection',
         'features': results,
     }
-    geo_json = json.dumps(result_data) 
-
-    from django.utils.safestring import mark_safe
-    mark_safe(geo_json)
+    geo_json = mark_safe(json.dumps(result_data))
   
     return HttpResponse(geo_json, content_type='application/json', status=200)
     
     
 # called from w/in layer_view
-def _datum_to_json(datum,thickness='thin'):
-    if datum.point:
-        thing = json.loads(datum.point.json)
+def object_to_json(sound_object):
+    if sound_object.point:
+        point = json.loads(sound_object.point.json)
     else:
-        thing = ''
+        point = ''
     data = {
         "type":"Feature", 
-        "geometry": thing,
-        "properties": { "title": datum.title,
-                        "id": datum.id,
-                        "thickness": thickness }
+        "geometry": point,
+        "properties": { "title": sound_object.title, "id": sound_object.id }
         }
     return data
     

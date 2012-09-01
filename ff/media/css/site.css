@@ -401,7 +401,7 @@ h2 {
     height: 100%;
 }
 #map {
-	opacity:0;
+	opacity:1;
 }
 #customZoom {
     position:absolute;

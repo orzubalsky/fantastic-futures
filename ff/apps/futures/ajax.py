@@ -1,7 +1,9 @@
-from django.utils import simplejson as json
 from dajaxice.decorators import dajaxice_register
 from dajaxice.utils import deserialize_form
+from django.utils import simplejson as json
+from django.utils.safestring import mark_safe
 from futures.forms import *
+from futures.views import object_to_json
 
 @dajaxice_register(method='POST')
 def submit_feedback(request, form):
@@ -23,6 +25,10 @@ def submit_sound(request, form):
         uploaded_file = add_sound_form.cleaned_data.get('filename')
         lat = add_sound_form.cleaned_data.get('lat')
         lon = add_sound_form.cleaned_data.get('lon')
-        validForm.save_upload(uploaded_file, float(lat), float(lon))
-        return json.dumps({'success':True})
+        new_sound = validForm.save_upload(uploaded_file, float(lat), float(lon))
+        
+        result_data = { 'type':'FeatureCollection', 'features': object_to_json(new_sound)}
+        geo_json = mark_safe(json.dumps(result_data))        
+        
+        return json.dumps({'success':True, 'geojson':geo_json})
     return json.dumps({'success':False, 'errors': add_sound_form.errors})

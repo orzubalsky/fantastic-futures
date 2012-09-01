@@ -9,7 +9,7 @@
 		    this.WIDTH  = $('#interface').width();
 		    this.HEIGHT = $('#interface').height();
 		    site.ajaxUpload.init();
-		    //site.map.init();
+		    site.map.init();
 		};
 		
 		this.menus = function()
@@ -92,10 +92,32 @@
 		{
 		    if (data.success == true)
 		    {
-		        // show success message
-		        // hide form
-                // show sound on map
-                // hide map
+                // 1. fade out form
+                $('#addSoundForm').fadeOut(800, function() 
+                {
+                    // 2. fade in success message
+                    $('#addSoundCheck').fadeIn(500, function() 
+                    {
+                        // 3. wait 1000 ms
+                        setTimeout(function() 
+                        {
+                            // 4. bring form back to its original position
+                            $('#addSound').fadeOut(1000, function() 
+                            {
+            	                // 5. restore the form's original state
+            	                $('#addSoundCheck').hide();
+            	                $('#addSoundForm input, #addSoundForm textarea').not('.formSubmit').val('');
+            	                
+                                // 6. show sound on map
+                                lib.log(data.geojson);
+                                site.map.addSound(data.geojson);
+                                
+                                // 7. hide map            	                
+            	                
+                	        });
+                        }, 1500);
+                    });
+                });		        
 		    }
 		    else 
 		    {		        
@@ -133,7 +155,7 @@
                     	                // 5. restore the form's original state
                     	                $('#feedbackCheck').hide();
                     	                $('#feedbackForm input, #feedbackForm textarea').not('.formSubmit').val('');
-                    	                $('#feedbackForm').show();
+                    	                $('#feedbackForm').show();                                        
                     	            }
                     	    );
                         }, 1000);
@@ -152,6 +174,12 @@
 		this.appendFormError = function(form, message)
 		{
             $('.errors', form).append('<p>' + message + '</p>');		    
+		};
+		
+		this.outputError = function(message)
+		{
+            $('#error #errorMessage').html('<p>' + message + '</p>');
+            $('#error').fadeIn(1000);	    
 		};
 	};
 })(jQuery);

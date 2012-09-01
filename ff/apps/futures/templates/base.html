@@ -47,10 +47,7 @@
 	
         <!--------ADD SOUND-------->
         <div id="addSound" class="tran1">
-        	<canvas id="addSoundTriangle" width="20" height="20">
-        	Your browser does not support the HTML5 canvas tag.
-        	</canvas>
-
+        	<canvas id="addSoundTriangle" width="20" height="20"></canvas>
         	<script type="text/javascript">
         		var c=document.getElementById("addSoundTriangle");
         		var ctx=c.getContext("2d");
@@ -87,7 +84,7 @@
               {{ add_sound_form.location }}
               {{ add_sound_form.story }}
               <button type="past">PAST?</button><button type="past">PRESENT?</button><button type="past">FUTURE?</button>
-              <input id="submit" type="submit" value="UPLOAD">
+              <input id="submit" class="formSubmit" type="submit" value="UPLOAD">
               <div id="addSoundCheck">
                 :) SOUND ADDED!
               </div>	

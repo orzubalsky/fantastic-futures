@@ -69,18 +69,14 @@ class GeoSound(Base):
         # create a title for the sound
         self.title = "by %s, recorded in %s" % (self.created_by, self.location)
         
-        # construct path to ajax uploaded file
-        path = settings.MEDIA_ROOT + '/uploads/' + filename
-        
-        # open file and create a django File object from it
-        f = open(path, 'w')
-        sound_file = File(f)
-        
-        # save the model's sound file
-        self.sound.save(filename, sound_file)
+        # save sound
+        self.sound = filename
                     
         # save model
         super(GeoSound, self).save(*args, **kwargs)
+        
+        # return the newly created model
+        return self
 
     def __unicode__(self):
         return self.title
