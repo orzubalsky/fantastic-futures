@@ -1,6 +1,7 @@
 ;(function($){
 	var ffinterface = window.site.ffinterface = new function() 
-	{	
+	{
+	    this.running = false;
 	    this.width;
 	    this.height;
 	    this.lastClick       = -1;
@@ -10,6 +11,8 @@
         this.map_points      = [];
         this.points_2D       = [];
         this.connections_2D  = [];
+        this.map_points_count;
+        this.sphere_point_count;
         this.stage;
         this.rotation_layer;
         this.points_layer;       
@@ -40,11 +43,8 @@
             
             // run update-draw loop
             setInterval(function() { self.update(); self.draw(); }, framerate);
-        };
-        
-        this.setPoints = function(points)
-        {
-            this.map_points = points;
+            
+            self.running = true;            
         };
         
         this.resetRotation = function()
@@ -67,12 +67,12 @@
         };
         
         this.rotateTo = function(x,y,z)
-        {
-            var rotation = self.rotation;
-            
-            rotation.x = (rotation.x > x) ? rotation.x - rotation.x/30 : x;
-            rotation.y = (rotation.y > y) ? rotation.y - rotation.y/30 : y;
-            rotation.z = (rotation.z > z) ? rotation.z - rotation.z/30 : z;
+        {   
+            var self = this;
+                     
+            self.rotation.x = (self.rotation.x > x + self.deg_to_rad(0.5)) ? self.rotation.x - self.rotation.x/20 : x;
+            self.rotation.y = (self.rotation.y > y + self.deg_to_rad(0.5)) ? self.rotation.y - self.rotation.y/20 : y;
+            self.rotation.z = (self.rotation.z > z + self.deg_to_rad(0.5)) ? self.rotation.z - self.rotation.z/20 : z;
             
             /*
             rotation.x = (rotation.x > x) ? rotation.x - deg_to_rad(3) : x;
@@ -87,24 +87,44 @@
             self.setupStageDragging();
             for(var i=0; i<self.map_points.length; i++)
             {
-                p = new self.Point3D();
-                p.z = lib.random(14,-7);
-                p.x = self.reverse_projection(self.map_points[i].x, p.z, self.width/2.0, 100.0, self.distance)
-                p.y = self.reverse_projection(self.map_points[i].y, p.z, self.height/2.0, 100.0, self.distance)
-                self.sphere.point.push( p );             
-            }            
+                self.mapPointToSpherePoint(self.map_points[i]);
+            }
+            self.map_points_count = self.map_points.length;        
             self.sphereRefresh();
             self.initPoints();
             $("#loadingGif").fadeToggle("fast", "linear");
         }
         
+        this.mapPointToSpherePoint = function(map_point)
+        {
+            var self = this;
+            
+            p = new self.Point3D();
+            
+            p.z = lib.random(14,-7);
+            p.x = self.reverse_projection(map_point.x, p.z, self.width/2.0, 100.0, self.distance)
+            p.y = self.reverse_projection(map_point.y, p.z, self.height/2.0, 100.0, self.distance)
+            
+            // add point to sphere point array
+            self.sphere.point.push(p);
+            
+            // the new sound index
+            var index = self.sphere.point.length - 1;
+                        
+            // push the point manually to the 2D point array so we can add a sound to the interface
+            self.addSpherePointToPoints2D(p, index);
+            
+            // the newly added 2D point
+            var new_2d_point = self.points_2D[index];
+            
+            // add sound shape to the interface
+            self.addPointToLayer(new_2d_point);            
+        };
+        
         this.initPoints = function()
         {
             var self = this;
             
-            for(var i=0; i<self.points_2D.length; i++) {
-                self.addPointToLayer(self.points_2D[i]);   
-            }            
             self.stage.add(self.points_layer);
             
             for (var i=0; i<self.sphere.connections.length; i++)
@@ -148,6 +168,14 @@
                     var halo = group.getChildren()[0];
                     halo.setRadius(radius);
                 }                
+            }
+            
+            // check whether a new point was added on the openlayers map
+            if (self.map_points.length > self.map_points_count)
+            {     
+                lib.log("a sound was added");
+                self.map_points_count = self.map_points.length;
+                self.mapPointToSpherePoint(self.map_points[self.map_points_count-1]);                
             }
             
             // rebuild projected 2d point array
@@ -327,60 +355,6 @@
             this.connections = new Array();
             this.radius      = (typeof(radius) == "undefined") ? 10.0 : radius;
             this.radius      = (typeof(radius) != "number") ? 10.0 : radius;
-
-/*
-            p1 = new Point3D();
-            p1.x = 0;
-            p1.y = 0;
-            p1.z = 0;
-            this.point.push(p1);
-       
-            p2 = new Point3D();            
-            p2.x = 100;
-            p2.y = 0;
-            p2.z = 0;
-            this.point.push(p2);
-          
-            p3 = new Point3D();            
-            p3.x = 100;
-            p3.y = 100;
-            p3.z = 0;
-            this.point.push(p3);
-                     
-            p4 = new Point3D();                        
-            p4.x = 0;
-            p4.y = 100;
-            p4.z = 0;
-            this.point.push(p4);            
-
-         
-            for(alpha = 0; alpha <= deg_to_rad(360); alpha += deg_to_rad(30)) {
-                p = new Point3D();
-
-                p.x = Math.cos(alpha) * this.radius;
-                p.y = 0;
-                p.z = Math.sin(alpha) * this.radius;
-                
-                this.point.push(p);
-            }
-         
-            for(var direction = 1; direction >= -1; direction -= 2) {
-                for(var beta = deg_to_rad(10); beta < deg_to_rad(90); beta += deg_to_rad(30)) {
-                    var radius = Math.cos(beta) * this.radius;
-                    var fixedY = Math.sin(beta) * this.radius * direction;
-
-                    for(var alpha = 0; alpha < deg_to_rad(360); alpha += deg_to_rad(30)) {
-                        p = new Point3D();
-
-                        p.x = Math.cos(alpha) * radius;
-                        p.y = fixedY;
-                        p.z = Math.sin(alpha) * radius;
-
-                        this.point.push(p);
-                    }
-                }
-            }
-            */
         }
 
         
@@ -394,16 +368,23 @@
             // repopulate points array after projecting the points onto 2d
             for(var i = 0; i < self.sphere.point.length; i++) 
             {
-                var coordinates = self.project3dPoint(self.sphere.point[i]);
-
-                self.points_2D.push({
-                    x       : coordinates.x_2d,       // 2d x 
-                    y       : coordinates.y_2d,       // 2d y
-                    point_3d: coordinates.point_3d,   // Point3D object
-                    index   : i                       // point index
-                });
+                self.addSpherePointToPoints2D(self.sphere.point[i], i);
             }
         }
+        
+        this.addSpherePointToPoints2D = function(sphere_point, index)
+        {
+            var self = this;
+            
+            var coordinates = self.project3dPoint(sphere_point);
+
+            self.points_2D.push({
+                x       : coordinates.x_2d,       // 2d x 
+                y       : coordinates.y_2d,       // 2d y
+                point_3d: coordinates.point_3d,   // Point3D object
+                index   : index                   // point index
+            });            
+        };
         
         this.project3dPoint = function(point)
         {

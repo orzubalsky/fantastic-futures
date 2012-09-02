@@ -67,7 +67,7 @@ class GeoSound(Base):
             pass
         
         # create a title for the sound
-        self.title = "by %s, recorded in %s" % (self.created_by, self.location)
+        self.title = "recorded in %s by %s" % (self.location, self.created_by)
         
         # save sound
         self.sound = filename

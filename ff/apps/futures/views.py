@@ -42,7 +42,7 @@ def view_sound(request, sound_slug):
     pass
 
 def sound_layer(request):
-    sounds = GeoSound.objects.all()
+    sounds = GeoSound.objects.all().order_by('created')
 
     results = []
     for sound in list(sounds):

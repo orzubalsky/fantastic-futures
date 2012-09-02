@@ -105,28 +105,39 @@
     			} ); 					
     			layer.events.register("loadend", layer, function() 
     			{
-                   // save coordinates
-                   points = [];
+                   // save coordinates                   
+                   site.ffinterface.map_points = [];
                    for(var i=0; i<layer.features.length; i++)
                    {
-                       var feature = layer.features[i];
-                       var coordinates = layer.renderer.getLocalXY(feature.geometry);
-                       
-                       points.push({
-                           x: coordinates[0], 
-                           y: coordinates[1]
-                       })
-                   }                    
+                       self.pushPointToInterface(layer.features[i], layer);
+                   }
+                   if (site.ffinterface.running == false) 
+                   {                       
+                       site.ffinterface.init(); 
+                   }
                    
-                   site.ffinterface.setPoints(points);
-                   site.ffinterface.init();
                    $('#map').hide();
+                   $('#interface').show();
     			});                
     	        layers.push(layer);
     	        
     	    }
         	return layers;        	
         };   
+        
+        this.pushPointToInterface = function(feature, layer)
+        {
+            var self = this;
+            
+            var coordinates = self.getGeometryFromFeature(feature, layer);
+            var map_point = {x: coordinates[0], y: coordinates[1]};
+            site.ffinterface.map_points.push(map_point);
+        };
+        
+        this.getGeometryFromFeature = function(feature, layer)
+        {
+            return layer.renderer.getLocalXY(feature.geometry);
+        };
         
         this.addDymaxFeaturesToLayer = function(layer)
         {
