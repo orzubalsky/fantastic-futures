@@ -82,4 +82,22 @@ class GeoSound(Base):
         return self.title
         
     def get_tags(self):
-        return ",".join([tag.name for tag in self.tags.all()])        
+        return ",".join([tag.name for tag in self.tags.all()])   
+        
+"""
+class Constellation(Base):
+
+    title               = CharField(max_length=100, blank=False, null=False)
+    created_by          = CharField(max_length=100, blank=False, null=True)
+    location            = CharField(max_length=150, blank=True, null=True)
+    user                = ForeignKey(User, blank=True, null=True)
+    slug                = SlugField()
+    sounds              = ManyToManyField(GeoSound)
+    rotation_x          = FloatField()
+    rotation_y          = FloatField()
+    rotation_z          = FloatField()
+    
+    
+    def __unicode__(self):
+        return self.title
+"""

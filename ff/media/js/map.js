@@ -127,10 +127,9 @@
         
         this.pushPointToInterface = function(feature, layer)
         {
-            var self = this;
-            
+            var self = this;            
             var coordinates = self.getGeometryFromFeature(feature, layer);
-            var map_point = {x: coordinates[0], y: coordinates[1]};
+            var map_point = {x: coordinates[0], y: coordinates[1], id: feature.data.id};
             site.ffinterface.map_points.push(map_point);
         };
         

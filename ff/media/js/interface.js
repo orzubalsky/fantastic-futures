@@ -23,7 +23,7 @@
         {
             var self = this;
             
-            self.rotation           = { x: self.deg_to_rad(0), y: self.deg_to_rad(0), z: self.deg_to_rad(0) };            
+            self.rotation           = { x: 0, y: 0, z: 0 };            
     	    self.width              = $('#interface').width();
     	    self.height             = $('#interface').height();            
             self.sphere             = new self.Sphere3D();
@@ -85,13 +85,19 @@
             var self = this;
             
             self.setupStageDragging();
+            
             for(var i=0; i<self.map_points.length; i++)
             {
                 self.mapPointToSpherePoint(self.map_points[i]);
             }
             self.map_points_count = self.map_points.length;        
+            
             self.sphereRefresh();
+            
             self.initPoints();
+            
+            self.loadConstellation();
+            
             $("#loadingGif").fadeToggle("fast", "linear");
         }
         
@@ -104,6 +110,7 @@
             p.z = lib.random(14,-7);
             p.x = self.reverse_projection(map_point.x, p.z, self.width/2.0, 100.0, self.distance)
             p.y = self.reverse_projection(map_point.y, p.z, self.height/2.0, 100.0, self.distance)
+            p.id= map_point.id
             
             // add point to sphere point array
             self.sphere.point.push(p);
@@ -118,7 +125,7 @@
             var new_2d_point = self.points_2D[index];
             
             // add sound shape to the interface
-            self.addPointToLayer(new_2d_point);            
+            self.addPointToLayer(new_2d_point);               
         };
         
         this.initPoints = function()
@@ -133,6 +140,45 @@
             }
             self.stage.add(self.connections_layer);
         }
+        
+        this.loadConstellation = function(c)
+        {
+            var self = this;
+            
+            var c = [
+                {'sound_1': 75, 'sound_2':71},
+                {'sound_1': 75, 'sound_2':33},
+                {'sound_1': 33, 'sound_2':71},                                              
+            ];
+            
+            for (var i=0; i<c.length; i++)
+            {
+                var data = c[i];
+                
+                var connection = new self.Connection3D();
+                connection.sound_1 = data.sound_1;
+                connection.sound_2 = data.sound_2;
+                connection.index_1 = self.getPointIndexFromId(data.sound_1);             
+                connection.index_2 = self.getPointIndexFromId(data.sound_2);
+                
+                self.sphere.connections.push(connection);                        
+                self.addConnectionToLayer(connection);                
+            }
+        };
+        
+        this.getPointIndexFromId = function(sound_id)
+        {
+            var self = this;
+            
+            for(var j=0; j<self.points_2D.length; j++)
+            {
+                var point = self.points_2D[j];
+                if (point.id == sound_id)
+                {
+                    return point.index;
+                }
+            }            
+        };
         
         this.update = function()
         {      
@@ -235,13 +281,14 @@
                 alpha       : 0.4,
                 point_3d    : point.point_3d,
                 index       : point.index,
+                id          : point.id,
                 active      : false,
                 draggable   : true,
                 dragBounds: { top: 0, right: 0, bottom: 0, left: 0 },
                 start_x     : 0,
                 start_y     : 0 
 		    });	
-		     
+		    		     
             sound.on("mouseover", function() {
                 $('#container').css({'cursor':'pointer'});
                 if (!this.active)
@@ -265,13 +312,15 @@
                     if (self.lastClick != -1) 
                     {
                         c = new self.Connection3D();
-                        c.index_1 = self.lastClick;
+                        c.sound_1 = self.lastClick.id;
+                        c.sound_2 = this.getAttrs().id;
+                        c.index_1 = self.lastClick.index;
                         c.index_2 = this.getAttrs().index;
-                        self.sphere.connections.push(c);                        
-                        self.addConnectionToLayer(c);
+                        self.sphere.connections.push(c);  
+                        self.addConnectionToLayer(c);                        
                     }
 
-                    self.lastClick = this.getAttrs().index;
+                    self.lastClick = {id: this.getAttrs().id, index: this.getAttrs().index}
                 }
                 else 
                 {
@@ -303,7 +352,7 @@
 		this.addConnectionToLayer = function(connection)
 		{	
 		    var self = this;
-		    
+            
 		    var p1 = self.points_2D[connection.index_1];
 		    var p2 = self.points_2D[connection.index_2];
 		    		    		    
@@ -343,6 +392,8 @@
         
         this.Connection3D = function()
         {
+            this.sound_1 = 0;
+            this.sound_2 = 0;
             this.index_1 = 0;
             this.index_2 = 0;
         }
@@ -368,7 +419,8 @@
             // repopulate points array after projecting the points onto 2d
             for(var i = 0; i < self.sphere.point.length; i++) 
             {
-                self.addSpherePointToPoints2D(self.sphere.point[i], i);
+                var point = self.sphere.point[i];
+                self.addSpherePointToPoints2D(point, i);
             }
         }
         
@@ -382,7 +434,8 @@
                 x       : coordinates.x_2d,       // 2d x 
                 y       : coordinates.y_2d,       // 2d y
                 point_3d: coordinates.point_3d,   // Point3D object
-                index   : index                   // point index
+                index   : index,                  // point index
+                id      : sphere_point.id
             });            
         };
         
