@@ -156,6 +156,7 @@
                 var data = c[i];
                 
                 var connection = new self.Connection3D();
+                
                 connection.sound_1 = data.sound_1;
                 connection.sound_2 = data.sound_2;
                 connection.index_1 = self.getPointIndexFromId(data.sound_1);             
@@ -198,6 +199,7 @@
                  rotation.x += self.deg_to_rad(y); 
                  rotation.x = (rotation.x >= self.deg_to_rad(360)) ? self.deg_to_rad(0) : rotation.x;
                  
+                 lib.log(rotation);
             }
             
             // sound drag volume calculation

@@ -84,7 +84,16 @@ class GeoSound(Base):
     def get_tags(self):
         return ",".join([tag.name for tag in self.tags.all()])   
         
-"""
+        
+
+class Connection(Base):
+
+    sound_1         = ForeignKey(GeoSound, related_name="sound_1")
+    sound_1_volume  = FloatField(default = 0.8)
+    sound_2         = ForeignKey(GeoSound, related_name="sound_2")
+    sound_2_volume  = FloatField(default = 0.8)
+
+
 class Constellation(Base):
 
     title               = CharField(max_length=100, blank=False, null=False)
@@ -92,12 +101,10 @@ class Constellation(Base):
     location            = CharField(max_length=150, blank=True, null=True)
     user                = ForeignKey(User, blank=True, null=True)
     slug                = SlugField()
-    sounds              = ManyToManyField(GeoSound)
-    rotation_x          = FloatField()
-    rotation_y          = FloatField()
-    rotation_z          = FloatField()
-    
+    connections         = ManyToManyField(Connection)
+    rotation_x          = FloatField(default=0)
+    rotation_y          = FloatField(default=0)
+    rotation_z          = FloatField(default=0)
     
     def __unicode__(self):
         return self.title
-"""
