@@ -18,4 +18,7 @@ class UserProfileAdmin(admin.ModelAdmin):
     
 admin.site.register(GeoSound, GeoSoundAdmin)
 admin.site.register(UserProfile, UserProfileAdmin)
+admin.site.register(Constellation)
+admin.site.register(Connection)
+
 

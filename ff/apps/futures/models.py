@@ -85,13 +85,15 @@ class GeoSound(Base):
         return ",".join([tag.name for tag in self.tags.all()])   
         
         
-
 class Connection(Base):
 
     sound_1         = ForeignKey(GeoSound, related_name="sound_1")
     sound_1_volume  = FloatField(default = 0.8)
     sound_2         = ForeignKey(GeoSound, related_name="sound_2")
     sound_2_volume  = FloatField(default = 0.8)
+    
+    def __unicode__(self):
+        return u"%s - %s" % (self.sound_1.title, self.sound_2.title)
 
 
 class Constellation(Base):

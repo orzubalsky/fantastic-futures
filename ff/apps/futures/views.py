@@ -2,6 +2,7 @@ from django.shortcuts import render_to_response, get_object_or_404
 from django.template import RequestContext
 from django.http import HttpResponseRedirect, HttpResponse
 from django.core.urlresolvers import reverse
+from django.core import serializers
 from django.forms.formsets import formset_factory
 from django.conf import settings
 from futures.models import *
@@ -26,16 +27,21 @@ def index(request):
            # 'style_size': art.type.mapdisplay_size 
     }
     layer_json = json.dumps(layers)
+    
+    constellations      = Constellation.objects.all()
+    constellations_json = serializers.serialize('json', constellations)
 
     feedback_form   = FeedbackForm()
-    add_sound_form  = GeoSoundForm()        
+    add_sound_form  = GeoSoundForm()
+    
 
     return render_to_response(
         'index.html', { 
             'layers'        : layer_json,
             'feedback_form' : feedback_form,
             'add_sound_form': add_sound_form,
-            'google_api_key': settings.GOOGLE_API_KEY
+            'google_api_key': settings.GOOGLE_API_KEY,
+            'constellations': constellations_json,
         }, context_instance=RequestContext(request))
 
 def view_sound(request, sound_slug):

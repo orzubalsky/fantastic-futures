@@ -198,8 +198,6 @@
                  rotation.y = (rotation.y >= self.deg_to_rad(360)) ? self.deg_to_rad(0) : rotation.y;
                  rotation.x += self.deg_to_rad(y); 
                  rotation.x = (rotation.x >= self.deg_to_rad(360)) ? self.deg_to_rad(0) : rotation.x;
-                 
-                 lib.log(rotation);
             }
             
             // sound drag volume calculation
