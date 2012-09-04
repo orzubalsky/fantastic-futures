@@ -19,18 +19,22 @@ h2 {
 	line-height:12px;
 	color: #005fff;
 }
+/*detail text about a sound*/
+.soundText {
+    color:#666;
+    background:url(../images/arrow.png) 25px 25px no-repeat;
+    position:absolute;
+    top:100px;
+	height:108px;
+	text-transform:uppercase;
+}
 #loadingGif {
 	width:100%;
 	height:100%;
 	position:absolute;
 	left:0;
 	top:0;
-<<<<<<< HEAD
 	background:url(../images/loading.gif);
-=======
-	display: none;
-
->>>>>>> 66801f5dae7ddfde567ff068005914e4dfc7e055
 }
 #logo {
 	background:url(../images/logo2.png);
@@ -50,6 +54,13 @@ h2 {
 	right:0px;
 	bottom:0px;
 }
+/*addConstellation button*/
+#addConstellationText {
+	text-transform:uppercase;
+	height:150px;
+	background:url(../images/blueArrow.png) 50px 12px no-repeat;
+	display:block;
+}
 /*addSound buttons*/
 #addSoundText {
 	position:relative;
@@ -58,9 +69,7 @@ h2 {
 	bottom:28px;
     z-index:2;
 }
-
 /*constellation menu*/
-
 #constellationMenu {
 	width:140px;
 	position:relative;
@@ -427,10 +436,4 @@ a#customZoomIn, a#customZoomOut {
     top:25px;
     margin-top:2px;
 }
-.soundText {
-    width:200px;
-    color:#666;
-    background:url(../images/dottedGrey.png) 10px 100px repeat-y;
-    position:absolute;
-    top:100px;
-}
+
