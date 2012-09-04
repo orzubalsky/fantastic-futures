@@ -17,6 +17,7 @@
         this.rotation_layer;
         this.points_layer;       
         this.connections_layer;
+		this.addButton = 0;
 
         /* set up the interface and run it */
         this.init = function()
@@ -286,11 +287,17 @@
                 draggable   : true,
                 dragBounds: { top: 0, right: 0, bottom: 0, left: 0 },
                 start_x     : 0,
-                start_y     : 0 
+                start_y     : 0, 
+				name		: 'Or Zublinsky',
+				location	: 'Toledo, OH'
 		    });	
 		    		     
             sound.on("mouseover", function() {
                 $('#container').css({'cursor':'pointer'});
+				$('.soundText').html(this.getAttrs().name+'<br/>'+this.getAttrs().location);
+				$('.soundText').fadeToggle("fast", "linear");
+				$('.soundText').css({'top':this.getAttrs().y-110+'px'});
+				$('.soundText').css({'left':this.getAttrs().x-27+'px'});
                 if (!this.active)
                 {
                     this.getChildren()[1].setFill('#000');                    
@@ -298,6 +305,7 @@
             });            
             sound.on("mouseout", function() {
                 $('#container').css({'cursor':'default'});
+				$('.soundText').fadeToggle("fast", "linear");
                 if (!this.active)
                 {
                     this.getChildren()[1].setFill('#000');                    
@@ -317,7 +325,11 @@
                         c.index_1 = self.lastClick.index;
                         c.index_2 = this.getAttrs().index;
                         self.sphere.connections.push(c);  
-                        self.addConnectionToLayer(c);                        
+                        self.addConnectionToLayer(c);
+						if (self.addButton==0){
+							$('#addConstellationText').fadeToggle("fast", "linear");
+							self.addButton=1;
+						}
                     }
 
                     self.lastClick = {id: this.getAttrs().id, index: this.getAttrs().index}
@@ -327,7 +339,7 @@
                     this.getChildren()[1].setFill('#000');
                 }
             });		    
-		    
+		
 		    // volume halo ellipse
 		    var halo = new Kinetic.Circle({
                 radius        : 8,
