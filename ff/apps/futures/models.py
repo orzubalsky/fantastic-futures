@@ -93,7 +93,7 @@ class Connection(Base):
     sound_2_volume  = FloatField(default = 0.8)
     
     def __unicode__(self):
-        return u"%s - %s" % (self.sound_1.title, self.sound_2.title)
+        return "%s - %s" % (self.sound_1.title, self.sound_2.title)
 
 
 class Constellation(Base):

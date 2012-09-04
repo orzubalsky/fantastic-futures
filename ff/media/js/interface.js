@@ -11,6 +11,7 @@
         this.map_points      = [];
         this.points_2D       = [];
         this.connections_2D  = [];
+        this.constellations;
         this.map_points_count;
         this.sphere_point_count;
         this.stage;
@@ -70,14 +71,9 @@
         {   
             var self = this;
                      
-            self.rotation.x = (self.rotation.x > x + self.deg_to_rad(0.5)) ? self.rotation.x - self.rotation.x/20 : x;
-            self.rotation.y = (self.rotation.y > y + self.deg_to_rad(0.5)) ? self.rotation.y - self.rotation.y/20 : y;
-            self.rotation.z = (self.rotation.z > z + self.deg_to_rad(0.5)) ? self.rotation.z - self.rotation.z/20 : z;
-            
-            /*
-            rotation.x = (rotation.x > x) ? rotation.x - deg_to_rad(3) : x;
-            rotation.y = (rotation.y > y) ? rotation.y - deg_to_rad(3) : y;
-            rotation.z = (rotation.z > z) ? rotation.z - deg_to_rad(3) : z;   */         
+            self.rotation.x = (self.rotation.x > x + self.deg_to_rad(0.5)) ? self.rotation.x - self.rotation.x/30 : x;
+            self.rotation.y = (self.rotation.y > y + self.deg_to_rad(0.5)) ? self.rotation.y - self.rotation.y/30 : y;
+            self.rotation.z = (self.rotation.z > z + self.deg_to_rad(0.5)) ? self.rotation.z - self.rotation.z/30 : z;
         };
         
         this.setup = function()
@@ -95,9 +91,7 @@
             self.sphereRefresh();
             
             self.initPoints();
-            
-            self.loadConstellation();
-            
+                                    
             $("#loadingGif").fadeToggle("fast", "linear");
         }
         
@@ -141,31 +135,48 @@
             self.stage.add(self.connections_layer);
         }
         
-        this.loadConstellation = function(c)
+        this.loadConstellation = function(id, rotate)
         {
             var self = this;
             
-            var c = [
-                {'sound_1': 75, 'sound_2':71},
-                {'sound_1': 75, 'sound_2':33},
-                {'sound_1': 33, 'sound_2':71},                                              
-            ];
+            // first clear the current connections
+            self.clearConnections();
             
-            for (var i=0; i<c.length; i++)
+            for (var i=0; i<CONSTELLATIONS.length; i++)
             {
-                var data = c[i];
-                
-                var connection = new self.Connection3D();
-                
-                connection.sound_1 = data.sound_1;
-                connection.sound_2 = data.sound_2;
-                connection.index_1 = self.getPointIndexFromId(data.sound_1);             
-                connection.index_2 = self.getPointIndexFromId(data.sound_2);
-                
-                self.sphere.connections.push(connection);                        
-                self.addConnectionToLayer(connection);                
+                if (CONSTELLATIONS[i].pk == id)
+                {
+                    var constellation = CONSTELLATIONS[i].fields;
+                    
+                    if (rotate)
+                    {
+                        self.rotateTo(constellation.rotation_x, constellation.rotation_y, constellation.rotation_z);
+                    }
+                    
+                    for (var j=0; j<constellation.connections.length; j++)
+                    {
+                        var db_connection = constellation.connections[j].fields;
+                        var connection = new self.Connection3D();
+
+                        connection.sound_1 = db_connection.sound_1;
+                        connection.sound_2 = db_connection.sound_2;
+                        connection.index_1 = self.getPointIndexFromId(db_connection.sound_1);             
+                        connection.index_2 = self.getPointIndexFromId(db_connection.sound_2);
+                        self.sphere.connections.push(connection);                        
+                        self.addConnectionToLayer(connection);
+                    }                    
+                }
             }
-        };
+        };      
+        
+        this.clearConnections = function() 
+        {
+            var self = this;
+            
+            self.connections_2D = [];
+            self.sphere.connections = [];
+            self.connections_layer.removeChildren();
+        };  
         
         this.getPointIndexFromId = function(sound_id)
         {

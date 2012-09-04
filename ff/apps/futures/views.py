@@ -16,32 +16,29 @@ from ajaxuploader.views import AjaxFileUploader
 
 def index(request):
     layers = {}
-    layers["sounds"] = {  
-           'title': "sounds",
-           'url': reverse('sound-layer'),
-           # 'style_shape': art.type.mapdisplay_graphic_type,
-           # 'style_fill_color': art.type.mapdisplay_fill_color,
-           # 'style_fill_opacity': art.type.mapdisplay_fill_opacity, 
-           # 'style_stroke_color': art.type.mapdisplay_stroke_color,
-           # 'style_stroke_opacity': art.type.mapdisplay_stroke_opacity,
-           # 'style_size': art.type.mapdisplay_size 
-    }
+    layers["sounds"] = { 'title': "sounds", 'url': reverse('sound-layer'),}
     layer_json = json.dumps(layers)
     
-    constellations      = Constellation.objects.all()
-    constellations_json = serializers.serialize('json', constellations)
-
+    constellations = Constellation.objects.all()
+    constellations_json = serializers.serialize('json', constellations, indent=4, 
+        excludes=('updated', 'created', 'is_active', 'user'), 
+        relations= {
+            'connections': 
+                {'fields': ('sound_1','sound_2','sound_1_volume','sound_2_volume') }
+            }
+    )
+        
     feedback_form   = FeedbackForm()
     add_sound_form  = GeoSoundForm()
-    
 
     return render_to_response(
         'index.html', { 
-            'layers'        : layer_json,
-            'feedback_form' : feedback_form,
-            'add_sound_form': add_sound_form,
-            'google_api_key': settings.GOOGLE_API_KEY,
-            'constellations': constellations_json,
+            'layers'                : layer_json,
+            'feedback_form'         : feedback_form,
+            'add_sound_form'        : add_sound_form,
+            'google_api_key'        : settings.GOOGLE_API_KEY,
+            'constellations'        : constellations,
+            'constellations_json'   : constellations_json,
         }, context_instance=RequestContext(request))
 
 def view_sound(request, sound_slug):

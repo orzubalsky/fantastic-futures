@@ -39,7 +39,17 @@
         	  $("#about .description.english").fadeToggle("fast", "linear");
         	  $("#aboutLinks #toggleAr").fadeToggle("fast", "linear");
         	  $("#aboutLinks #toggleEn").fadeToggle("fast", "linear");
-        	});    
+        	});
+            $('#constellationMenuContent a').hover(function (e)
+            { 
+        	    e.preventDefault();
+        	    
+                var id = lib.getId($(this).attr('id'));
+                site.ffinterface.loadConstellation(id, false); 
+            }, function(e) 
+            {
+                site.ffinterface.clearConnections();
+            });        	
         	$('#locateSoundForm').submit(function(e) 
         	{
         	    e.preventDefault();

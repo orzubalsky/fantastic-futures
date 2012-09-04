@@ -105,6 +105,10 @@ ADMIN_MEDIA_PREFIX = '/admin/media/'
 
 AUTH_PROFILE_MODULE = 'futures.UserProfile'
 
+SERIALIZATION_MODULES = {
+    'json': 'wadofstuff.django.serializers.json'
+}
+
 INSTALLED_APPS = (
     'django.contrib.auth',
     'django.contrib.contenttypes',
