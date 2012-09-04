@@ -1,64 +1,50 @@
 ;(function($){
 	var map = window.site.map = new function() 
 	{	
-	    var width           = $('#interface').width();
-	    var height          = $('#interface').height();
-	    var map, layer;
-        var projectForward = function( point )
-		{
-			var convertedPoint = convert_s_t_p( point.x, point.y );
-			point.x = convertedPoint.x * 150;
-			point.y = convertedPoint.y * 150;
-			return point;
-		};
-		
-
+	    this.width           = $('#interface').width();
+	    this.height          = $('#interface').height();
+	    this.map;
+	    this.soundLayer;
+	    
         this.init = function()
         {   
+            var self = this;
+                        
+            // output an error if the browser doesn't support canvas (the entire site is based on canvases)
             if (!OpenLayers.CANVAS_SUPPORTED) 
             {
-                var unsupported = OpenLayers.Util.getElement('unsupported');
-                unsupported.innerHTML = 'Your browser does not support canvas, nothing to see here !';
+                site.outputError('Your browser does not support canvas, nothing to see here!');
             }
             
-            OpenLayers.Projection.addTransform( "EPSG:4326", "DYMAX", projectForward );
+            // add the 4326 to dymaxiom transformation function
+            OpenLayers.Projection.addTransform( "EPSG:4326", "DYMAX", self.projectForward );
 
-			// KML layer
-			var kml = new OpenLayers.Layer.Vector( "World countries", {
-				projection : new OpenLayers.Projection("EPSG:4326"),
-	            strategies: [ new OpenLayers.Strategy.Fixed() ],
-	            protocol: new OpenLayers.Protocol.HTTP( {
-	                url: MEDIA_URL + "data/worldCountries.kml",
-	                format: new OpenLayers.Format.KML()
-	            } ),
-				style : { 'fillColor' : '#ededed', 'fillOpacity' : 1, 'strokeColor' : '#fff', 'strokeWidth' : 0.7 },
-                renderers: ["Canvas"]				
-	        } );
-
-			var points = new OpenLayers.Layer.Vector( "World cities", {
-				projection : new OpenLayers.Projection("EPSG:4326"),
-	            strategies: [ new OpenLayers.Strategy.Fixed() ],
-	            protocol: new OpenLayers.Protocol.HTTP( {
-	                url: MEDIA_URL + "data/93211.kml",
-	                format: new OpenLayers.Format.KML()
-	            } ),
-				style : { 'fillColor' : '#b2b2b2', 'fillOpacity' : 1, 'pointRadius' : 1, 'stroke' : false },
-                renderers: ["Canvas"]				
-			} );
-			var triFill = new OpenLayers.Layer.Vector( "Triangle fills", {
-				projection: new OpenLayers.Projection("DYMAX"),
-				style : { 'fillColor' : 'transparent', 'fillOpacity' : 1, 'strokeColor' : '#0099cc', 'strokeWidth' : 1, 'strokeOpacity' : 0 },
-                renderers: ["Canvas"]				
-			} );
-
-            // var triDashed = new OpenLayers.Layer.Vector( "Triangle strokes", {
-            //  projection: new OpenLayers.Projection("DYMAX"),
-            //  style : { 'fillColor' : '#c8ebff', 'fillOpacity' : 0, 'strokeColor' : '#ededed', 'strokeWidth' : .5, 'strokeOpacity' : 1, 'strokeDashstyle' : 'longdash' },
-            //                 renderers: ["Canvas"]                
-            // } );
+			// base layers
+			var countries   = self.countriesLayer();
+			var triFill     = self.dymaxTriFill();
 
 			// Create new map
-			var map = new OpenLayers.Map("map", {
+			self.map = self.createMap();
+			           
+            // add base layers to map
+			self.map.addLayers( [ triFill, countries ] );
+			
+			// initial zoom
+			self.map.zoomTo(2.5);
+
+            // add features to the dymax layer
+            self.addDymaxFeaturesToLayer(triFill);
+       
+		    // add sounds layer
+            self.soundLayer = self.get_data_layers();
+            self.map.addLayers(self.soundLayer);
+        };
+        
+        this.createMap = function() 
+        {
+            var self = this;
+            
+            var map = new OpenLayers.Map("map", {
 				projection: new OpenLayers.Projection("DYMAX"),
 		        maxExtent: new OpenLayers.Bounds( 0,0,860,400),
 				allOverlays: true,
@@ -76,11 +62,108 @@
 				    })
 				],
 			});
-			           
-			map.addLayers( [ triFill, kml ] );
-			map.zoomTo(2.5);
+			
+			return map;        
+        };
+        
+        this.addSound = function(geojson)
+        {
+            var self = this;
+                
+            // var point       = new OpenLayers.Geometry.Point(lat, lon);
+            // var feature     = new OpenLayers.Feature.Vector(point, attributes);
+            var layer       = self.map.getLayersBy('name', 'sounds')[0];
+            // 
+            // layer.addFeatures([feature]);
+            
+            var format      = new OpenLayers.Format.GeoJSON();
+            var collection  = '{"type":"FeatureCollection", "features":' + geojson + '}';
+            var features    = format.read(collection);
 
-			// *** TRIANGLE STUFF ***
+            layer.addFeatures(features);
+            layer.refresh();
+            return layer;   
+        };
+        
+        this.get_data_layers = function() 
+        {
+            var self = this;      
+        	var layers = [];
+            
+            for (var key in DATA_LAYERS) {
+                var layer_info = DATA_LAYERS[key];
+
+    			var layer = new OpenLayers.Layer.Vector( layer_info['title'], {
+    				projection : new OpenLayers.Projection("EPSG:4326"),
+    	            strategies: [ new OpenLayers.Strategy.Fixed() ],
+    	            protocol: new OpenLayers.Protocol.HTTP( {
+                        url     : layer_info['url'],
+                        format  : new OpenLayers.Format.GeoJSON(),
+    	            } ),
+    				style : { 'fillColor' : '#000000', 'fillOpacity' : 1, 'pointRadius' : 2, 'stroke' : false },
+                    renderers: ["Canvas"]				
+    			} ); 					
+    			layer.events.register("loadend", layer, function() 
+    			{
+                   // save coordinates                   
+                   site.ffinterface.map_points = [];
+                   for(var i=0; i<layer.features.length; i++)
+                   {
+                       self.pushPointToInterface(layer.features[i], layer);
+                   }
+                   if (site.ffinterface.running == false) 
+                   {                       
+                       site.ffinterface.init(); 
+                   }
+                   
+                   $('#map').hide();
+                   $('#interface').show();
+    			});                
+    	        layers.push(layer);
+    	        
+    	    }
+        	return layers;        	
+        };   
+        
+        this.pushPointToInterface = function(feature, layer)
+        {
+            var self = this;            
+            var coordinates = self.getGeometryFromFeature(feature, layer);
+            var map_point = {x: coordinates[0], y: coordinates[1], id: feature.data.id};
+            site.ffinterface.map_points.push(map_point);
+        };
+        
+        this.getGeometryFromFeature = function(feature, layer)
+        {
+            return layer.renderer.getLocalXY(feature.geometry);
+        };
+        
+        this.addDymaxFeaturesToLayer = function(layer)
+        {
+            var self = this;
+            
+            var triData = self.dymaxTriData();
+			var triFeatures = [];
+			var triDashedFeatures = [];
+			for ( var i = 0; i < triData.length; i++ )
+			{
+				var lineGeom = new OpenLayers.Geometry.LinearRing( [
+					new OpenLayers.Geometry.Point( triData[i][0][0], triData[i][0][1] ),
+					new OpenLayers.Geometry.Point( triData[i][1][0], triData[i][1][1] ),
+					new OpenLayers.Geometry.Point( triData[i][2][0], triData[i][2][1] ),
+					new OpenLayers.Geometry.Point( triData[i][0][0], triData[i][0][1] )
+				] );
+
+				triFeatures.push( new OpenLayers.Feature.Vector( new OpenLayers.Geometry.Polygon( [ lineGeom ] ) ) );
+				// triDashedFeatures.push( new OpenLayers.Feature.Vector( new OpenLayers.Geometry.Polygon( [ lineGeom ] ) ) );
+			}
+          
+			layer.addFeatures( triFeatures );
+			// triDashed.addFeatures( triDashedFeatures );            
+        };
+        
+        this.dymaxTriData = function() 
+        {
 			/* define the 19 triangles */
 			var triData = 
 			[
@@ -107,70 +190,64 @@
 				[ [ 600, 390 ], [ 675, 260 ], [ 525, 260 ] ],
 
 				[ [ 750, 390 ], [ 825, 260 ], [ 675, 260 ] ]
-			];
-
-			var triFeatures = [];
-			var triDashedFeatures = [];
-			for ( var i = 0; i < triData.length; i++ )
-			{
-				var lineGeom = new OpenLayers.Geometry.LinearRing( [
-					new OpenLayers.Geometry.Point( triData[i][0][0], triData[i][0][1] ),
-					new OpenLayers.Geometry.Point( triData[i][1][0], triData[i][1][1] ),
-					new OpenLayers.Geometry.Point( triData[i][2][0], triData[i][2][1] ),
-					new OpenLayers.Geometry.Point( triData[i][0][0], triData[i][0][1] )
-				] );
-
-				triFeatures.push( new OpenLayers.Feature.Vector( new OpenLayers.Geometry.Polygon( [ lineGeom ] ) ) );
-				triDashedFeatures.push( new OpenLayers.Feature.Vector( new OpenLayers.Geometry.Polygon( [ lineGeom ] ) ) );
-			}
-
-			triFill.addFeatures( triFeatures );
-			// triDashed.addFeatures( triDashedFeatures );            
+			];  
 			
-            var sound_layer = get_data_layers();
-            map.addLayers(sound_layer);              
+			return triData;          
         };
         
-        function get_data_layers() 
-        {            
-        	var layers = [];
+        this.dymaxTriStrokes = function() 
+        {
+            var layer = new OpenLayers.Layer.Vector( "Triangle strokes", {
+             projection: new OpenLayers.Projection("DYMAX"),
+             style : { 'fillColor' : '#c8ebff', 'fillOpacity' : 0, 'strokeColor' : '#ededed', 'strokeWidth' : .5, 'strokeOpacity' : 1, 'strokeDashstyle' : 'longdash' },
+                            renderers: ["Canvas"]                
+            });
             
-            for (var key in DATA_LAYERS) {
-                var layer_info = DATA_LAYERS[key];
-
-    			var layer = new OpenLayers.Layer.Vector( layer_info['title'], {
-    				projection : new OpenLayers.Projection("EPSG:4326"),
-    	            strategies: [ new OpenLayers.Strategy.Fixed() ],
-    	            protocol: new OpenLayers.Protocol.HTTP( {
-                        url     : layer_info['url'],
-                        format  : new OpenLayers.Format.GeoJSON(),
-    	            } ),
-    				style : { 'fillColor' : '#000000', 'fillOpacity' : 1, 'pointRadius' : 2, 'stroke' : false },
-                    renderers: ["Canvas"]				
-    			} ); 					
-    			layer.events.register("loadend", layer, function() 
-    			{
-                   // save coordinates
-                   points = [];
-                   for(var i=0; i<layer.features.length; i++)
-                   {
-                       var feature = layer.features[i];
-                       var coordinates = layer.renderer.getLocalXY(feature.geometry);
-                       
-                       points.push({
-                           x: coordinates[0], 
-                           y: coordinates[1]
-                       })
-                   } 
-                   site.ffinterface.setPoints(points);
-                   site.ffinterface.init();
-                   $('#map').hide();                   
-    			});
-    	        layers.push(layer);
-    	        
-    	    }
-        	return layers;        	
-        };   
+            return layer;            
+        };
+        
+        this.dymaxTriFill = function() 
+        {
+			var layer = new OpenLayers.Layer.Vector( "Triangle fills", {
+				projection: new OpenLayers.Projection("DYMAX"),
+				style : { 'fillColor' : 'transparent', 'fillOpacity' : 1, 'strokeColor' : '#0099cc', 'strokeWidth' : 1, 'strokeOpacity' : 0 },
+                renderers: ["Canvas"]				
+			} );
+			
+			return layer;            
+        };
+        
+        this.citiesLayer = function() 
+        {
+			var layer = new OpenLayers.Layer.Vector( "World cities", {
+				projection : new OpenLayers.Projection("EPSG:4326"),
+	            strategies: [ new OpenLayers.Strategy.Fixed() ],
+	            protocol: new OpenLayers.Protocol.HTTP( {
+	                url: MEDIA_URL + "data/93211.kml",
+	                format: new OpenLayers.Format.KML()
+	            } ),
+				style : { 'fillColor' : '#b2b2b2', 'fillOpacity' : 1, 'pointRadius' : 1, 'stroke' : false },
+                renderers: ["Canvas"]				
+			});
+			
+			return layer;            
+        };
+        
+        this.countriesLayer = function() 
+        {
+        	var layer = new OpenLayers.Layer.Vector( "World countries", {
+				projection : new OpenLayers.Projection("EPSG:4326"),
+	            strategies: [ new OpenLayers.Strategy.Fixed() ],
+	            protocol: new OpenLayers.Protocol.HTTP( {
+	                url: MEDIA_URL + "data/worldCountries.kml",
+	                format: new OpenLayers.Format.KML()
+	            } ),
+				style : { 'fillColor' : '#ededed', 'fillOpacity' : 1, 'strokeColor' : '#fff', 'strokeWidth' : 0.7 },
+                renderers: ["Canvas"]				
+	        }); 
+	        
+	        return layer;           
+        };
         
         this.codeLatLng = function(lat, lon) 
         {
@@ -197,17 +274,19 @@
                 if (status == google.maps.GeocoderStatus.OK) {
                     var lat = results[0].geometry.location.lat();
                     var lon = results[0].geometry.location.lng();
-                    placeMarker(lat, lon);
-                    // return {lat: lat, lon: lon};
+                    return [lat, lon];
                 } else {
                     lib.log(status);
                 }
             });
         };
         
-        function placeMarker(lat, lon)
-        {
-            lib.log(sound_layer);
-        };
+        this.projectForward = function(point)
+		{
+			var convertedPoint = convert_s_t_p( point.x, point.y );
+			point.x = convertedPoint.x * 150;
+			point.y = convertedPoint.y * 150;
+			return point;
+		};        
 	};
 })(jQuery);	

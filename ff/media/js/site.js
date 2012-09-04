@@ -6,7 +6,6 @@
 		this.init = function() 
 		{
 		    this.menus();
-		    this.formValues();
 		    this.WIDTH  = $('#interface').width();
 		    this.HEIGHT = $('#interface').height();
 		    site.ajaxUpload.init();
@@ -16,7 +15,7 @@
 		this.menus = function()
 		{
 		    var self = this;
-		    
+        	
         	$("#logo").click(function() {
         	  $("#about").fadeToggle("fast", "linear");
         	});
@@ -62,28 +61,73 @@
                 var data = $(this).serialize();
                 Dajaxice.futures.submit_feedback(self.feedback_callback, {'form':data});
         	});
+            $('#addSoundForm').submit(function(e)
+            {                
+                e.preventDefault();
+                
+                $('input[name=lat]').val('');
+                $('input[name=lon]').val('');      
+    		    $('#addSoundForm input, #addSoundForm textarea').removeClass('error');
+    		    $('#addSoundForm .errors').empty();                          
+                
+                var address = $('input[name=location]').val();
+                var geocoder = new google.maps.Geocoder();                        
+                geocoder.geocode( { 'address': address}, function(results, status) 
+                {
+                    if (status == google.maps.GeocoderStatus.OK) 
+                    {
+                       $('input[name=lat]').val( results[0].geometry.location.lat() );
+                       $('input[name=lon]').val( results[0].geometry.location.lng() );                     
+                    } 
+                    else 
+                    {
+                    }
+                    var data = $('#addSoundForm').serialize();
+                    Dajaxice.futures.submit_sound(self.addSound_callback, {'form':data});                    
+                });            
+            });
 		};
 		
-    	this.formValues = function() 
-		{		    
-            this.inputDefaultValue($('#id_created_by'));
-            this.inputDefaultValue($('#id_location'));
-            this.inputDefaultValue($('#id_story'));
-		};		
-		
-		this.inputDefaultValue = function(element)
+		this.addSound_callback = function(data)
 		{
-            // the input box's default value 
-            var defaultValue = $(element).val();
-        
-            $(element).live('focus', function() {
-            	$(this).val('');
-            })
-            .live('blur', function() {
-            	if ($(this).val().length < 1) {
-            		$(element).val(defaultValue);
-            	}
-            });
+		    if (data.success == true)
+		    {
+                // 1. fade out form
+                $('#addSoundForm').fadeOut(800, function() 
+                {
+                    // 2. fade in success message
+                    $('#addSoundCheck').fadeIn(500, function() 
+                    {
+                        // 3. wait 1000 ms
+                        setTimeout(function() 
+                        {
+                            // 4. bring form back to its original position
+                            $('#addSound').fadeOut(1000, function() 
+                            {
+            	                // 5. restore the form's original state
+            	                $('#addSoundCheck').hide();
+            	                $('#addSoundForm input, #addSoundForm textarea').not('.formSubmit').val('');
+            	                
+                                // 6. show sound on map
+                                lib.log(data.geojson);
+                                site.map.addSound(data.geojson);
+                                
+                                // 7. hide map            	                
+            	                
+                	        });
+                        }, 1500);
+                    });
+                });		        
+		    }
+		    else 
+		    {		        
+                for (field in data.errors)
+                {   
+                    var error = data.errors[field][0];
+                    $('#addSoundForm .errors').append('<p>' + error + '</p>');
+                    $('#id_' + field).addClass('error');
+                }		        
+		    }		    
 		};
 		
 		this.feedback_callback = function(data)
@@ -111,7 +155,7 @@
                     	                // 5. restore the form's original state
                     	                $('#feedbackCheck').hide();
                     	                $('#feedbackForm input, #feedbackForm textarea').not('.formSubmit').val('');
-                    	                $('#feedbackForm').show();
+                    	                $('#feedbackForm').show();                                        
                     	            }
                     	    );
                         }, 1000);
@@ -125,6 +169,17 @@
                     $('#id_' + field).addClass('error');
                 }
             }
+		};
+		
+		this.appendFormError = function(form, message)
+		{
+            $('.errors', form).append('<p>' + message + '</p>');		    
+		};
+		
+		this.outputError = function(message)
+		{
+            $('#error #errorMessage').html('<p>' + message + '</p>');
+            $('#error').fadeIn(1000);	    
 		};
 	};
 })(jQuery);

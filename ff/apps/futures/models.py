@@ -44,7 +44,7 @@ class GeoSound(Base):
                   
     sound               = FileField(upload_to="uploads", max_length=150)
     title               = CharField(max_length=100, blank=True, null=True)
-    location            = CharField(max_length=150, blank=False, null=True, validators=[validate_address])
+    location            = CharField(max_length=150, blank=True, null=True)
     story               = TextField(blank=True, null=True)
     created_by          = CharField(max_length=100, blank=False, null=True)    
     user                = ForeignKey(User, blank=True, null=True)
@@ -54,32 +54,59 @@ class GeoSound(Base):
     
     objects = GeoManager()
     
-    def save_upload(self, filename, *args, **kwargs):
+    def save_upload(self, filename, lat, lon, *args, **kwargs):
         "save geosound after ajax uploading an mp3 file"
+
+        # store point from coordinates
+        self.point = Point(lon, lat, srid=4326)
+
+        # try finding an existing user by the "created_by" field
         try:
-            # get coordinates from address
-            lat, lng = coords_from_address(self.location)
-            
-            # store point from coordinates
-            point = Point(lng, lat, srid=4326)
-            
-            # construct path to ajax uploaded file
-            path = settings.MEDIA_ROOT + '/uploads/' + filename
-            
-            # open file and create a django File object from it
-            f = open(path, 'w')
-            sound_file = File(f)
-            
-            # save the model's sound file
-            self.sound.save(filename, sound_file)
-    
-            # save model
-            super(GeoSound, self).save(*args, **kwargs)
-        except:
+            self.user = User.objects.get(username=self.created_by)
+        except User.DoesNotExist:
             pass
+        
+        # create a title for the sound
+        self.title = "recorded in %s by %s" % (self.location, self.created_by)
+        
+        # save sound
+        self.sound = filename
+                    
+        # save model
+        super(GeoSound, self).save(*args, **kwargs)
+        
+        # return the newly created model
+        return self
 
     def __unicode__(self):
         return self.title
         
     def get_tags(self):
-        return ",".join([tag.name for tag in self.tags.all()])        
+        return ",".join([tag.name for tag in self.tags.all()])   
+        
+        
+class Connection(Base):
+
+    sound_1         = ForeignKey(GeoSound, related_name="sound_1")
+    sound_1_volume  = FloatField(default = 0.8)
+    sound_2         = ForeignKey(GeoSound, related_name="sound_2")
+    sound_2_volume  = FloatField(default = 0.8)
+    
+    def __unicode__(self):
+        return u"%s - %s" % (self.sound_1.title, self.sound_2.title)
+
+
+class Constellation(Base):
+
+    title               = CharField(max_length=100, blank=False, null=False)
+    created_by          = CharField(max_length=100, blank=False, null=True)
+    location            = CharField(max_length=150, blank=True, null=True)
+    user                = ForeignKey(User, blank=True, null=True)
+    slug                = SlugField()
+    connections         = ManyToManyField(Connection)
+    rotation_x          = FloatField(default=0)
+    rotation_y          = FloatField(default=0)
+    rotation_z          = FloatField(default=0)
+    
+    def __unicode__(self):
+        return self.title

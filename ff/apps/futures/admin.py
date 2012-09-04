@@ -7,8 +7,8 @@ class GeoAdmin(admin.OSMGeoAdmin):
     default_zoom = 10
 
 class GeoSoundAdmin(GeoAdmin):
-    list_display        = ( 'title', 'sound', 'created_by', 'location', 'point', 'story', 'get_tags', 'is_active')
-    fields              = ( 'title', 'sound', 'slug', 'created_by', 'location', 'story', 'tags', 'point', 'is_active')
+    list_display        = ( 'title', 'sound', 'created_by', 'user', 'location', 'point', 'story', 'get_tags', 'is_active')
+    fields              = ( 'title', 'sound', 'slug', 'created_by', 'user', 'location', 'story', 'tags', 'point', 'is_active')
     prepopulated_fields = {'slug': ('title',)}    
 
 class UserProfileAdmin(admin.ModelAdmin):
@@ -18,4 +18,7 @@ class UserProfileAdmin(admin.ModelAdmin):
     
 admin.site.register(GeoSound, GeoSoundAdmin)
 admin.site.register(UserProfile, UserProfileAdmin)
+admin.site.register(Constellation)
+admin.site.register(Connection)
+
 

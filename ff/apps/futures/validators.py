@@ -1,7 +1,7 @@
 from django.core.exceptions import ValidationError
-from django.conf import settings
+from utils import coords_from_address
 
-def validate_address(value):
+def validate_address(value):    
     try:
         coords_from_address(value)
     except:
