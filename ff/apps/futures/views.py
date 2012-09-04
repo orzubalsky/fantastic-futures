@@ -28,14 +28,16 @@ def index(request):
             }
     )
         
-    feedback_form   = FeedbackForm()
-    add_sound_form  = GeoSoundForm()
+    feedback_form       = FeedbackForm()
+    add_sound_form      = GeoSoundForm()
+    constellation_form  = ConstellationForm()
 
     return render_to_response(
         'index.html', { 
             'layers'                : layer_json,
             'feedback_form'         : feedback_form,
             'add_sound_form'        : add_sound_form,
+            'constellation_form'    : constellation_form,
             'google_api_key'        : settings.GOOGLE_API_KEY,
             'constellations'        : constellations,
             'constellations_json'   : constellations_json,

@@ -110,3 +110,22 @@ class Constellation(Base):
     
     def __unicode__(self):
         return self.title
+        
+    def save_ajax(self, rotation, *args, **kwargs):
+
+        # try finding an existing user by the "created_by" field
+        try:
+            self.user = User.objects.get(username=self.created_by)
+        except User.DoesNotExist:
+            pass
+            
+        # rotation
+        self.rotation_x = rotation['x']
+        self.rotation_y = rotation['y']
+        self.rotation_z = rotation['z']
+        
+        # save model
+        super(Constellation, self).save(*args, **kwargs)
+
+        # return the newly created model
+        return self        

@@ -11,7 +11,7 @@
         this.map_points      = [];
         this.points_2D       = [];
         this.connections_2D  = [];
-        this.constellations;
+        this.constellation;
         this.map_points_count;
         this.sphere_point_count;
         this.stage;
@@ -134,6 +134,13 @@
             }
             self.stage.add(self.connections_layer);
         }
+        
+        this.getActiveConnections = function()
+        {
+            var self = this;
+            
+            return self.sphere.connections;
+        };
         
         this.loadConstellation = function(id, rotate)
         {

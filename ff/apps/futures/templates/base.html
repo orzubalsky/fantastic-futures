@@ -45,7 +45,7 @@
             	<div id="scrollUp"></div>
 					    <div id="constellationMenuContent">
 					    {% for c in constellations %}
-					      <a href="" id="c_{{ c.pk }}">{{ c.title|upper }}<a><br />
+					      <a href="#" id="c_{{ c.pk }}">{{ c.title|upper }}<a><br />
 					    {% endfor %}
 						  <!--<a>A1482324</a><br><a class="selected">ALPHA OMEGA</a><br><a>POTATO</a><br><a>39JASKN</a><br><a>LISTEN</a><br><a>FOXTROT</a><br/><a>A1482324</a><br><a class="selected">ALPHA OMEGA</a><br><a>POTATO</a><br><a>39JASKN</a><br><a>LISTEN</a><br><a>FOXTROT</a><br/><a>A1482324</a><br><a class="selected">ALPHA OMEGA</a><br><a>POTATO</a><br><a>39JASKN</a><br><a>LISTEN</a><br><a>FOXTROT</a>-->
 					</div>
@@ -96,10 +96,10 @@
               <button name="present" class ="time" value="0" id="present">PRESENT?</button>
               <button name="future" class ="time" value="0" id="future">FUTURE?</button>
               <input id="submit" class="formSubmit" type="submit" value="UPLOAD">
-              <div id="addSoundCheck">
-                :) SOUND ADDED!
-              </div>	
             </form>
+            <div id="addSoundCheck">
+              :) SOUND ADDED!
+            </div>            
         </div>
         <!--------ADD SOUND ENDED------->
             	 
@@ -116,19 +116,22 @@
         		//ctx.stroke();
         		ctx.fill();
         	</script>
-
-        	<form id="addConstellationForm" action="/constellation/add/" method="post">		
-        		<ul>
-        			<li><input id="filename" type="text" name="filename" value="NAME YOUR CONSTELLATION"></li>
-        			<li><input id="id_author" type="text" maxlength="255" name="id_author" value="YOUR NAME"></li>
-        			<li><input id="id_author" type="text" maxlength="255" name="id_author" class="optional" value="YOUR CITY, STATE, COUNTRY (OPTIONAL)"></li>
-        			<li><input id="submit" type="submit" value="SAVE"></li>
-        		</ul>	
-
-        		<div id="addConstellationCheck">
-        			:) CONSTELLATION ADDED!
-        		</div>	
+        	
+        	<form id="addConstellationForm" action="" method="post">		
+        	  {% csrf_token %}  
+        	  <div class="errors">
+              {{ constellation_form.title.errors }}       	  
+              {{ constellation_form.created_by.errors }}
+              {{ constellation_form.location.errors }}
+            </div>
+            {{ constellation_form.title }}       	  
+            {{ constellation_form.created_by }}
+            {{ constellation_form.location }}
+        		<input id="submit" class="formSubmit" type="submit" value="SAVE">
         	</form>
+      		<div id="addConstellationCheck">
+      			:) CONSTELLATION ADDED!
+      		</div>        	
         </div>
         <!--------CONSTELLATION ENDED--------->
 

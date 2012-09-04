@@ -10,8 +10,8 @@ class FeedbackForm(forms.Form):
 
 class GeoSoundForm(forms.ModelForm):
     class Meta: 
-        model = GeoSound
-        fields = ['created_by', 'location', 'story']
+        model   = GeoSound
+        fields  = ['created_by', 'location', 'story']
         widgets = {
             'created_by': forms.TextInput(attrs={'placeholder':'YOUR NAME'}),
             'location': forms.TextInput(attrs={'placeholder':'CITY, STATE, COUNTRY'}),            
@@ -25,4 +25,14 @@ class GeoSoundForm(forms.ModelForm):
 
     filename    = forms.CharField(widget=forms.HiddenInput, error_messages={'required': 'Please upload an mp3 file'})
     lat         = forms.CharField(error_messages={'required':'Please enter a valid address'})
-    lon         = forms.CharField(required=False)     
+    lon         = forms.CharField(required=False)
+    
+class ConstellationForm(forms.ModelForm):
+    class Meta:
+        model   = Constellation
+        fields  = ['title', 'created_by', 'location']
+        widgets = {
+            'title'     : forms.TextInput(attrs={'placeholder':'NAME YOUR CONSTELLATION'}),        
+            'created_by': forms.TextInput(attrs={'placeholder':'YOUR NAME'}),
+            'location'  : forms.TextInput(attrs={'placeholder':'CITY, STATE, COUNTRY (OPTIONAL)', 'class':'optional'}),            
+            }        

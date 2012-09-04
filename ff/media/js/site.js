@@ -45,16 +45,11 @@
         	    e.preventDefault();
         	    
                 var id = lib.getId($(this).attr('id'));
-                site.ffinterface.loadConstellation(id, false); 
+                site.ffinterface.loadConstellation(id, true); 
             }, function(e) 
             {
                 site.ffinterface.clearConnections();
-            });        	
-        	$('#locateSoundForm').submit(function(e) 
-        	{
-        	    e.preventDefault();
-        	    site.map.codeAddress($('#address').val());
-        	});
+            });        	       	
         	$('#contactUs a').click(function(e)
         	{
         	    e.preventDefault();
@@ -96,6 +91,18 @@
                     Dajaxice.futures.submit_sound(self.addSound_callback, {'form':data});                    
                 });            
             });
+            $('#addConstellationForm').submit(function(e) 
+        	{
+        	    e.preventDefault();
+        	    
+                var data = $(this).serialize();
+                var connections = site.ffinterface.getActiveConnections();                
+                Dajaxice.futures.submit_constellation(self.addConstellation_callback, {
+                    'form'          :data, 
+                    'connections'   :connections,
+                    'rotation'      : site.ffinterface.rotation
+                });
+        	});            
 		};
 		
 		this.addSound_callback = function(data)
@@ -139,6 +146,41 @@
                 }		        
 		    }		    
 		};
+		
+        this.addConstellation_callback = function(data)
+		{
+		    if (data.success == true)
+		    {
+                // 1. fade out form
+                $('#addConstellationForm').fadeOut(800, function() 
+                {
+                    // 2. fade in success message
+                    $('#addConstellationCheck').fadeIn(500, function() 
+                    {
+                        // 3. wait 1000 ms
+                        setTimeout(function() 
+                        {
+                            // 4. bring form back to its original position
+                            $('#addConstellation').fadeOut(1000, function() 
+                            {
+            	                // 5. restore the form's original state
+            	                $('#addConstellationCheck').hide();
+            	                $('#addConstellationForm input, #addConstellationForm textarea').not('.formSubmit').val('');
+                	        });
+                        }, 1500);
+                    });
+                });		        
+		    }
+		    else 
+		    {		        
+                for (field in data.errors)
+                {   
+                    var error = data.errors[field][0];
+                    $('#addConstellationForm .errors').append('<p>' + error + '</p>');
+                    $('#id_' + field).addClass('error');
+                }		        
+		    }		    
+		};		
 		
 		this.feedback_callback = function(data)
 		{
