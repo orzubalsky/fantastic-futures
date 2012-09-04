@@ -190,6 +190,18 @@ h2 {
 	font-size:1em;
 	cursor:pointer;
 }
+#addSoundForm button.time {
+    -moz-border-radius: 2px;
+    border-radius: 2px;
+    background-color: #fff;
+    color: #005fff;
+    padding:3px;
+    
+}
+#addSoundForm button.selected {
+    background-color:yellow;
+    
+}
 #addSoundForm input#submit, #addConstellationForm input#submit, #locateSoundForm input#submit {
 	border:none;
 	background-color:transparent;
@@ -216,21 +228,10 @@ h2 {
 	display:none;
 }
 #addSoundForm .optional, #addConstellationForm .optional {
-	/*background-color: #DEF0FF;*/
-	/* IE 8 */
-  -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=70)";
-
-  /* IE 5-7 */
-  filter: alpha(opacity=70);
-
-  /* Netscape */
-  -moz-opacity: 0.7;
-
-  /* Safari 1.x */
-  -khtml-opacity: 0.7;
-
-  /* Good browsers */
-  opacity: 0.7;
+    background-color:#b3cfff;
+}
+#addSoundForm .optional {
+    margin-bottom:5px;
 }
 
 /*error*/
@@ -425,4 +426,11 @@ a#customZoomIn, a#customZoomOut {
 #customZoomOut {
     top:25px;
     margin-top:2px;
+}
+.soundText {
+    width:200px;
+    color:#666;
+    background:url(../images/dottedGrey.png) 10px 100px repeat-y;
+    position:absolute;
+    top:100px;
 }

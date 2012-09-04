@@ -29,6 +29,11 @@
             <a href="#" id="addConstellationText"><h2>SAVE A CONSTELLATION?</h2></a>
             <a href="#" id="errorText"><h2>SHOW AN ERROR</h2></a>
         </div>             
+        
+        <div class="soundText">
+          Huong Ngo<br/>
+          Brooklyn, NY 
+        </div>
 
         <div id="bottomMenu">
             <!--------ADD SOUND-------->
@@ -84,7 +89,9 @@
               {{ add_sound_form.created_by }}
               {{ add_sound_form.location }}
               {{ add_sound_form.story }}
-              <button type="past">PAST?</button><button type="past">PRESENT?</button><button type="past">FUTURE?</button>
+              <button name="past" class ="time" value="0" id="past">PAST?</button>
+              <button name="present" class ="time" value="0" id="present">PRESENT?</button>
+              <button name="future" class ="time" value="0" id="future">FUTURE?</button>
               <input id="submit" class="formSubmit" type="submit" value="UPLOAD">
               <div id="addSoundCheck">
                 :) SOUND ADDED!
