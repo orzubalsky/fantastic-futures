@@ -45,7 +45,7 @@
         	    e.preventDefault();
         	    
                 var id = lib.getId($(this).attr('id'));
-                site.ffinterface.loadConstellation(id, true); 
+                site.ffinterface.loadConstellation(id, false); 
             }, function(e) 
             {
                 site.ffinterface.clearConnections();
@@ -95,11 +95,17 @@
         	{
         	    e.preventDefault();
         	    
+            	$('#addConstellationForm input, #addConstellationForm textarea').removeClass('error');
+            	$('#addConstellationForm .errors').empty();
+            		            	    
                 var data = $(this).serialize();
                 var connections = site.ffinterface.getActiveConnections();                
+                
+            	$('#addConstellationForm input[name=connection_count]').val(connections.length);
+            	                
                 Dajaxice.futures.submit_constellation(self.addConstellation_callback, {
-                    'form'          :data, 
-                    'connections'   :connections,
+                    'form'          : data, 
+                    'connections'   : connections,
                     'rotation'      : site.ffinterface.rotation
                 });
         	});            

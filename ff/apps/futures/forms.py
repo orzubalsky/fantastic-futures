@@ -28,11 +28,19 @@ class GeoSoundForm(forms.ModelForm):
     lon         = forms.CharField(required=False)
     
 class ConstellationForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+         "Sets custom meta data to the form's fields"
+         super(forms.ModelForm, self).__init__(*args, **kwargs)
+         self.fields['created_by'].error_messages['required'] = "please enter your name"
+         self.fields['title'].error_messages['required'] = "please name your constellation"
+         
     class Meta:
         model   = Constellation
         fields  = ['title', 'created_by', 'location']
         widgets = {
-            'title'     : forms.TextInput(attrs={'placeholder':'NAME YOUR CONSTELLATION'}),        
+            'title'     : forms.TextInput(attrs={'placeholder':'NAME YOUR CONSTELLATION',}),
             'created_by': forms.TextInput(attrs={'placeholder':'YOUR NAME'}),
             'location'  : forms.TextInput(attrs={'placeholder':'CITY, STATE, COUNTRY (OPTIONAL)', 'class':'optional'}),            
-            }        
+            }
+    connection_count = forms.CharField(widget=forms.HiddenInput, error_messages={'required':'Please connect sounds before saving'})
+             
