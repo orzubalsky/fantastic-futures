@@ -2,11 +2,13 @@
 	var ffinterface = window.site.ffinterface = new function() 
 	{
 	    this.running = false;
+	    this.frameRate;
 	    this.width;
 	    this.height;
 	    this.lastClick       = -1;
         this.sphere;
         this.rotation;
+        this.rotation_interval;
         this.distance        = 2000;
         this.map_points      = [];
         this.points_2D       = [];
@@ -40,10 +42,10 @@
             self.setup();            
 
             // Set framerate to 30 fps
-            var framerate = 1000/30;
+            self.framerate = 1000/30;
             
             // run update-draw loop
-            setInterval(function() { self.update(); self.draw(); }, framerate);
+            setInterval(function() { self.update(); self.draw(); }, self.framerate);
             
             self.running = true;            
         };
@@ -53,28 +55,42 @@
             var self = this;
             var rotation = self.rotation;
             
-            var rotation_interval = setInterval(function() 
+            self.rotateTo(0,0,0, function() 
             {
-                self.rotateTo(0,0,0);
-                
-                if ( rotation.x == 0 && rotation.y == 0 && rotation.z == 0)
-                {
-                    clearInterval(rotation_interval);
-                    $('#interface').fadeOut(2000);
-                    $('#map').css('opacity','1');
-                    $('#map').fadeIn(500);
-                }
-            }, 1000/30);            
+                $('#interface').fadeOut(2000);
+                $('#map').css('opacity','1');
+                $('#map').fadeIn(500);                
+            });
         };
         
-        this.rotateTo = function(x,y,z)
+        this.rotateTo = function(x,y,z, callback)
         {   
             var self = this;
-                     
-            self.rotation.x = (self.rotation.x > x + self.deg_to_rad(0.5)) ? self.rotation.x - self.rotation.x/30 : x;
-            self.rotation.y = (self.rotation.y > y + self.deg_to_rad(0.5)) ? self.rotation.y - self.rotation.y/30 : y;
-            self.rotation.z = (self.rotation.z > z + self.deg_to_rad(0.5)) ? self.rotation.z - self.rotation.z/30 : z;
+            
+            clearInterval(self.rotation_interval)
+            
+            self.rotation_interval = setInterval(function() 
+            {   
+                self.rotation.x = self.rotateAxis(self.rotation.x, x, 25);
+                self.rotation.y = self.rotateAxis(self.rotation.y, y, 25);
+                self.rotation.z = self.rotateAxis(self.rotation.z, z, 25);
+                
+                if ( self.rotation.x == x && self.rotation.y == y && self.rotation.z == z)
+                {
+                    clearInterval(self.rotation_interval);
+                    callback();
+                }
+            }, self.frameRate);
         };
+        
+        this.rotateAxis = function(current, target, pace)
+        {
+            var self = this;
+            var difference = Math.abs(current - target);
+            var multiplier = (current > target) ? -1 : 1;
+            
+            return (difference > self.deg_to_rad(1)) ? current + multiplier * difference/pace : target;
+        };        
         
         this.setup = function()
         {   
@@ -157,7 +173,7 @@
                     
                     if (rotate)
                     {
-                        self.rotateTo(constellation.rotation_x, constellation.rotation_y, constellation.rotation_z);
+                        self.rotateTo(constellation.rotation_x, constellation.rotation_y, constellation.rotation_z, function() {});
                     }
                     
                     for (var j=0; j<constellation.connections.length; j++)
@@ -212,11 +228,15 @@
                  var s = 10;
                  var x = ((mousePos.x * 2*s) - self.width*s) / self.width;
                  var y = ((mousePos.y * 2*s) - self.height*s) / self.height;
-                 rotation.y -= self.deg_to_rad(x);
+
+                 rotation.y += self.deg_to_rad(x);
                  rotation.y = (rotation.y >= self.deg_to_rad(360)) ? self.deg_to_rad(0) : rotation.y;
+
                  rotation.x += self.deg_to_rad(y); 
                  rotation.x = (rotation.x >= self.deg_to_rad(360)) ? self.deg_to_rad(0) : rotation.x;
             }
+            
+            
             
             // sound drag volume calculation
             for (var i=0; i<self.points_layer.getChildren().length; i++)

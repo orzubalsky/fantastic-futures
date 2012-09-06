@@ -45,7 +45,7 @@
         	    e.preventDefault();
         	    
                 var id = lib.getId($(this).attr('id'));
-                site.ffinterface.loadConstellation(id, false); 
+                site.ffinterface.loadConstellation(id, true); 
             }, function(e) 
             {
                 site.ffinterface.clearConnections();

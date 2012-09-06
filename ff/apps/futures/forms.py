@@ -1,6 +1,7 @@
 from django import forms
 from django.forms.formsets import BaseFormSet
 from django.utils.translation import ugettext as _
+from django.core.validators import *
 from futures.models import *
 
 class FeedbackForm(forms.Form):
