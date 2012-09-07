@@ -93,7 +93,7 @@ class Connection(Base):
     sound_2_volume  = FloatField(default = 0.8)
     
     def __unicode__(self):
-        return u"%s - %s" % (self.sound_1.title, self.sound_2.title)
+        return "%s - %s" % (self.sound_1.title, self.sound_2.title)
 
 
 class Constellation(Base):
@@ -110,3 +110,22 @@ class Constellation(Base):
     
     def __unicode__(self):
         return self.title
+        
+    def save_ajax(self, rotation, *args, **kwargs):
+
+        # try finding an existing user by the "created_by" field
+        try:
+            self.user = User.objects.get(username=self.created_by)
+        except User.DoesNotExist:
+            pass
+            
+        # rotation
+        self.rotation_x = rotation['x']
+        self.rotation_y = rotation['y']
+        self.rotation_z = rotation['z']
+        
+        # save model
+        super(Constellation, self).save(*args, **kwargs)
+
+        # return the newly created model
+        return self        

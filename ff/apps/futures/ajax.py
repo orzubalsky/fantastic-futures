@@ -32,3 +32,27 @@ def submit_sound(request, form):
         
         return json.dumps({'success':True, 'geojson':geo_json})
     return json.dumps({'success':False, 'errors': add_sound_form.errors})
+    
+@dajaxice_register(method='POST')
+def submit_constellation(request, form, connections, rotation):
+    constellation_form = ConstellationForm(deserialize_form(form))
+    
+    if constellation_form.is_valid():
+        validForm = constellation_form.save(commit=False)        
+        new_constellation = validForm.save_ajax(rotation)
+        
+        for c in connections:
+            sound_1 = GeoSound.objects.get(pk=int(c['sound_1']))
+            sound_2 = GeoSound.objects.get(pk=int(c['sound_2']))
+            
+            # try finding an existing connection
+            try:
+                connection = Connection.objects.get(sound_1=sound_1, sound_2=sound_2)
+            except Connection.DoesNotExist:
+                connection = Connection(sound_1=sound_1, sound_2=sound_2)        
+                connection.save()
+            
+            new_constellation.connections.add(connection)
+        
+        return json.dumps({'success':True})
+    return json.dumps({'success':False, 'errors': constellation_form.errors})

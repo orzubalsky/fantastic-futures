@@ -115,7 +115,6 @@
                    {                       
                        site.ffinterface.init(); 
                    }
-                   
                    $('#map').hide();
                    $('#interface').show();
     			});                

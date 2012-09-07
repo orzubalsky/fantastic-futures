@@ -2,15 +2,18 @@
 	var ffinterface = window.site.ffinterface = new function() 
 	{
 	    this.running = false;
+	    this.frameRate;
 	    this.width;
 	    this.height;
 	    this.lastClick       = -1;
         this.sphere;
         this.rotation;
+        this.rotation_interval;
         this.distance        = 2000;
         this.map_points      = [];
         this.points_2D       = [];
         this.connections_2D  = [];
+        this.constellation;
         this.map_points_count;
         this.sphere_point_count;
         this.stage;
@@ -40,10 +43,10 @@
             self.setup();            
 
             // Set framerate to 30 fps
-            var framerate = 1000/30;
+            self.framerate = 1000/30;
             
             // run update-draw loop
-            setInterval(function() { self.update(); self.draw(); }, framerate);
+            setInterval(function() { self.update(); self.draw(); }, self.framerate);
             
             self.running = true;            
         };
@@ -53,33 +56,42 @@
             var self = this;
             var rotation = self.rotation;
             
-            var rotation_interval = setInterval(function() 
+            self.rotateTo(0,0,0, function() 
             {
-                self.rotateTo(0,0,0);
-                
-                if ( rotation.x == 0 && rotation.y == 0 && rotation.z == 0)
-                {
-                    clearInterval(rotation_interval);
-                    $('#interface').fadeOut(2000);
-                    $('#map').css('opacity','1');
-                    $('#map').fadeIn(500);
-                }
-            }, 1000/30);            
+                $('#interface').fadeOut(2000);
+                $('#map').css('opacity','1');
+                $('#map').fadeIn(500);                
+            });
         };
         
-        this.rotateTo = function(x,y,z)
+        this.rotateTo = function(x,y,z, callback)
         {   
             var self = this;
-                     
-            self.rotation.x = (self.rotation.x > x + self.deg_to_rad(0.5)) ? self.rotation.x - self.rotation.x/20 : x;
-            self.rotation.y = (self.rotation.y > y + self.deg_to_rad(0.5)) ? self.rotation.y - self.rotation.y/20 : y;
-            self.rotation.z = (self.rotation.z > z + self.deg_to_rad(0.5)) ? self.rotation.z - self.rotation.z/20 : z;
             
-            /*
-            rotation.x = (rotation.x > x) ? rotation.x - deg_to_rad(3) : x;
-            rotation.y = (rotation.y > y) ? rotation.y - deg_to_rad(3) : y;
-            rotation.z = (rotation.z > z) ? rotation.z - deg_to_rad(3) : z;   */         
+            clearInterval(self.rotation_interval)
+            
+            self.rotation_interval = setInterval(function() 
+            {   
+                self.rotation.x = self.rotateAxis(self.rotation.x, x, 25);
+                self.rotation.y = self.rotateAxis(self.rotation.y, y, 25);
+                self.rotation.z = self.rotateAxis(self.rotation.z, z, 25);
+                
+                if ( self.rotation.x == x && self.rotation.y == y && self.rotation.z == z)
+                {
+                    clearInterval(self.rotation_interval);
+                    callback();
+                }
+            }, self.frameRate);
         };
+        
+        this.rotateAxis = function(current, target, pace)
+        {
+            var self = this;
+            var difference = Math.abs(current - target);
+            var multiplier = (current > target) ? -1 : 1;
+            
+            return (difference > self.deg_to_rad(1)) ? current + multiplier * difference/pace : target;
+        };        
         
         this.setup = function()
         {   
@@ -96,9 +108,7 @@
             self.sphereRefresh();
             
             self.initPoints();
-            
-            self.loadConstellation();
-            
+                                    
             $("#loadingGif").fadeToggle("fast", "linear");
         }
         
@@ -142,31 +152,55 @@
             self.stage.add(self.connections_layer);
         }
         
-        this.loadConstellation = function(c)
+        this.getActiveConnections = function()
         {
             var self = this;
             
-            var c = [
-                {'sound_1': 75, 'sound_2':71},
-                {'sound_1': 75, 'sound_2':33},
-                {'sound_1': 33, 'sound_2':71},                                              
-            ];
-            
-            for (var i=0; i<c.length; i++)
-            {
-                var data = c[i];
-                
-                var connection = new self.Connection3D();
-                
-                connection.sound_1 = data.sound_1;
-                connection.sound_2 = data.sound_2;
-                connection.index_1 = self.getPointIndexFromId(data.sound_1);             
-                connection.index_2 = self.getPointIndexFromId(data.sound_2);
-                
-                self.sphere.connections.push(connection);                        
-                self.addConnectionToLayer(connection);                
-            }
+            return self.sphere.connections;
         };
+        
+        this.loadConstellation = function(id, rotate)
+        {
+            var self = this;
+            
+            // first clear the current connections
+            self.clearConnections();
+            
+            for (var i=0; i<CONSTELLATIONS.length; i++)
+            {
+                if (CONSTELLATIONS[i].pk == id)
+                {
+                    var constellation = CONSTELLATIONS[i].fields;
+                    
+                    if (rotate)
+                    {
+                        self.rotateTo(constellation.rotation_x, constellation.rotation_y, constellation.rotation_z, function() {});
+                    }
+                    
+                    for (var j=0; j<constellation.connections.length; j++)
+                    {
+                        var db_connection = constellation.connections[j].fields;
+                        var connection = new self.Connection3D();
+
+                        connection.sound_1 = db_connection.sound_1;
+                        connection.sound_2 = db_connection.sound_2;
+                        connection.index_1 = self.getPointIndexFromId(db_connection.sound_1);             
+                        connection.index_2 = self.getPointIndexFromId(db_connection.sound_2);
+                        self.sphere.connections.push(connection);                        
+                        self.addConnectionToLayer(connection);
+                    }                    
+                }
+            }
+        };      
+        
+        this.clearConnections = function() 
+        {
+            var self = this;
+            
+            self.connections_2D = [];
+            self.sphere.connections = [];
+            self.connections_layer.removeChildren();
+        };  
         
         this.getPointIndexFromId = function(sound_id)
         {
@@ -195,11 +229,15 @@
                  var s = 10;
                  var x = ((mousePos.x * 2*s) - self.width*s) / self.width;
                  var y = ((mousePos.y * 2*s) - self.height*s) / self.height;
-                 rotation.y -= self.deg_to_rad(x);
+
+                 rotation.y += self.deg_to_rad(x);
                  rotation.y = (rotation.y >= self.deg_to_rad(360)) ? self.deg_to_rad(0) : rotation.y;
+
                  rotation.x += self.deg_to_rad(y); 
                  rotation.x = (rotation.x >= self.deg_to_rad(360)) ? self.deg_to_rad(0) : rotation.x;
             }
+            
+            
             
             // sound drag volume calculation
             for (var i=0; i<self.points_layer.getChildren().length; i++)
