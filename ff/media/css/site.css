@@ -27,6 +27,8 @@ h2 {
     top:100px;
 	height:108px;
 	text-transform:uppercase;
+	display:none;
+	z-index:2000;
 }
 #loadingGif {
 	width:100%;
@@ -56,10 +58,11 @@ h2 {
 }
 /*addConstellation button*/
 #addConstellationText {
-	text-transform:uppercase;
-	height:150px;
-	background:url(../images/blueArrow.png) 50px 12px no-repeat;
-	display:block;
+	display:none;
+	width:200px;
+	position:absolute;
+	top:205px;
+	left:100px;
 }
 /*addSound buttons*/
 #addSoundText {
@@ -73,7 +76,7 @@ h2 {
 #constellationMenu {
 	width:140px;
 	position:relative;
-	left:15px;
+	left:10px;
 	bottom:32px;
 	height:160px;
 	z-index:2;
@@ -145,8 +148,8 @@ h2 {
 }
 #addConstellation {
 	position:absolute;
-	left:0px;
-	top:60px;
+	left:109px;
+	top:232px;
 	display:none;
 	z-index:2;
 }
