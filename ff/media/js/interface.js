@@ -131,10 +131,10 @@
                         
             // add point to sphere point array
             self.sphere.point.push(p);
-            
+                        
             // the new sound index
             var index = self.sphere.point.length - 1;
-                        
+                                    
             // push the point manually to the 2D point array so we can add a sound to the interface
             self.addSpherePointToPoints2D(p, index);
             
@@ -330,6 +330,7 @@
                 y           : point.y,
                 alpha       : 0.4,
                 point_3d    : point.point_3d,
+                data        : point.sphere_point,
                 index       : point.index,
                 id          : point.id,
                 active      : false,
@@ -337,12 +338,12 @@
                 dragBounds: { top: 0, right: 0, bottom: 0, left: 0 },
                 start_x     : 0,
                 start_y     : 0, 
-				name		: 'Or Zublinsky',
-				location	: 'Toledo, OH',
-				isNew		: true,
-				justAdded	: true
-		    });	
-		    		     
+				name		: point.sphere_point.created_by,
+				location	: point.sphere_point.location,
+				isNew		: point.sphere_point.is_recent,
+				justAdded	: false
+		    });
+		    		    		     
             sound.on("mouseover", function() {
                 $('#container').css({'cursor':'pointer'});
 				$('.soundText').html(this.getAttrs().name+'<br/>'+this.getAttrs().location);
@@ -507,13 +508,14 @@
             var self = this;
             
             var coordinates = self.project3dPoint(sphere_point);
-
+            
             self.points_2D.push({
-                x       : coordinates.x_2d,       // 2d x 
-                y       : coordinates.y_2d,       // 2d y
-                point_3d: coordinates.point_3d,   // Point3D object
-                index   : index,                  // point index
-                id      : sphere_point.id
+                x            : coordinates.x_2d,       // 2d x 
+                y            : coordinates.y_2d,       // 2d y
+                point_3d     : coordinates.point_3d,   // Point3D object
+                index        : index,                  // point index
+                id           : sphere_point.id,
+                sphere_point : sphere_point
             });            
         };
         
