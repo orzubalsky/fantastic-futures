@@ -118,11 +118,17 @@
             
             p = new self.Point3D();
             
-            p.z = lib.random(14,-7);
-            p.x = self.reverse_projection(map_point.x, p.z, self.width/2.0, 100.0, self.distance)
-            p.y = self.reverse_projection(map_point.y, p.z, self.height/2.0, 100.0, self.distance)
-            p.id= map_point.id
-            
+            p.z         = lib.random(14,-7);
+            p.x         = self.reverse_projection(map_point.x, p.z, self.width/2.0, 100.0, self.distance);
+            p.y         = self.reverse_projection(map_point.y, p.z, self.height/2.0, 100.0, self.distance);
+            p.id        = map_point.id;
+            p.title     = map_point.title;
+            p.created_by= map_point.created_by;
+            p.location  = map_point.location;
+            p.story     = map_point.story;
+            p.filename  = map_point.filename;
+            p.is_recent = map_point.is_recent;
+                        
             // add point to sphere point array
             self.sphere.point.push(p);
             
@@ -443,6 +449,13 @@
             this.x = 0;
             this.y = 0;
             this.z = 0;
+            this.id;
+            this.title;
+            this.created_by;
+            this.location;
+            this.story;
+            this.filename;
+            this.is_recent;
         }
         
         this.Connection3D = function()

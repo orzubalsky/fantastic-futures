@@ -54,6 +54,15 @@ class GeoSound(Base):
     
     objects = GeoManager()
     
+    def is_recent():
+        def fget(self):
+            now = datetime.utcnow().replace(tzinfo=utc)
+            week_ago = now - timedelta(days=7)
+            return self.created > week_ago        
+        return locals()        
+        
+    is_recent = property(**is_recent())
+    
     def save_upload(self, filename, lat, lon, *args, **kwargs):
         "save geosound after ajax uploading an mp3 file"
 
