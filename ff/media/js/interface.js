@@ -236,8 +236,6 @@
                  rotation.x = (rotation.x >= self.deg_to_rad(360)) ? self.deg_to_rad(0) : rotation.x;
             }
             
-            
-            
             // sound drag volume calculation
             for (var i=0; i<self.points_layer.getChildren().length; i++)
             {
@@ -245,12 +243,19 @@
                 
                 if (group.isDragging()) 
                 {                     
-                    var group_y = group.getY();                     
-                    var value = self.stage.getMousePosition().y;
-                    var volume = self.map(value, group_y+40, group_y-40, 0.2, 0.9, true);
-                    var radius = self.map(value, group_y+40, group_y-40, 5, 20, true);                    
-                    var halo = group.getChildren()[0];
-                    halo.setRadius(radius);
+                    var group_y = group.getY();
+                    if (group_y > 0)
+                    {
+                        lib.log(group);
+                        lib.log(group_y);
+                        var halo = group.getChildren()[0];
+                    
+                        var value = self.stage.getMousePosition().y;
+                        var volume = self.map(value, group_y+40, group_y-40, 0.2, 0.9, true);
+                        var radius = self.map(value, group_y+40, group_y-40, 5, 20, true);
+                        lib.log("yPos: " + group_y + " low: " + (group_y+40) + " high: " + (group_y-40) + " value: " + value + " radius: " + radius);
+                        halo.setRadius(radius);
+                    }
                 }                
             }
             
