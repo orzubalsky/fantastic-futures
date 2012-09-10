@@ -338,7 +338,9 @@
                 start_x     : 0,
                 start_y     : 0, 
 				name		: 'Or Zublinsky',
-				location	: 'Toledo, OH'
+				location	: 'Toledo, OH',
+				isNew		: true,
+				justAdded	: true
 		    });	
 		    		     
             sound.on("mouseover", function() {
@@ -404,7 +406,15 @@
               stroke        : "transparent",
               strokeWidth   : 0,
             }); 
-            
+			
+			if (sound.getAttrs().isNew) {
+				halo.setFill('yellow');
+			}
+			 
+			if (sound.getAttrs().justAdded) {
+				//this.effect("highlight", {}, 3000);
+			}
+			
             sound.add(halo);
             sound.add(core);
             self.points_layer.add(sound);	
