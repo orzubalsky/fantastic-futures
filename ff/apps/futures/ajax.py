@@ -18,14 +18,15 @@ def submit_feedback(request, form):
     
     
 @dajaxice_register(method='POST')
-def submit_sound(request, form):
+def submit_sound(request, form, tags):
     add_sound_form = GeoSoundForm(deserialize_form(form))
     if add_sound_form.is_valid():
         validForm = add_sound_form.save(commit=False)
         uploaded_file = add_sound_form.cleaned_data.get('filename')
         lat = add_sound_form.cleaned_data.get('lat')
         lon = add_sound_form.cleaned_data.get('lon')
-        new_sound = validForm.save_upload(uploaded_file, float(lat), float(lon))
+
+        new_sound = validForm.save_upload(uploaded_file, float(lat), float(lon), tags)
         
         result_data = { 'type':'FeatureCollection', 'features': sound_to_json(new_sound)}
         geo_json = mark_safe(json.dumps(result_data))        

@@ -71,7 +71,7 @@ class GeoSound(Base):
         
     is_recent = property(**is_recent())
     
-    def save_upload(self, filename, lat, lon, *args, **kwargs):
+    def save_upload(self, filename, lat, lon, tags, *args, **kwargs):
         "save geosound after ajax uploading an mp3 file"
 
         # store point from coordinates
@@ -91,6 +91,10 @@ class GeoSound(Base):
                     
         # save model
         super(GeoSound, self).save(*args, **kwargs)
+        
+        # save tags to sound
+        for t in tags:
+            self.tags.add(t)
         
         # return the newly created model
         return self

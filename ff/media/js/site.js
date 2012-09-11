@@ -66,6 +66,21 @@
                 var data = $(this).serialize();
                 Dajaxice.futures.submit_feedback(self.feedback_callback, {'form':data});
         	});
+        	$('#addSoundForm .time').click(function(e) 
+        	{
+        	    e.preventDefault();
+        	    
+        	    if ($(this).val() == 0)
+        	    {
+        	        // button was not selected
+        	        $(this).addClass('selected').val(1);
+        	    }
+        	    else 
+        	    {
+        	        // button was selected
+                    $(this).removeClass('selected').val(0);        	        
+        	    }
+        	});
             $('#addSoundForm').submit(function(e)
             {                
                 e.preventDefault();
@@ -82,13 +97,21 @@
                     if (status == google.maps.GeocoderStatus.OK) 
                     {
                        $('input[name=lat]').val( results[0].geometry.location.lat() );
-                       $('input[name=lon]').val( results[0].geometry.location.lng() );                     
+                       $('input[name=lon]').val( results[0].geometry.location.lng() );
                     } 
-                    else 
-                    {
-                    }
                     var data = $('#addSoundForm').serialize();
-                    Dajaxice.futures.submit_sound(self.addSound_callback, {'form':data});                    
+                    
+                    var tags = [];
+                    for(var i=0; i<$('.time').size(); i++)
+                    {
+                        var button = $('.time').eq(i);
+                        if ($(button).val() == 1)
+                        {
+                            tags.push($(button).attr('name'));
+                        }
+                    }
+                    
+                    Dajaxice.futures.submit_sound(self.addSound_callback, {'form':data, 'tags':tags});
                 });            
             });
             $('#addConstellationForm').submit(function(e) 
