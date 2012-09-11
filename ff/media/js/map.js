@@ -128,7 +128,19 @@
         {
             var self = this;            
             var coordinates = self.getGeometryFromFeature(feature, layer);
-            var map_point = {x: coordinates[0], y: coordinates[1], id: feature.data.id};
+            var map_point = {
+                x           : coordinates[0], 
+                y           : coordinates[1], 
+                id          : feature.data.id,
+                title       : feature.data.title,
+                location    : feature.data.location,
+                created_by  : feature.data.created_by,
+                story       : feature.data.story,
+                filename    : feature.data.filename,
+                volume      : feature.data.volume,
+                z           : feature.data.z,
+                is_recent   : feature.data.is_recent,
+            };
             site.ffinterface.map_points.push(map_point);
         };
         

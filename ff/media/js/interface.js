@@ -118,17 +118,24 @@
             
             p = new self.Point3D();
             
-            p.z = lib.random(14,-7);
-            p.x = self.reverse_projection(map_point.x, p.z, self.width/2.0, 100.0, self.distance)
-            p.y = self.reverse_projection(map_point.y, p.z, self.height/2.0, 100.0, self.distance)
-            p.id= map_point.id
-            
+            p.z         = map_point.z;
+            p.x         = self.reverse_projection(map_point.x, p.z, self.width/2.0, 100.0, self.distance);
+            p.y         = self.reverse_projection(map_point.y, p.z, self.height/2.0, 100.0, self.distance);
+            p.id        = map_point.id;
+            p.title     = map_point.title;
+            p.created_by= map_point.created_by;
+            p.location  = map_point.location;
+            p.story     = map_point.story;
+            p.filename  = map_point.filename;
+            p.volume    = map_point.volume;
+            p.is_recent = map_point.is_recent;
+                        
             // add point to sphere point array
             self.sphere.point.push(p);
-            
+                        
             // the new sound index
             var index = self.sphere.point.length - 1;
-                        
+                                    
             // push the point manually to the 2D point array so we can add a sound to the interface
             self.addSpherePointToPoints2D(p, index);
             
@@ -230,34 +237,11 @@
                  var x = ((mousePos.x * 2*s) - self.width*s) / self.width;
                  var y = ((mousePos.y * 2*s) - self.height*s) / self.height;
 
-                 rotation.y += self.deg_to_rad(x);
+                 rotation.y += self.deg_to_rad(Math.abs(x));
                  rotation.y = (rotation.y >= self.deg_to_rad(360)) ? self.deg_to_rad(0) : rotation.y;
 
-                 rotation.x += self.deg_to_rad(y); 
+                 rotation.x += self.deg_to_rad(Math.abs(y)); 
                  rotation.x = (rotation.x >= self.deg_to_rad(360)) ? self.deg_to_rad(0) : rotation.x;
-            }
-            
-            // sound drag volume calculation
-            for (var i=0; i<self.points_layer.getChildren().length; i++)
-            {
-                var group = self.points_layer.getChildren()[i];
-                
-                if (group.isDragging()) 
-                {                     
-                    var group_y = group.getY();
-                    if (group_y > 0)
-                    {
-                        lib.log(group);
-                        lib.log(group_y);
-                        var halo = group.getChildren()[0];
-                    
-                        var value = self.stage.getMousePosition().y;
-                        var volume = self.map(value, group_y+40, group_y-40, 0.2, 0.9, true);
-                        var radius = self.map(value, group_y+40, group_y-40, 5, 20, true);
-                        lib.log("yPos: " + group_y + " low: " + (group_y+40) + " high: " + (group_y-40) + " value: " + value + " radius: " + radius);
-                        halo.setRadius(radius);
-                    }
-                }                
             }
             
             // check whether a new point was added on the openlayers map
@@ -317,13 +301,20 @@
 		this.addPointToLayer = function(point)
 		{	
 		    var self = this;
-		    	    
+		    
+		    // create a player instance for this sound
+		    var player = new site.Player(point.id, point.index, point.sphere_point.filename, 0.8);
+		    
+		    // radius value for halo is calculated according to the sound's default volume
+            var radius = self.map(point.sphere_point.volume, 0.2, 0.8, 5, 20, true);		    
+		    
 		    // Kinetic group to store coordinates and meta data about the sound
 		    var sound = new Kinetic.Group({
                 x           : point.x,
                 y           : point.y,
                 alpha       : 0.4,
                 point_3d    : point.point_3d,
+                data        : point.sphere_point,
                 index       : point.index,
                 id          : point.id,
                 active      : false,
@@ -331,12 +322,18 @@
                 dragBounds: { top: 0, right: 0, bottom: 0, left: 0 },
                 start_x     : 0,
                 start_y     : 0, 
-				name		: 'Or Zublinsky',
-				location	: 'Toledo, OH',
-				isNew		: true,
-				justAdded	: true
-		    });	
-		    		     
+				name		: point.sphere_point.created_by,
+				location	: point.sphere_point.location,
+				isNew		: point.sphere_point.is_recent,
+				justAdded	: false,
+				player      : player,
+				timeout     : '',
+				interval    : '',
+		    });
+		    
+		    sound.getAttrs().player.init();
+		    sound.getAttrs().player.play();
+		    		    		     
             sound.on("mouseover", function() {
                 $('#container').css({'cursor':'pointer'});
 				$('.soundText').html(this.getAttrs().name+'<br/>'+this.getAttrs().location);
@@ -355,12 +352,30 @@
                 {
                     this.getChildren()[1].setFill('#000');                    
                 }
-            });   
+            });
+            sound.on("mouseup", function() {
+                clearInterval(sound.interval);                
+            });
             sound.on("mousedown", function() {
                 this.active = !this.active;
                 if (this.active) 
                 {
                     this.getChildren()[1].setFill('#005fff');
+
+                    var shape = this;
+                    
+                    // wait 500ms and then start animating the halo/volume
+                    this.timeout = setTimeout(function() 
+                    {
+                        var halo    = shape.getChildren()[0];
+                        var radius  = halo.getRadius().x;
+                        shape.interval = setInterval(function() 
+                        {
+                            radius = (radius <= 20) ? radius + 0.1 : 5;
+                            halo.setRadius(radius);
+                        }, self.frameRate);
+                    }, 500);
+
 
                     if (self.lastClick != -1) 
                     {
@@ -387,7 +402,7 @@
 		
 		    // volume halo ellipse
 		    var halo = new Kinetic.Circle({
-                radius        : 8,
+                radius        : radius,
                 fill          : "#ccc",
                 stroke        : "white",
                 strokeWidth   : 0,
@@ -470,6 +485,14 @@
             this.x = 0;
             this.y = 0;
             this.z = 0;
+            this.id;
+            this.title;
+            this.created_by;
+            this.location;
+            this.story;
+            this.filename;
+            this.volume;
+            this.is_recent;
         }
         
         this.Connection3D = function()
@@ -511,13 +534,14 @@
             var self = this;
             
             var coordinates = self.project3dPoint(sphere_point);
-
+            
             self.points_2D.push({
-                x       : coordinates.x_2d,       // 2d x 
-                y       : coordinates.y_2d,       // 2d y
-                point_3d: coordinates.point_3d,   // Point3D object
-                index   : index,                  // point index
-                id      : sphere_point.id
+                x            : coordinates.x_2d,       // 2d x 
+                y            : coordinates.y_2d,       // 2d y
+                point_3d     : coordinates.point_3d,   // Point3D object
+                index        : index,                  // point index
+                id           : sphere_point.id,
+                sphere_point : sphere_point
             });            
         };
         

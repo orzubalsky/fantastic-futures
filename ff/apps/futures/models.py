@@ -41,7 +41,13 @@ class UserProfile(Base):
     slug                = SlugField()    
 
 class GeoSound(Base):
-                  
+         
+    def random_z():
+        return round(random.uniform(-7.0, 7.0), 2)
+        
+    def random_default_volume():
+        return round(random.uniform(0.2, 0.8), 2)
+                          
     sound               = FileField(upload_to="uploads", max_length=150)
     title               = CharField(max_length=100, blank=True, null=True)
     location            = CharField(max_length=150, blank=True, null=True)
@@ -50,11 +56,22 @@ class GeoSound(Base):
     user                = ForeignKey(User, blank=True, null=True)
     slug                = SlugField(max_length=100)    
     point               = PointField()
+    z                   = FloatField(default=random_z)
+    default_volume      = FloatField(default=random_default_volume)
     tags                = TaggableManager()    
     
     objects = GeoManager()
     
-    def save_upload(self, filename, lat, lon, *args, **kwargs):
+    def is_recent():
+        def fget(self):
+            now = datetime.utcnow().replace(tzinfo=utc)
+            week_ago = now - timedelta(days=7)
+            return self.created > week_ago        
+        return locals()        
+        
+    is_recent = property(**is_recent())
+    
+    def save_upload(self, filename, lat, lon, tags, *args, **kwargs):
         "save geosound after ajax uploading an mp3 file"
 
         # store point from coordinates
@@ -74,6 +91,10 @@ class GeoSound(Base):
                     
         # save model
         super(GeoSound, self).save(*args, **kwargs)
+        
+        # save tags to sound
+        for t in tags:
+            self.tags.add(t)
         
         # return the newly created model
         return self

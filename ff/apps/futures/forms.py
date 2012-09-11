@@ -25,8 +25,8 @@ class GeoSoundForm(forms.ModelForm):
          self.fields['created_by'].error_messages['required'] = "please enter your name"
 
     filename    = forms.CharField(widget=forms.HiddenInput, error_messages={'required': 'Please upload an mp3 file'})
-    lat         = forms.CharField(error_messages={'required':'Please enter a valid address'})
-    lon         = forms.CharField(required=False)
+    lat         = forms.CharField(widget=forms.HiddenInput, error_messages={'required':'Please enter a valid address'})
+    lon         = forms.CharField(widget=forms.HiddenInput, required=False)
     
 class ConstellationForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):

@@ -51,7 +51,7 @@ def sound_layer(request):
 
     results = []
     for sound in list(sounds):
-        data = object_to_json(sound)
+        data = sound_to_json(sound)
         results.append(data)
               
     result_data = {
@@ -64,16 +64,22 @@ def sound_layer(request):
     
     
 # called from w/in layer_view
-def object_to_json(sound_object):
-    if sound_object.point:
-        point = json.loads(sound_object.point.json)
-    else:
-        point = ''
+def sound_to_json(sound_object):
     data = {
-        "type":"Feature", 
-        "geometry": point,
-        "properties": { "title": sound_object.title, "id": sound_object.id }
+        "type"              : "Feature", 
+        "geometry"          : json.loads(sound_object.point.json),
+        "properties"        : { 
+            "id"        : sound_object.id,
+            "title"     : sound_object.title,
+            "created_by": sound_object.created_by,
+            "location"  : sound_object.location,
+            "story"     : sound_object.story,
+            "filename"  : sound_object.sound.name,
+            "volume"    : sound_object.default_volume,
+            "z"         : sound_object.z,
+            "is_recent" : sound_object.is_recent
         }
+    }
     return data
     
 
