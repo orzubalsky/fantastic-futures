@@ -401,16 +401,33 @@
               strokeWidth   : 0,
             }); 
 			
+			//checking if sound is new and changing the color
 			if (sound.getAttrs().isNew) {
 				halo.setFill('yellow');
 			}
 			 
-			if (sound.getAttrs().justAdded) {
-				//this.effect("highlight", {}, 3000);
-			}
+			/*if (sound.getAttrs().justAdded) {
+				sound.setAlpha(1);
+			}*/
+			
+			//trying to add animation
+			/*
+			var duration = 1000 ; // we set it to last 1s 
+			var anim = new Kinetic.Animation({
+			    func: function(frame) {
+			        if (frame.time >= duration) {
+			           anim.stop() ;
+			       } else {
+					
+			            sound.setOpacity(frame.time / duration) ;
+			        }
+			    },
+			    node: layer
+			});*/
 			
             sound.add(halo);
             sound.add(core);
+			//anim.start();
             self.points_layer.add(sound);	
 		};
 		

@@ -76,7 +76,7 @@ h2 {
 #constellationMenu {
 	width:140px;
 	position:relative;
-	left:10px;
+	left:15px;
 	bottom:32px;
 	height:160px;
 	z-index:2;
@@ -116,11 +116,14 @@ h2 {
 #addSound {
 	position:absolute;
 	right:131px;
-	bottom:15px;
-	display:none;
+	bottom:20px;
 	z-index: 1;
 	margin-top:0px;
 	padding-top:0px;
+	display:none;
+	min-height:170px;
+	width:265px;
+	background-color:#005fff;
 }
 #addSound label {
     position: absolute;
@@ -131,10 +134,10 @@ h2 {
 /* saf3+, chrome1+ argh! */
 @media screen and (-webkit-min-device-pixel-ratio:0) {
 	#addSound {
-		bottom:15px;
+		bottom:20px;
 	}
 	#constellationMenu {
-		bottom:27px;
+		bottom:32px;
 	}
 	#addSoundText {
 		bottom:24px;
@@ -149,28 +152,29 @@ h2 {
 #addConstellation {
 	position:absolute;
 	left:109px;
-	top:232px;
+	top:260px;
 	display:none;
 	z-index:2;
+	width:265px;
+	min-height:120px;
+	background-color:#005fff;
 }
 #addConstellationTriangle {
 	position:relative;
 	left:20px;
-	top:3px;
+	top:-20px;
 	border:none;
 }
-#addSoundForm, #addConstellationForm, #locateSoundForm {
-	background-color:#005fff;
+#addSoundForm, #addConstellationForm {
 	color:#FFF;
 	font-family:"Andale Mono", "Droid Sans", Helvetica, Arial, sans-serif;
 	font-size:1em;
 	line-height:12px;
-	padding:13px 15px 5px 10px;
-	width:240px;
-	min-height:60px;
+	padding:0px 15px 5px 10px;
+	margin-top:-10px;
 }
 	
-#addSoundForm input, #addSoundForm textarea, #addConstellationForm input, #addConstellationForm textarea, #locateSoundForm input {
+#addSoundForm input, #addSoundForm textarea, #addConstellationForm input, #addConstellationForm textarea {
 	background-color: #FFF;
 	color:#005fff;
 	width: 240px;
@@ -232,20 +236,41 @@ h2 {
 	list-style: none;
 	position: relative;
 }
+#addSoundCheck{
+	padding-top:50px;
+}
+#addConstellationCheck{
+	padding-top:30px;
+}
 #addSoundCheck, #addConstellationCheck, #feedbackCheck {
 	text-align:center;
 	color:#FFF;
+	background-color:#005fff;
 	position:relative;
-	top:40px;
 	display:none;
+
 }
 #addSoundForm .optional, #addConstellationForm .optional {
     background-color:#b3cfff;
 }
 #addSoundForm .optional {
-    margin-bottom:5px;
+    margin-bottom:8px;
 }
-
+#id_lon {
+	display:none;
+}
+#id_lat {
+	display:none;
+}
+/* saf3+, chrome1+ argh! */
+@media screen and (-webkit-min-device-pixel-ratio:0) {
+	#addSoundCheck{
+		padding-top:50px;
+	}
+	#addSoundForm .optional {
+	    margin-bottom:5px;
+	}
+}
 /*error*/
 #error {
 	margin:auto;

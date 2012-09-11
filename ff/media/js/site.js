@@ -116,6 +116,7 @@
 		    if (data.success == true)
 		    {
                 // 1. fade out form
+				
                 $('#addSoundForm').fadeOut(800, function() 
                 {
                     // 2. fade in success message
@@ -129,6 +130,7 @@
                             {
             	                // 5. restore the form's original state
             	                $('#addSoundCheck').hide();
+								$('#addSoundForm').show();
             	                $('#addSoundForm input, #addSoundForm textarea').not('.formSubmit').val('');
             	                
                                 // 6. show sound on map
@@ -140,7 +142,7 @@
                 	        });
                         }, 1500);
                     });
-                });		        
+                });	       
 		    }
 		    else 
 		    {		        
@@ -175,7 +177,7 @@
                 	        });
                         }, 1500);
                     });
-                });		        
+                });	        
 		    }
 		    else 
 		    {		        
@@ -196,6 +198,7 @@
             if (data.success == true)
             {
                 // 1. fade out form
+
                 $('#feedbackForm').fadeOut(300, function() 
                 {
                     // 2. fade in success message

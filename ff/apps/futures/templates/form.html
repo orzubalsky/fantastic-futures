@@ -39,7 +39,7 @@
 		ctx.fill();
 	</script>
 	
-	<form action="/videos/add/" method="post" enctype="multipart/form-data" id="addSoundForm">		
+	<form action="/videos/add/" method="post" enctype="multipart/form-data" id="addSoundForm" class="tran1">		
 		<input type="hidden" class="hidden" name="page_id" value="{{ page.id }}">
 		<ul>
 			<li><input id="filename" type="text" name="filename" value="FIND THE FILE"></li>
@@ -50,15 +50,14 @@
 			<!--	{{ form.as_ul }}-->
 			<li><input id="submit" type="submit" value="UPLOAD"></li>
 		</ul>	
-		
-		<div id="addSoundCheck">
-			:) SOUND ADDED!
-		</div>	
 	</form>
+	<div id="addSoundCheck" class="tran1">
+		:) SOUND ADDED!	
+	</div>
 </div>
 <!--------ADD SOUND ENDED-------->
 
-<!--------CONSTELLATION--------->
+<!--------CONSTELLATION-------->
 <div id="addConstellation">
 	<canvas id="addConstellationTriangle" width="20" height="20">
 	Your browser does not support the HTML5 canvas tag.
@@ -84,11 +83,10 @@
 			<!--	{{ form.as_ul }}-->
 			<li><input id="submit" type="submit" value="SAVE"></li>
 		</ul>	
-
-		<div id="addConstellationCheck">
-			:) CONSTELLATION ADDED!
-		</div>	
 	</form>
+	<div id="addConstellationCheck">
+		:) CONSTELLATION ADDED!
+	</div>
 </div>
 <!--------CONSTELLATION ENDED--------->
 
