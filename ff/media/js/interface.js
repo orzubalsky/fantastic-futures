@@ -323,7 +323,10 @@
 		this.addPointToLayer = function(point)
 		{	
 		    var self = this;
-		    	    
+		    
+		    // create a player instance for this sound
+		    var player = new site.Player(point.id, point.index, point.sphere_point.filename, 0.8);
+		    
 		    // Kinetic group to store coordinates and meta data about the sound
 		    var sound = new Kinetic.Group({
                 x           : point.x,
@@ -341,8 +344,12 @@
 				name		: point.sphere_point.created_by,
 				location	: point.sphere_point.location,
 				isNew		: point.sphere_point.is_recent,
-				justAdded	: false
+				justAdded	: false,
+				player      : player
 		    });
+		    
+		    sound.getAttrs().player.init();
+		    sound.getAttrs().player.play();
 		    		    		     
             sound.on("mouseover", function() {
                 $('#container').css({'cursor':'pointer'});

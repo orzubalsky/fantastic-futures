@@ -3,11 +3,11 @@
 	{
 	    this.id = id,
 	    this.index = index,
-		this.file = file,
+		this.file = MEDIA_URL + file,
 		this.volume = volume;
 	    this.playerId = 'player' + index + '_' + id;
 	    this.loaded;
-	    this.interval;
+	    this.interval;	    
 	};
 
 	site.Player.prototype.init = function()
@@ -19,33 +19,20 @@
 			$('#'+self.playerId).jPlayer("setMedia", {
 	            mp3: self.file
 			}).jPlayer('play').jPlayer('stop');
-			//
-//			var loaded;
-//			self.interval = setInterval(function() {
-//				loaded = $('#'+self.playerId).data("jPlayer").status.seekPercent;
-//				if (loaded < 100) {
-//				}
-//			}, 100);
-			//
 		  },
-		  swfPath: baseUrl + '/js/site',
+		  swfPath: MEDIA_URL + 'js/lib',
 		  volume: self.volume,
 		  preload: 'auto',
 		  backgroundColor: 'transparent',
-		  cssSelectorAncestor: '#timeline #sound'+ self.index + '_' + self.id,
 		  supplied: 'mp3',
-		  solution: 'flash, html',
 		  preload: 'auto'
 	    })
 	    .jPlayer('onProgressChange', function(seekPercent, playedPercentRelative, playedPercentAbsolute, playedTime, totalTime) {
 		})
 		.jPlayer("onSoundComplete", function() {
-			for (var i=0; i < site.soundMap.length; i++) {
-				var sound = site.soundMap[i];
-			}
 		});
 	};
-	
+
 	
 	site.Player.prototype.getLoadedPercent = function()
 	{
@@ -72,6 +59,7 @@
 	{
 		var self = this;
 		$('#'+self.playerId).jPlayer('play');
+		lib.log(this.file);
 	};
 	
 	site.Player.prototype.stop = function()
