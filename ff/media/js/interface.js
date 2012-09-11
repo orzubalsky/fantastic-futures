@@ -118,7 +118,7 @@
             
             p = new self.Point3D();
             
-            p.z         = lib.random(14,-7);
+            p.z         = map_point.z;
             p.x         = self.reverse_projection(map_point.x, p.z, self.width/2.0, 100.0, self.distance);
             p.y         = self.reverse_projection(map_point.y, p.z, self.height/2.0, 100.0, self.distance);
             p.id        = map_point.id;
@@ -127,6 +127,7 @@
             p.location  = map_point.location;
             p.story     = map_point.story;
             p.filename  = map_point.filename;
+            p.volume    = map_point.volume;
             p.is_recent = map_point.is_recent;
                         
             // add point to sphere point array
@@ -327,6 +328,9 @@
 		    // create a player instance for this sound
 		    var player = new site.Player(point.id, point.index, point.sphere_point.filename, 0.8);
 		    
+		    // radius value for halo is calculated according to the sound's default volume
+            var radius = self.map(point.sphere_point.volume, 0.2, 0.8, 5, 20, true);		    
+		    
 		    // Kinetic group to store coordinates and meta data about the sound
 		    var sound = new Kinetic.Group({
                 x           : point.x,
@@ -401,7 +405,7 @@
 		
 		    // volume halo ellipse
 		    var halo = new Kinetic.Circle({
-                radius        : 8,
+                radius        : radius,
                 fill          : "#ccc",
                 stroke        : "white",
                 strokeWidth   : 0,
@@ -473,6 +477,7 @@
             this.location;
             this.story;
             this.filename;
+            this.volume;
             this.is_recent;
         }
         

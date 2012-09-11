@@ -41,7 +41,13 @@ class UserProfile(Base):
     slug                = SlugField()    
 
 class GeoSound(Base):
-                  
+         
+    def random_z():
+        return round(random.uniform(-7.0, 7.0), 2)
+        
+    def random_default_volume():
+        return round(random.uniform(0.2, 0.8), 2)
+                          
     sound               = FileField(upload_to="uploads", max_length=150)
     title               = CharField(max_length=100, blank=True, null=True)
     location            = CharField(max_length=150, blank=True, null=True)
@@ -50,7 +56,8 @@ class GeoSound(Base):
     user                = ForeignKey(User, blank=True, null=True)
     slug                = SlugField(max_length=100)    
     point               = PointField()
-    z                   = FloatField(default=random.uniform(-7.0, 7.0))
+    z                   = FloatField(default=random_z)
+    default_volume      = FloatField(default=random_default_volume)
     tags                = TaggableManager()    
     
     objects = GeoManager()
