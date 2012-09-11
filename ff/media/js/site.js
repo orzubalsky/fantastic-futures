@@ -121,10 +121,9 @@
             	$('#addConstellationForm input, #addConstellationForm textarea').removeClass('error');
             	$('#addConstellationForm .errors').empty();
             		            	    
-                var data = $(this).serialize();
                 var connections = site.ffinterface.getActiveConnections();                
-                
             	$('#addConstellationForm input[name=connection_count]').val(connections.length);
+                var data = $(this).serialize();
             	                
                 Dajaxice.futures.submit_constellation(self.addConstellation_callback, {
                     'form'          : data, 
