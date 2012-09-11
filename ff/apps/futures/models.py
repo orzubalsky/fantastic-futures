@@ -50,6 +50,7 @@ class GeoSound(Base):
     user                = ForeignKey(User, blank=True, null=True)
     slug                = SlugField(max_length=100)    
     point               = PointField()
+    z                   = FloatField(default=random.uniform(-7.0, 7.0))
     tags                = TaggableManager()    
     
     objects = GeoManager()
