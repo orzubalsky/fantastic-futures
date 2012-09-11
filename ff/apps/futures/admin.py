@@ -24,14 +24,19 @@ class GeoSoundAdmin(GeoAdmin):
     prepopulated_fields = {'slug': ('title',)}    
     actions = [randomize_z, randomize_volume]    
 
+class ConstellationAdmin(admin.ModelAdmin):
+    list_display        = ( 'title', 'created_by','location', 'rotation_x', 'rotation_y', 'rotation_z')
+    fields              = ( 'title', 'slug', 'created_by', 'user', 'location', 'connections', 'rotation_x', 'rotation_y', 'rotation_z')
+    prepopulated_fields = {'slug': ('title',)}
+
 class UserProfileAdmin(admin.ModelAdmin):
     list_display        = ( 'display_name', 'city','state', 'country')
     fields              = ( 'display_name', 'slug', 'city','state', 'country', 'country_code', 'number')
     prepopulated_fields = {'slug': ('display_name',)}
     
 admin.site.register(GeoSound, GeoSoundAdmin)
+admin.site.register(Constellation, ConstellationAdmin)
 admin.site.register(UserProfile, UserProfileAdmin)
-admin.site.register(Constellation)
 admin.site.register(Connection)
 
 

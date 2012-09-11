@@ -237,10 +237,10 @@
                  var x = ((mousePos.x * 2*s) - self.width*s) / self.width;
                  var y = ((mousePos.y * 2*s) - self.height*s) / self.height;
 
-                 rotation.y += self.deg_to_rad(x);
+                 rotation.y += self.deg_to_rad(Math.abs(x));
                  rotation.y = (rotation.y >= self.deg_to_rad(360)) ? self.deg_to_rad(0) : rotation.y;
 
-                 rotation.x += self.deg_to_rad(y); 
+                 rotation.x += self.deg_to_rad(Math.abs(y)); 
                  rotation.x = (rotation.x >= self.deg_to_rad(360)) ? self.deg_to_rad(0) : rotation.x;
             }
             
