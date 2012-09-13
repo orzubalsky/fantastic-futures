@@ -20,6 +20,7 @@
         this.rotation_layer;
         this.points_layer;       
         this.connections_layer;
+        this.playhead_layer;
 		this.addButton = 0;
 
         /* set up the interface and run it */
@@ -39,6 +40,7 @@
             self.rotation_layer      = new Kinetic.Layer();
             self.points_layer        = new Kinetic.Layer();        
             self.connections_layer   = new Kinetic.Layer();            
+            self.playhead_layer      = new Kinetic.Layer();
             
             self.setup();            
 
@@ -104,6 +106,8 @@
                 self.mapPointToSpherePoint(self.map_points[i]);
             }
             self.map_points_count = self.map_points.length;        
+            
+    		self.playhead();
             
             self.sphereRefresh();
             
@@ -244,6 +248,31 @@
                  rotation.x = (rotation.x >= self.deg_to_rad(360)) ? self.deg_to_rad(0) : rotation.x;
             }
             
+            // playhead
+            var playhead    = self.playhead_layer.getChildren()[0];
+            var radius      = playhead.getRadius();
+            radius = (radius.x < self.width / 2) ? radius.x + 1 : 0;
+            playhead.setRadius(radius);
+                    
+            var sounds = self.points_layer.getChildren();
+            for (var i=0; i<sounds.length; i++)
+            {
+                var sound = sounds[i];
+                var player = sound.getAttrs().player;
+                var distance_from_center = self.dist(sound.getX(), sound.getY(), self.width/2, self.height/2);
+                if (distance_from_center == radius)
+                {                    
+                    if (sound.getAttrs().active == true)
+                    {          
+
+                        lib.log('play sound: ' + sound.getAttrs().name);
+                        player.stop();
+                        player.play();
+                    }
+                }
+            }
+            
+            
             // check whether a new point was added on the openlayers map
             if (self.map_points.length > self.map_points_count)
             {     
@@ -262,6 +291,7 @@
             
             self.points_layer.clear();
             self.connections_layer.clear();
+            self.playhead_layer.clear();
                                            
             for(var i=0; i<self.points_layer.getChildren().length; i++)
             {
@@ -292,6 +322,7 @@
                 child.setPoints([ {x: p1.x, y: p1.y}, {x: p2.x, y: p2.y} ]);
             }            
             
+            self.playhead_layer.draw();            
             self.rotation_layer.draw();
             self.points_layer.draw();
             self.connections_layer.draw();
@@ -301,9 +332,6 @@
 		this.addPointToLayer = function(point)
 		{	
 		    var self = this;
-		    
-		    // create a player instance for this sound
-		    var player = new site.Player(point.id, point.index, point.sphere_point.filename, 0.8);
 		    
 		    // radius value for halo is calculated according to the sound's default volume
             var radius = self.map(point.sphere_point.volume, 0.2, 0.8, 5, 20, true);		    
@@ -326,13 +354,10 @@
 				location	: point.sphere_point.location,
 				isNew		: point.sphere_point.is_recent,
 				justAdded	: false,
-				player      : player,
+				player      : '',
 				timeout     : '',
 				interval    : '',
 		    });
-		    
-		    sound.getAttrs().player.init();
-		    sound.getAttrs().player.play();
 		    		    		     
             sound.on("mouseover", function() {
                 $('#container').css({'cursor':'pointer'});
@@ -340,7 +365,7 @@
 				$('.soundText').fadeToggle("fast", "linear");
 				$('.soundText').css({'top':this.getAttrs().y-110+'px'});
 				$('.soundText').css({'left':this.getAttrs().x-27+'px'});
-                if (!this.active)
+                if (! this.getAttrs().active)
                 {
                     this.getChildren()[1].setFill('#000');                    
                 }
@@ -348,18 +373,27 @@
             sound.on("mouseout", function() {
                 $('#container').css({'cursor':'default'});
 				$('.soundText').fadeToggle("fast", "linear");
-                if (!this.active)
+                if (!this.getAttrs().active)
                 {
                     this.getChildren()[1].setFill('#000');                    
                 }
             });
             sound.on("mouseup", function() {
-                clearInterval(sound.interval);                
+                clearTimeout(sound.timeout);
+                clearInterval(sound.interval);             
             });
             sound.on("mousedown", function() {
-                this.active = !this.active;
-                if (this.active) 
+                this.getAttrs().active = !this.getAttrs().active;
+                
+                if ( this.getAttrs().active) 
                 {
+                     // create a player instance for this sound
+                     if (this.getAttrs().player == '')
+            	     {
+            	         this.getAttrs().player = new site.Player(this.getAttrs().id, this.getAttrs().index, this.getAttrs().data.filename, 0.8);                    
+        		         this.getAttrs().player.init();
+    		         }
+
                     this.getChildren()[1].setFill('#005fff');
 
                     var shape = this;
@@ -369,13 +403,13 @@
                     {
                         var halo    = shape.getChildren()[0];
                         var radius  = halo.getRadius().x;
-                        shape.interval = setInterval(function() 
+                        sound.interval = setInterval(function() 
                         {
                             radius = (radius <= 20) ? radius + 0.1 : 5;
                             halo.setRadius(radius);
                         }, self.frameRate);
                     }, 500);
-
+                    
 
                     if (self.lastClick != -1) 
                     {
@@ -386,6 +420,13 @@
                         c.index_2 = this.getAttrs().index;
                         self.sphere.connections.push(c);  
                         self.addConnectionToLayer(c);
+                        
+                        // start playing both sounds when the connection is made
+                        var sound_1 = self.points_layer.getChildren()[c.index_1];
+                        var sound_2 = self.points_layer.getChildren()[c.index_2];
+                        sound_1.getAttrs().player.play();
+                        sound_2.getAttrs().player.play();                        
+                        
 						if (self.addButton==0){
 							$('#addConstellationText').fadeToggle("fast", "linear");
 							self.addButton=1;
@@ -397,6 +438,8 @@
                 else 
                 {
                     this.getChildren()[1].setFill('#000');
+
+                    this.getAttrs().player.destroy();
                 }
             });		    
 		
@@ -444,6 +487,25 @@
             sound.add(core);
 			//anim.start();
             self.points_layer.add(sound);	
+		};
+		
+		this.playhead = function()
+		{
+		    var self = this;
+		    
+		    var playhead = new Kinetic.Circle({
+                x               : self.width / 2,
+                y               : self.height / 2,
+                alpha           : 0.8,		        
+                radius          : 100,
+                fill            : "#eeeeff",
+                stroke          : "white",
+                strokeWidth     : 1,
+		    });
+		    
+            self.playhead_layer.add(playhead);
+		    self.stage.add(self.playhead_layer);            
+		    
 		};
 		
 		this.addConnectionToLayer = function(connection)
@@ -614,6 +676,11 @@
       	       result = (result < ostart) ? ostart : result;
       	   }
       	   return result;
-        }        
+        }
+        
+        this.dist = function(x1,y1,x2,y2)
+        {
+            return Math.round(Math.sqrt( (x2-x1)*(x2-x1) + (y2-y1)*(y2-y1) ));
+        }
 	};
 })(jQuery);	

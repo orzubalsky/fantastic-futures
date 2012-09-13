@@ -19,7 +19,7 @@ class GeoAdmin(admin.OSMGeoAdmin):
     default_zoom = 10
 
 class GeoSoundAdmin(GeoAdmin):
-    list_display        = ( 'title', 'sound', 'created_by', 'user', 'location', 'default_volume', 'story', 'get_tags', 'is_active')
+    list_display        = ( 'title', 'sound', 'created_by', 'user', 'location', 'default_volume', 'z', 'story', 'get_tags', 'is_active')
     fields              = ( 'title', 'sound', 'slug', 'created_by', 'user', 'location', 'story', 'tags', 'point', 'is_active')
     prepopulated_fields = {'slug': ('title',)}    
     actions = [randomize_z, randomize_volume]    

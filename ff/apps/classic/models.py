@@ -114,7 +114,7 @@ class SoundManager(Manager):
             point = Point(lng, lat, srid=4326)
 
             # save geosound
-            geosound = GeoSound(sound=data['filename'], title=data['title'], location=data['location'], story=data['story'], created_by=user.username, user=user, slug=slug, point=point, created=created)
+            geosound = GeoSound(sound="uploads/" + data['filename'], title=data['title'], location=data['location'], story=data['story'], created_by=user.username, user=user, slug=slug, point=point, created=created)
             geosound.save()
 
             # get tags

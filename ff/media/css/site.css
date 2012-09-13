@@ -464,4 +464,6 @@ a#customZoomIn, a#customZoomOut {
     top:25px;
     margin-top:2px;
 }
-
+#players {
+    display: none;
+}
