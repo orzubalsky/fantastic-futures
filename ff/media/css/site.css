@@ -497,13 +497,12 @@ a#customZoomIn, a#customZoomOut {
 }
 #search {
 	display:block;
-
 	position:absolute;
 	right:40px;
 	bottom:10px;
 }
 #search input {
-	width:80px;
+	width:84px;
 	background-color:transparent;
 	border:1px #f1f1ff solid;
 	font-family:"Andale Mono", "Droid Sans", Helvetica, Arial, sans-serif;

@@ -37,13 +37,16 @@
 			});
         	$("#logo").click(function() {
         	  $("#about").fadeToggle("fast", "linear");
+			  $("#clickLayer").fadeToggle("fast", "linear");
         	});
         	$("#addSoundText").click(function() {
         	  $("#addSound").fadeToggle("fast", "linear");
+			   $("#clickLayer").fadeToggle("fast", "linear");
               site.ffinterface.resetRotation();        	  
         	});
         	$("#addConstellationText").click(function() {
         	  $("#addConstellation").fadeToggle("fast", "linear");
+			  $("#clickLayer").fadeToggle("fast", "linear");
         	});
         	$("#errorText").click(function() {
         	  $("#error").fadeToggle("fast", "linear");
