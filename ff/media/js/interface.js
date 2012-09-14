@@ -409,17 +409,28 @@
             });
             sound.on("mousedown", function() 
             {
-                this.getAttrs().active = !this.getAttrs().active;
+                // if the sound is connected to connections it's always "active"
+                if (self.soundShapeConnectsToExistingConnection(this))
+                {
+                    this.getAttrs().active = true;
+                }
+                else 
+                {
+                    // if it's not connected, the active state is toggled with every mouse click
+                    this.getAttrs().active = !this.getAttrs().active;                    
+                }
                 
                 if ( this.getAttrs().active) 
                 {
+                    /*
                      // create a player instance for this sound
                      if (this.getAttrs().player == '')
             	     {
             	         var player = new site.Player(this.getAttrs().id, this.getAttrs().index, this.getAttrs().data.filename, 0.8);
             	         this.setAttrs({player: player});
         		         this.getAttrs().player.init();
-    		         } 		         
+    		         }
+    		         */ 		         
                      
                      // change the "core" color
                      this.getChildren()[1].setFill('#005fff');
@@ -444,26 +455,69 @@
                         }, self.frameRate);
                     }, 500);
                                         
-                    // sound connection logic
-                    if (self.lastClick != -1) 
-                    {
-                        // create connection between this sound and the last one clicked
-                        c = self.newConnectionFromTwoSoundShapes(self.lastClick, this);
-                        
-                        // start playing both sounds when the connection is made
-                        var sound_1 = self.points_layer.getChildren()[c.index_1];
-                        var sound_2 = self.points_layer.getChildren()[c.index_2];
-                        sound_1.getAttrs().player.play();
-                        sound_2.getAttrs().player.play();                        
-                        
-                        // show add constellation link upon making the first connection 
-						if (self.addButton == 0)
-						{
-							$('#addConstellationText').fadeToggle("fast", "linear");
-							self.addButton = 1;
-						}
-                    }
                     
+                    /* SOUND CONNECTION LOGIC */
+                    
+                    // if this is the first sound clicked in order to make a connection
+                    if (self.lastClick == -1) 
+                    {
+                        // if there are connections, you can only connect the sound to them
+                        if (self.getActiveConnections().length > 0)
+                        {
+                            self.styleAllOtherActiveSoundShapes(this, 'red');                            
+                        }
+                        else 
+                        {
+                            // if there aren't, this is the first sound ever clicked, and anything is possible!
+                            self.styleAllInactiveSoundShapes('red');                            
+                        }                        
+                    }
+                    else
+                    {
+                        // this is the second sound clicked on, several scenarios are possible:
+                        
+                        // 1. this is the first connection made
+                        if (self.getActiveConnections().length == 0)
+                        {
+                            // make the connection between this sound and the one last clicked
+                            c = self.connectTwoSoundShapes(self.lastClick, this);
+                            
+                            // show add constellation link upon making the first connection 
+                            if (self.addButton == 0)
+                            {
+                                $('#addConstellationText').fadeToggle("fast", "linear");
+                                self.addButton = 1;
+                            }                            
+                        }
+                        else 
+                        {                            
+                            // 2. this is a connection made in succession, right after another was just made
+                            if (self.soundShapeConnectsToExistingConnection(this) == false && self.soundShapeConnectsToExistingConnection(self.lastClick) == true)
+                            {
+                                // make the connection between this sound and the one last clicked
+                                c = self.connectTwoSoundShapes(self.lastClick, this);                                
+                            }
+                            
+                            // 3. this a connection made after resetting he lastClick variable, 
+                            //    clicking on a sound that isn't conneted, 
+                            //    and connecting it to a sound which is connected
+                            if (self.soundShapeConnectsToExistingConnection(this) == true && self.soundShapeConnectsToExistingConnection(self.lastClick) == false)
+                            {
+                                // make the connection between this sound and the one last clicked
+                                c = self.connectTwoSoundShapes(self.lastClick, this);                                
+                            }  
+                            
+                            // 4. this a connection made after resetting he lastClick variable, 
+                            //    clicking on a sound that *is* conneted, 
+                            //    and connecting it to a sound which isn't connected
+                            if (self.soundShapeConnectsToExistingConnection(this) == true && self.soundShapeConnectsToExistingConnection(self.lastClick) == true)
+                            {
+                                // make the connection between this sound and the one last clicked
+                                c = self.connectTwoSoundShapes(self.lastClick, this);                                
+                            }  
+                        }
+                    }
+
                     // store the sound which was clicked in the interface lastClick variable
                     self.lastClick = this;
                 }
@@ -473,7 +527,7 @@
                     this.getChildren()[1].setFill('#000');
                     
                     // remove audio player instance
-                    this.player.destroy();
+                    // this.player.destroy();
                 }
             });		    
 		
@@ -521,6 +575,85 @@
             sound.add(core);
 			//anim.start();
             self.points_layer.add(sound);	
+		};
+		
+		this.connectTwoSoundShapes = function(soundShape_1, soundShape_2)
+		{
+		    var self = this;
+		    
+            // create connection between the two sounds
+            c = self.newConnectionFromTwoSoundShapes(soundShape_1, soundShape_2);
+
+            // start playing both sounds when the connection is made
+            var sound_1 = self.points_layer.getChildren()[c.index_1];
+            var sound_2 = self.points_layer.getChildren()[c.index_2];
+            //sound_1.getAttrs().player.play();
+            //sound_2.getAttrs().player.play();    
+
+            // now show all of the other possible connections by highlighting the other sounds                    
+            self.styleAllInactiveSoundShapes('red');		    
+		};
+
+        this.soundShapeConnectsToExistingConnection = function(soundShape)
+        {
+            var self = this;
+            
+            for (var i=0; i<self.sphere.connections.length; i++)
+            {
+                var c = self.sphere.connections[i];
+                if (soundShape.getAttrs().index == c.index_1 || soundShape.getAttrs().index == c.index_2)
+                {
+                    return true;
+                }
+            }
+            
+            return false;
+        };
+
+		this.styleAllOtherActiveSoundShapes = function(clickedSoundShape, color)
+		{
+		    var self = this;
+		    
+            var allSoundsShapes = self.points_layer.getChildren();		    
+
+            for(var i=0; i<allSoundsShapes.length; i++)
+            {
+                var soundShape = allSoundsShapes[i];
+
+                // only apply the style change to sounds which are active and aren't this specific sound
+                if (soundShape.getAttrs().active && i != clickedSoundShape.getAttrs().index)
+                {                    
+                    // color the "core" shape
+                    soundShape.getChildren()[1].setFill(color);                                
+                } 
+                else
+                {
+                    soundShape.getChildren()[1].setFill('black');
+                }
+            }		    
+		};
+		
+		this.styleAllInactiveSoundShapes = function(color)
+		{
+		    var self = this;
+		    
+            var allSoundsShapes = self.points_layer.getChildren();		    
+
+            for(var i=0; i<allSoundsShapes.length; i++)
+            {
+                var soundShape = allSoundsShapes[i];
+
+                // only apply the style change to sounds which are not active
+                if (!soundShape.getAttrs().active)
+                {                    
+                    // color the "core" shape
+                    soundShape.getChildren()[1].setFill(color);                                
+                } 
+                else
+                {
+                    soundShape.getChildren()[1].setFill('black');
+                }
+            }		    
 		};
 		
 		this.newConnectionFromTwoSoundShapes = function(soundShape_1, soundShape_2)
@@ -588,6 +721,18 @@
                 draggable: true,
                 dragBounds: { top: 0, right: 0, bottom: 0, left: 0 }
 		    });
+            rotationCanvas.on("mousedown", function() 
+            {
+                // reset the interface last click variable 
+                self.lastClick = -1;
+                
+                lib.log('resetting last click');
+                
+                // reset the style of all sounds
+                self.styleAllInactiveSoundShapes('black');
+            });
+		    
+		    
 		    self.rotation_layer.add(rotationCanvas);
 		    self.stage.add(self.rotation_layer);		    
 		}
