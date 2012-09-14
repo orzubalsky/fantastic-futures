@@ -121,14 +121,19 @@ h2 {
 	color:#AAA;
 	display:none;
 	overflow:hidden;
-	height:97px;
+	height:117px;
 	position:relative;
 	top:-5px;
 }
 #constellationMenuContent .selected {
 	color:#000;
 }
-
+#constellationMenuContent a {
+	color:#999;
+}
+#constellationMenuContent a:hover {
+	color:#333;
+}
 /*addSound addConstellation forms*/
 #addSound {
 	position:absolute;
@@ -492,19 +497,18 @@ a#customZoomIn, a#customZoomOut {
 }
 #search {
 	display:block;
-	text-align:right;
+
 	position:absolute;
 	right:40px;
 	bottom:10px;
 }
 #search input {
 	width:80px;
-	background-color:white;
-	opacity:1;
+	background-color:transparent;
 	border:1px #f1f1ff solid;
 	font-family:"Andale Mono", "Droid Sans", Helvetica, Arial, sans-serif;
 	color: #005fff;
 	font-size:1em;
-	text-align:right;
+
 
 }

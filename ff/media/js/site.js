@@ -216,6 +216,7 @@
                             {
             	                // 5. restore the form's original state
             	                $('#addConstellationCheck').hide();
+								$('#addConstellationForm').show();
             	                $('#addConstellationForm input, #addConstellationForm textarea').not('.formSubmit').val('');
                 	        });
                         }, 1500);
