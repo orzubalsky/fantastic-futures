@@ -23,6 +23,7 @@
         this.playhead_layer;
         this.playhead = 0;
 		this.addButton = 0;
+		this.is_playing = false;
 
         /* set up the interface and run it */
         this.init = function()
@@ -101,6 +102,7 @@
             var self = this;
             
             self.setupStageDragging();
+            self.playerToggleControl();
             
             for(var i=0; i<self.map_points.length; i++)
             {
@@ -252,8 +254,11 @@
             //playhead //comment out to get rid of playhead
             var playhead    = self.playhead_layer.getChildren()[0];
             var radius      = playhead.getRadius();
-            radius = (radius.x < self.width / 2) ? radius.x + 1 : 0;
-            playhead.setRadius(radius);
+            if (self.is_playing)
+            {
+                radius = (radius.x < self.width / 2) ? radius.x + 1 : 0;
+                playhead.setRadius(radius);                
+            }
              
 			//unhide to get rid of playhead
             /*var radius = self.playhead;
@@ -423,7 +428,6 @@
                 
                 if ( this.getAttrs().active) 
                 {
-                    /*
                      // create a player instance for this sound
                      if (this.getAttrs().player == '')
             	     {
@@ -431,8 +435,7 @@
             	         this.setAttrs({player: player});
         		         this.getAttrs().player.init();
     		         }
-    		         */ 		         
-                     
+
                      // change the "core" color
                      this.getChildren()[1].setFill('#005fff');
 
@@ -488,7 +491,10 @@
                             {
                                 $('#addConstellationText').fadeToggle("fast", "linear");
                                 self.addButton = 1;
-                            }                            
+                            }
+                            
+                            // set the interface to playing mode!
+                            self.is_playing = true;
                         }
                         else 
                         {                            
@@ -528,7 +534,7 @@
                     this.getChildren()[1].setFill('#000');
                     
                     // remove audio player instance
-                    // this.player.destroy();
+                    this.player.destroy();
                 }
             });		    
 		
@@ -589,8 +595,8 @@
             // start playing both sounds when the connection is made
             var sound_1 = self.points_layer.getChildren()[c.index_1];
             var sound_2 = self.points_layer.getChildren()[c.index_2];
-            //sound_1.getAttrs().player.play();
-            //sound_2.getAttrs().player.play();    
+            sound_1.getAttrs().player.play();
+            sound_2.getAttrs().player.play();    
 
             // now show all of the other possible connections by highlighting the other sounds                    
             self.styleAllInactiveSoundShapes('white');		    
@@ -674,6 +680,33 @@
             return c;
 		};
 		
+		this.playerToggleControl = function()
+		{
+		    var self = this;
+		    
+		    $(window).keypress(function(e) 
+		    {
+		        // return, backspace, escape, space
+                if (e.keyCode == 8 || e.keyCode == 13 || e.keyCode == 27 || e.keyCode == 32)
+                {
+                    lib.log('toggle player from: ' + self.is_playing);
+                    self.is_playing = !self.is_playing;
+                    
+                    // pause all players
+                    if (!self.is_playing)
+                    {
+                          var sounds = self.points_layer.getChildren();
+                            for (var i=0; i<sounds.length; i++)
+                            {
+                                var sound = sounds[i];
+                                var player = sound.getAttrs().player;
+                                player.pause();
+                            }                        
+                    }
+                }
+		    });
+		};
+		
 		this.playhead = function()
 		{
 		    var self = this;
@@ -682,7 +715,7 @@
                 x               : self.width / 2,
                 y               : self.height / 2,
                 alpha           : 0.8,		        
-                radius          : 100,
+                radius          : 0,
                 fill            : "#eeeeff",
                 stroke          : "white",
                 strokeWidth     : 1,
