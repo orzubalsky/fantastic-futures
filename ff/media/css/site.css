@@ -19,6 +19,14 @@ h2 {
 	line-height:12px;
 	color: #005fff;
 }
+#clickLayer {
+	position:absolute;
+	height:100%;
+	width:100%;
+	background-color:transparent;
+	z-index:2;
+	display:none;
+}
 /*detail text about a sound*/
 .soundText {
     color:#666;
@@ -117,7 +125,7 @@ h2 {
 	position:absolute;
 	right:131px;
 	bottom:20px;
-	z-index: 1;
+	z-index: 2;
 	margin-top:0px;
 	padding-top:0px;
 	display:none;
@@ -248,7 +256,6 @@ h2 {
 	background-color:#005fff;
 	position:relative;
 	display:none;
-
 }
 #addSoundForm .optional, #addConstellationForm .optional {
     background-color:#b3cfff;
