@@ -108,7 +108,7 @@
             }
             self.map_points_count = self.map_points.length;        
             
-    		// self.playhead();
+    		 self.playhead(); //comment out to get rid of playhead
             
             self.sphereRefresh();
             
@@ -249,16 +249,16 @@
                  rotation.x = (rotation.x >= self.deg_to_rad(360)) ? self.deg_to_rad(0) : rotation.x;
             }
             
-            // playhead
-            //var playhead    = self.playhead_layer.getChildren()[0];
-            // var radius      = playhead.getRadius();
-            //radius = (radius.x < self.width / 2) ? radius.x + 1 : 0;
-            //radius = (radius.x < self.width / 2) ? radius.x + 1 : 0;
-            //playhead.setRadius(radius);
+            //playhead //comment out to get rid of playhead
+            var playhead    = self.playhead_layer.getChildren()[0];
+            var radius      = playhead.getRadius();
+            radius = (radius.x < self.width / 2) ? radius.x + 1 : 0;
+            playhead.setRadius(radius);
              
-            var radius = self.playhead;
+			//unhide to get rid of playhead
+            /*var radius = self.playhead;
             radius = (radius < self.width / 2) ? radius + 1 : 0;
-            self.playhead = radius;
+            self.playhead = radius;*/
 
             var sounds = self.points_layer.getChildren();
             for (var i=0; i<sounds.length; i++)
@@ -270,8 +270,9 @@
                 {                    
                     if (sound.getAttrs().active == true)
                     {
-                        player.stop();                        
+                        player.stop();  
                         player.play();
+						sound.getChildren()[1].setFill("#005fff");	//style sound that is playing
                     }
                 }
             }
@@ -464,12 +465,12 @@
                         // if there are connections, you can only connect the sound to them
                         if (self.getActiveConnections().length > 0)
                         {
-                            self.styleAllOtherActiveSoundShapes(this, 'red');                            
+                            self.styleAllOtherActiveSoundShapes(this, 'white');                            
                         }
                         else 
                         {
                             // if there aren't, this is the first sound ever clicked, and anything is possible!
-                            self.styleAllInactiveSoundShapes('red');                            
+                            self.styleAllInactiveSoundShapes('white');                            
                         }                        
                     }
                     else
@@ -549,7 +550,8 @@
 			
 			//checking if sound is new and changing the color
 			if (sound.getAttrs().isNew) {
-				halo.setFill('yellow');
+			//	halo.setFill('#005fff');
+				halo.setFill('#666');
 			}
 			 
 			/*if (sound.getAttrs().justAdded) {
@@ -591,7 +593,7 @@
             //sound_2.getAttrs().player.play();    
 
             // now show all of the other possible connections by highlighting the other sounds                    
-            self.styleAllInactiveSoundShapes('red');		    
+            self.styleAllInactiveSoundShapes('white');		    
 		};
 
         this.soundShapeConnectsToExistingConnection = function(soundShape)
@@ -730,6 +732,9 @@
                 
                 // reset the style of all sounds
                 self.styleAllInactiveSoundShapes('black');
+
+				//hide all sound text
+				$(".soundText").fadeOut(200);
             });
 		    
 		    
