@@ -689,19 +689,15 @@
 		        // return, backspace, escape, space
                 if (e.keyCode == 8 || e.keyCode == 13 || e.keyCode == 27 || e.keyCode == 32)
                 {
-                    lib.log('toggle player from: ' + self.is_playing);
                     self.is_playing = !self.is_playing;
                     
-                    // pause all players
-                    if (!self.is_playing)
+                    var sounds = self.points_layer.getChildren();
+                    for (var i=0; i<sounds.length; i++)
                     {
-                          var sounds = self.points_layer.getChildren();
-                            for (var i=0; i<sounds.length; i++)
-                            {
-                                var sound = sounds[i];
-                                var player = sound.getAttrs().player;
-                                player.pause();
-                            }                        
+                        var sound = sounds[i];
+                        var player = sound.getAttrs().player;
+                        
+                        (self.is_playing) ? player.play() : player.pause();
                     }
                 }
 		    });
