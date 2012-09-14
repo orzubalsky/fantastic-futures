@@ -3,7 +3,7 @@ body {
 	font-size:10px;
 	line-height:12px;
 	color:#000; 
-	
+	margin:0;
 }
 /* saf3+, chrome1+ argh! */
 
@@ -59,6 +59,7 @@ h2 {
 	width:143px;
 	height:14px;
 	display:block;
+	margin:10px;
 }
 
 /*menus*/
@@ -481,4 +482,29 @@ a#customZoomIn, a#customZoomOut {
 }
 #players {
     display: none;
+}
+#footer {
+	height:35px;
+	width:100%;
+	position:fixed;
+	bottom:0;
+	z-index:3;
+}
+#search {
+	display:block;
+	text-align:right;
+	position:absolute;
+	right:40px;
+	bottom:10px;
+}
+#search input {
+	width:80px;
+	background-color:white;
+	opacity:1;
+	border:1px #f1f1ff solid;
+	font-family:"Andale Mono", "Droid Sans", Helvetica, Arial, sans-serif;
+	color: #005fff;
+	font-size:1em;
+	text-align:right;
+
 }
