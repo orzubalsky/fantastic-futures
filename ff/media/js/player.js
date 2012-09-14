@@ -14,8 +14,6 @@
 	site.Player.prototype.init = function()
 	{
 		var self = this;
-		
-		
 
 		$('#container').append('<div id="' + self.playerId + '"></div>');
 	    self.$player = $('#' + self.playerId);

@@ -21,6 +21,7 @@
 		this.menus = function()
 		{
 		    var self = this;
+
         	$("#clickLayer").click(function(){
 				if ($("#map").css("opacity")>0){
 					$("#map").fadeOut(1000);
@@ -36,16 +37,13 @@
 			});
         	$("#logo").click(function() {
         	  $("#about").fadeToggle("fast", "linear");
-			  $("#clickLayer").show();
         	});
         	$("#addSoundText").click(function() {
         	  $("#addSound").fadeToggle("fast", "linear");
-			  $("#clickLayer").show();
               site.ffinterface.resetRotation();        	  
         	});
         	$("#addConstellationText").click(function() {
         	  $("#addConstellation").fadeToggle("fast", "linear");
-			  $("#clickLayer").show();
         	});
         	$("#errorText").click(function() {
         	  $("#error").fadeToggle("fast", "linear");

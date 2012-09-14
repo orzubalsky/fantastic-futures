@@ -2,7 +2,7 @@
 import os, sys
 
 ADMINS = (
-    # ('Or Zubalsky', 'juviley@gmail.com'),
+    # ('The Youngest', 'youngestforever@gmail.com'),
 )
 
 MANAGERS = ADMINS
@@ -126,8 +126,8 @@ INSTALLED_APPS = (
     'dajaxice',                     # django ajax app
     'ajaxuploader',                 # ajax file uploader
     'taggit',                       # tagging app
+    'django_mailer',                # email backend
     'chronograph',                  # admin based cron job management
-    'mailer',                       # handle outgoing email queue
     'classic',                      # ff v2 datamodels, used here mostly for migrating data
     'futures',                      # fantastic futures!
 )
@@ -169,6 +169,9 @@ LOGGING = {
         },
     }
 }
+
+EMAIL_SUBJECT_PREFIX = 'FF | '
+SERVER_EMAIL = 'django@fantasticfutures.fm'
 
 try:
     LOCAL_SETTINGS

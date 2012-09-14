@@ -2,6 +2,7 @@ from dajaxice.decorators import dajaxice_register
 from dajaxice.utils import deserialize_form
 from django.utils import simplejson as json
 from django.utils.safestring import mark_safe
+from django.core.mail import mail_admins, send_mail
 from futures.forms import *
 from futures.views import sound_to_json
 
@@ -11,7 +12,9 @@ def submit_feedback(request, form):
     feedback_form = FeedbackForm(deserialize_form(form))
         
     if feedback_form.is_valid():
-        # Use mail_admin or something to send off the data like you normally would.
+        message = "from: %s, message: %s" % (feedback_form.cleaned_data.get('email'), feedback_form.cleaned_data.get('message'))        
+        # mail_admins('Feedback Receieved!', message, fail_silently=False)
+        send_mail('FF | Feedback Receieved!', message, 'noreply@fantasticfutures.fm', ('youngestforever@gmail.com',))
         
         return json.dumps({'success':True})
     return json.dumps({'success':False, 'errors': feedback_form.errors})
