@@ -730,6 +730,9 @@
                 
                 // reset the style of all sounds
                 self.styleAllInactiveSoundShapes('black');
+
+				//hide all sound text
+				$(".soundText").fadeOut(200);
             });
 		    
 		    

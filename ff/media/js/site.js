@@ -22,6 +22,10 @@
 		{
 		    var self = this;
         	$("#clickLayer").click(function(){
+				if ($("#map").css("opacity")>0){
+					$("#map").fadeOut(1000);
+	                $("#interface").fadeIn(1000);
+				}
 				$(".tran1").fadeOut(1000);
 				$("#clickLayer").hide();
 			});
