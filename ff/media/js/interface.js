@@ -100,19 +100,20 @@
         this.setup = function()
         {   
             var self = this;
-            
-            self.setupStageDragging();
-            self.playerToggleControl();
-            
+                        
             for(var i=0; i<self.map_points.length; i++)
             {
                 self.mapPointToSpherePoint(self.map_points[i]);
             }
             self.map_points_count = self.map_points.length;        
             
-    		 self.playhead(); //comment out to get rid of playhead
+    		self.playhead(); //comment out to get rid of playhead
+            
+            self.setupStageDragging();
             
             self.sphereRefresh();
+            
+            self.playerToggleControl();
             
             self.initPoints();
                                     
