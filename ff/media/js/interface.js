@@ -363,33 +363,52 @@
 				interval    : '',
 		    });
 		    		    		     
-            sound.on("mouseover", function() {
+            sound.on("mouseover", function() 
+            {
+                // change cursor 
                 $('#container').css({'cursor':'pointer'});
-				$('.soundText').html(this.getAttrs().name+'<br/>'+this.getAttrs().location);
-				$('.soundText').fadeToggle("fast", "linear");
-				$('.soundText').css({'top':this.getAttrs().y-110+'px'});
-				$('.soundText').css({'left':this.getAttrs().x-27+'px'});
+                
+                // populate the sound text div with this sound's data, position it, and display it
+				$('.soundText')
+				    .html(this.getAttrs().name+'<br/>'+this.getAttrs().location) 
+				    .css({ 
+				        'top'   : (this.getAttrs().y-110) + 'px',
+                        'left'  : (this.getAttrs().x-27) + 'px'				        
+                    })
+                    .fadeToggle("fast", "linear");
+
+                // if the sound isn't active, highlight it
                 if (! this.getAttrs().active)
                 {
-                    this.getChildren()[1].setFill('#000');                    
+                    this.setAlpha(1);                    
                 }
             });            
-            sound.on("mouseout", function() {
+            sound.on("mouseout", function() 
+            {
+                // clear volume halo animation timing variables
                 clearTimeout(sound.timeout);
                 clearInterval(sound.interval);
-                                
+
+                // reset cursor 
                 $('#container').css({'cursor':'default'});
+                
+                // hide the sound text div
 				$('.soundText').fadeToggle("fast", "linear");
+				
+				// reset the sound style
                 if (!this.getAttrs().active)
                 {
-                    this.getChildren()[1].setFill('#000');                    
+                    this.setAlpha(0.4);                    
                 }
             });
-            sound.on("mouseup", function() {
+            sound.on("mouseup", function() 
+            {
+                // clear volume halo animation timing variables                
                 clearTimeout(sound.timeout);
                 clearInterval(sound.interval);             
             });
-            sound.on("mousedown", function() {
+            sound.on("mousedown", function() 
+            {
                 this.getAttrs().active = !this.getAttrs().active;
                 
                 if ( this.getAttrs().active) 
@@ -401,33 +420,35 @@
             	         this.setAttrs({player: player});
         		         this.getAttrs().player.init();
     		         } 		         
+                     
+                     // change the "core" color
+                     this.getChildren()[1].setFill('#005fff');
 
-                    this.getChildren()[1].setFill('#005fff');
-
-                    var shape = this;
+                     // store the sound instance in a variable (js timeout function creates a new scope for "this")
+                     var shape = this;
                     
                     // wait 500ms and then start animating the halo/volume
                     this.timeout = setTimeout(function() 
                     {
-                        var halo    = shape.getChildren()[0];
-                        var radius  = halo.getRadius().x;
+                        // the halo shape is the first child of the sound group
+                        var halo = shape.getChildren()[0];
+                        
+                        // since halo is an ellipse, it has x & y values for its radius
+                        var radius = halo.getRadius().x;
+                        
+                        // animate the radius in a loop
                         sound.interval = setInterval(function() 
                         {
                             radius = (radius <= 20) ? radius + 0.1 : 5;
                             halo.setRadius(radius);
                         }, self.frameRate);
                     }, 500);
-                    
-
+                                        
+                    // sound connection logic
                     if (self.lastClick != -1) 
                     {
-                        c = new self.Connection3D();
-                        c.sound_1 = self.lastClick.id;
-                        c.sound_2 = this.getAttrs().id;
-                        c.index_1 = self.lastClick.index;
-                        c.index_2 = this.getAttrs().index;
-                        self.sphere.connections.push(c);  
-                        self.addConnectionToLayer(c);
+                        // create connection between this sound and the last one clicked
+                        c = self.newConnectionFromTwoSoundShapes(self.lastClick, this);
                         
                         // start playing both sounds when the connection is made
                         var sound_1 = self.points_layer.getChildren()[c.index_1];
@@ -435,18 +456,23 @@
                         sound_1.getAttrs().player.play();
                         sound_2.getAttrs().player.play();                        
                         
-						if (self.addButton==0){
+                        // show add constellation link upon making the first connection 
+						if (self.addButton == 0)
+						{
 							$('#addConstellationText').fadeToggle("fast", "linear");
-							self.addButton=1;
+							self.addButton = 1;
 						}
                     }
-
-                    self.lastClick = {id: this.getAttrs().id, index: this.getAttrs().index}
+                    
+                    // store the sound which was clicked in the interface lastClick variable
+                    self.lastClick = this;
                 }
                 else 
                 {
+                    // reset core color to original
                     this.getChildren()[1].setFill('#000');
                     
+                    // remove audio player instance
                     this.player.destroy();
                 }
             });		    
@@ -495,6 +521,22 @@
             sound.add(core);
 			//anim.start();
             self.points_layer.add(sound);	
+		};
+		
+		this.newConnectionFromTwoSoundShapes = function(soundShape_1, soundShape_2)
+		{
+		    var self = this;
+		    
+            c = new self.Connection3D();
+            
+            c.sound_1 = soundShape_1.getAttrs().id;
+            c.sound_2 = soundShape_2.getAttrs().id;
+            c.index_1 = soundShape_1.getAttrs().index;
+            c.index_2 = soundShape_2.getAttrs().index;
+            self.sphere.connections.push(c);  
+            self.addConnectionToLayer(c);
+            
+            return c;
 		};
 		
 		this.playhead = function()

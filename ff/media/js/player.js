@@ -51,17 +51,13 @@
 	
 	site.Player.prototype.play = function()
 	{
-	    lib.log('play player: ' + this.playerId);
-	    
 		var self = this;
         self.$player.jPlayer("playHead", 0).jPlayer("play");		
 	};
 	
 	site.Player.prototype.stop = function()
 	{
-	    lib.log('stop player: ' + this.playerId);
 		var self = this;
-		
 	    self.$player.jPlayer('stop');
 	};	
 	
@@ -73,8 +69,6 @@
 	
 	site.Player.prototype.destroy = function()
 	{
-	    lib.log('destroy player: ' + this.playerId);
-	    
 		var self = this;
 		self.$player.jPlayer('destory');
 	};		
