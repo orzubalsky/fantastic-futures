@@ -263,10 +263,8 @@
                 if (distance_from_center == radius)
                 {                    
                     if (sound.getAttrs().active == true)
-                    {          
-
-                        lib.log('play sound: ' + sound.getAttrs().name);
-                        player.stop();
+                    {
+                        player.stop();                        
                         player.play();
                     }
                 }
@@ -371,6 +369,9 @@
                 }
             });            
             sound.on("mouseout", function() {
+                clearTimeout(sound.timeout);
+                clearInterval(sound.interval);
+                                
                 $('#container').css({'cursor':'default'});
 				$('.soundText').fadeToggle("fast", "linear");
                 if (!this.getAttrs().active)
@@ -390,9 +391,10 @@
                      // create a player instance for this sound
                      if (this.getAttrs().player == '')
             	     {
-            	         this.getAttrs().player = new site.Player(this.getAttrs().id, this.getAttrs().index, this.getAttrs().data.filename, 0.8);                    
+            	         var player = new site.Player(this.getAttrs().id, this.getAttrs().index, this.getAttrs().data.filename, 0.8);
+            	         this.setAttrs({player: player});
         		         this.getAttrs().player.init();
-    		         }
+    		         } 		         
 
                     this.getChildren()[1].setFill('#005fff');
 
@@ -438,8 +440,8 @@
                 else 
                 {
                     this.getChildren()[1].setFill('#000');
-
-                    this.getAttrs().player.destroy();
+                    
+                    this.player.destroy();
                 }
             });		    
 		

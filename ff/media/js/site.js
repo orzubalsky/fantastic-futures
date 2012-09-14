@@ -10,6 +10,12 @@
 		    this.HEIGHT = $('#interface').height();
 		    site.ajaxUpload.init();
 		    site.map.init();
+		    this.debug();
+		};
+		
+		this.debug = function()
+		{
+        	
 		};
 		
 		this.menus = function()

@@ -27,6 +27,7 @@ def index(request):
                 {'fields': ('sound_1','sound_2','sound_1_volume','sound_2_volume') }
             }
     )
+    geosounds = GeoSound.objects.all()
         
     feedback_form       = FeedbackForm()
     add_sound_form      = GeoSoundForm()
@@ -41,6 +42,7 @@ def index(request):
             'google_api_key'        : settings.GOOGLE_API_KEY,
             'constellations'        : constellations,
             'constellations_json'   : constellations_json,
+            'geosounds'              : geosounds
         }, context_instance=RequestContext(request))
 
 def view_sound(request, sound_slug):
