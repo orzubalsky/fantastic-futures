@@ -38,6 +38,14 @@ h2 {
 	display:none;
 	z-index:2000;
 }
+.soundText .story{
+	position:relative;
+	width:300px;
+	border:dotted #ccc 1px;
+	left:35px;
+	top:5px;
+	padding:2px;
+}
 #loadingGif {
 	width:100%;
 	height:100%;
