@@ -28,6 +28,11 @@
 				}
 				$(".tran1").fadeOut(1000);
 				$("#clickLayer").hide();
+				$('#feedback').animate(
+        	        {
+        	            right: -322
+        	        }, 1000
+				);
 			});
         	$("#logo").click(function() {
         	  $("#about").fadeToggle("fast", "linear");
