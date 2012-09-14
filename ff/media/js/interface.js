@@ -21,6 +21,7 @@
         this.points_layer;       
         this.connections_layer;
         this.playhead_layer;
+        this.playhead = 0;
 		this.addButton = 0;
 
         /* set up the interface and run it */
@@ -107,7 +108,7 @@
             }
             self.map_points_count = self.map_points.length;        
             
-    		self.playhead();
+    		// self.playhead();
             
             self.sphereRefresh();
             
@@ -249,11 +250,16 @@
             }
             
             // playhead
-            var playhead    = self.playhead_layer.getChildren()[0];
-            var radius      = playhead.getRadius();
-            radius = (radius.x < self.width / 2) ? radius.x + 1 : 0;
-            playhead.setRadius(radius);
-                    
+            //var playhead    = self.playhead_layer.getChildren()[0];
+            // var radius      = playhead.getRadius();
+            //radius = (radius.x < self.width / 2) ? radius.x + 1 : 0;
+            //radius = (radius.x < self.width / 2) ? radius.x + 1 : 0;
+            //playhead.setRadius(radius);
+             
+            var radius = self.playhead;
+            radius = (radius < self.width / 2) ? radius + 1 : 0;
+            self.playhead = radius;
+
             var sounds = self.points_layer.getChildren();
             for (var i=0; i<sounds.length; i++)
             {
