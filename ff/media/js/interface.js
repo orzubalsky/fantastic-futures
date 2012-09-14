@@ -732,7 +732,7 @@
                 self.styleAllInactiveSoundShapes('black');
 
 				//hide all sound text
-				$(".soundText").fadeOut(200);
+				$(".soundText").fadeOut(100);
             });
 		    
 		    
