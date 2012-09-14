@@ -63,7 +63,7 @@ h2 {
 
 /*menus*/
 #topMenu, #bottomMenu {
-    z-index: 10;
+    z-index: 1;
     position: absolute;    
 }
 #topMenu {
@@ -86,7 +86,7 @@ h2 {
 	right:69px;
 	width:60px;
 	bottom:28px;
-    z-index:2;
+    
 }
 /*constellation menu*/
 #constellationMenu {
