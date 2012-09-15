@@ -37,11 +37,12 @@ class ConstellationForm(forms.ModelForm):
          
     class Meta:
         model   = Constellation
-        fields  = ['title', 'created_by', 'location']
+        fields  = ['title', 'created_by', 'location', 'zoom']
         widgets = {
             'title'     : forms.TextInput(attrs={'placeholder':'NAME YOUR CONSTELLATION',}),
             'created_by': forms.TextInput(attrs={'placeholder':'YOUR NAME'}),
-            'location'  : forms.TextInput(attrs={'placeholder':'CITY, STATE, COUNTRY (OPTIONAL)', 'class':'optional'}),            
+            'location'  : forms.TextInput(attrs={'placeholder':'CITY, STATE, COUNTRY (OPTIONAL)', 'class':'optional'}),           
+            'zoom'  : forms.TextInput(),             
             }
     connection_count = forms.CharField(widget=forms.HiddenInput, error_messages={'required':'Please connect sounds before saving'})
              

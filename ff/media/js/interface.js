@@ -80,7 +80,7 @@
                 self.rotation.x = self.rotateAxis(self.rotation.x, x, 25);
                 self.rotation.y = self.rotateAxis(self.rotation.y, y, 25);
                 self.rotation.z = self.rotateAxis(self.rotation.z, z, 25);
-                self.zoom       = self.rotateAxis(self.zoom, zoom, 70);
+                self.zoom       = self.rotateAxis(self.zoom, zoom, 100);
                 
                 if ( self.rotation.x == x && self.rotation.y == y && self.rotation.z == z && self.zoom == zoom)
                 {
@@ -191,7 +191,7 @@
                     
                     if (rotate)
                     {
-                        self.rotateTo(constellation.rotation_x, constellation.rotation_y, constellation.rotation_z, function() {});
+                        self.rotateTo(constellation.rotation_x, constellation.rotation_y, constellation.rotation_z, constellation.zoom, function() {});
                     }
                     
                     for (var j=0; j<constellation.connections.length; j++)

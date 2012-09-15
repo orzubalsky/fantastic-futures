@@ -128,6 +128,7 @@ class Constellation(Base):
     rotation_x          = FloatField(default=0)
     rotation_y          = FloatField(default=0)
     rotation_z          = FloatField(default=0)
+    zoom                = FloatField(default=1.0)
     
     def __unicode__(self):
         return self.title

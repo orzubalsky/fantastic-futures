@@ -147,6 +147,8 @@
             		            	    
                 var connections = site.ffinterface.getActiveConnections();                
             	$('#addConstellationForm input[name=connection_count]').val(connections.length);
+            	$('#addConstellationForm input[name=zoom]').val(site.ffinterface.zoom);
+            	
                 var data = $(this).serialize();
             	                
                 Dajaxice.futures.submit_constellation(self.addConstellation_callback, {
