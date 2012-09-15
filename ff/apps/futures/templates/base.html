@@ -31,8 +31,7 @@
         </div>             
         
         <div class="soundText">
-          Huong Ngo<br/>
-          Brooklyn, NY 
+        
         </div>
 
         <div id="bottomMenu">
@@ -192,6 +191,11 @@
               </div>              
           </div>
         <!--------FEEDBACK ENDED-------->
+		<div id="footer">
+			<form id="search">
+				<input type="" value="SEARCH">
+			</form>
+		</div>
 	</div>
 	<script type="text/javascript" src="{{ MEDIA_URL }}js/lib/jquery.js"></script>	
   <script type="text/javascript" src="{{ MEDIA_URL }}js/lib/jquery.jplayer.min.js"></script>	
@@ -211,12 +215,13 @@
 	{% block extra_js %}{% endblock %}	
 	<script type="text/javascript">
 	
-           /*$('#scrollDown').mouseover(function(){
+	/*
+           $('#scrollDown').mouseover(function(){
            		$('#constellationMenuContent').scrollTo('+=10px',500, { axis: 'y'});
-           });*/
-       
-      if ($.browser.mozilla) {
-        speed=10;
+           });
+    */   
+           if ($.browser.mozilla) {
+          		speed=10;
 			} else { 
 				speed=3;
 			}

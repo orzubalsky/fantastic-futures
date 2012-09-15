@@ -363,6 +363,7 @@
                 start_y     : 0, 
 				name		: point.sphere_point.created_by,
 				location	: point.sphere_point.location,
+				story		: point.sphere_point.story,
 				isNew		: point.sphere_point.is_recent,
 				justAdded	: false,
 				player      : '',
@@ -377,12 +378,16 @@
                 
                 // populate the sound text div with this sound's data, position it, and display it
 				$('.soundText')
-				    .html(this.getAttrs().name+'<br/>'+this.getAttrs().location) 
+				    .html(this.getAttrs().name+'<br/>'+this.getAttrs().location+'<br/><div class="story">'+this.getAttrs().story+'</div>') 
 				    .css({ 
 				        'top'   : (this.getAttrs().y-110) + 'px',
                         'left'  : (this.getAttrs().x-27) + 'px'				        
                     })
                     .fadeToggle("fast", "linear");
+
+				if (this.getAttrs().story==""){
+					$('.story').css('display','none');
+				}
 
                 // if the sound isn't active, highlight it
                 if (! this.getAttrs().active)

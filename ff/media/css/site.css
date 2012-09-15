@@ -3,7 +3,7 @@ body {
 	font-size:10px;
 	line-height:12px;
 	color:#000; 
-	
+	margin:0;
 }
 /* saf3+, chrome1+ argh! */
 
@@ -38,6 +38,14 @@ h2 {
 	display:none;
 	z-index:2000;
 }
+.soundText .story{
+	position:relative;
+	width:300px;
+	border:dotted #ccc 1px;
+	left:35px;
+	top:5px;
+	padding:2px;
+}
 #loadingGif {
 	width:100%;
 	height:100%;
@@ -51,11 +59,12 @@ h2 {
 	width:143px;
 	height:14px;
 	display:block;
+	margin:10px;
 }
 
 /*menus*/
 #topMenu, #bottomMenu {
-    z-index: 10;
+    z-index: 1;
     position: absolute;    
 }
 #topMenu {
@@ -78,7 +87,7 @@ h2 {
 	right:69px;
 	width:60px;
 	bottom:28px;
-    z-index:2;
+    
 }
 /*constellation menu*/
 #constellationMenu {
@@ -112,14 +121,19 @@ h2 {
 	color:#AAA;
 	display:none;
 	overflow:hidden;
-	height:97px;
+	height:117px;
 	position:relative;
 	top:-5px;
 }
 #constellationMenuContent .selected {
 	color:#000;
 }
-
+#constellationMenuContent a {
+	color:#999;
+}
+#constellationMenuContent a:hover {
+	color:#333;
+}
 /*addSound addConstellation forms*/
 #addSound {
 	position:absolute;
@@ -473,4 +487,27 @@ a#customZoomIn, a#customZoomOut {
 }
 #players {
     display: none;
+}
+#footer {
+	height:35px;
+	width:100%;
+	position:fixed;
+	bottom:0;
+	z-index:3;
+}
+#search {
+	display:block;
+	position:absolute;
+	right:40px;
+	bottom:10px;
+}
+#search input {
+	width:84px;
+	background-color:transparent;
+	border:1px #f1f1ff solid;
+	font-family:"Andale Mono", "Droid Sans", Helvetica, Arial, sans-serif;
+	color: #005fff;
+	font-size:1em;
+
+
 }

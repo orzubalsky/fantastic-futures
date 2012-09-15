@@ -126,7 +126,6 @@ INSTALLED_APPS = (
     'dajaxice',                     # django ajax app
     'ajaxuploader',                 # ajax file uploader
     'taggit',                       # tagging app
-    'django_mailer',                # email backend
     'chronograph',                  # admin based cron job management
     'classic',                      # ff v2 datamodels, used here mostly for migrating data
     'futures',                      # fantastic futures!
