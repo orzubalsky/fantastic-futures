@@ -9,6 +9,7 @@
         this.sphere;                    // an object that contains the entire 3D space TODO: move this out of this file
         this.rotation;                  // 3D rotation for the sphere, in radians. {x: 0.0, y: 0.0, z:0.0 }
         this.rotation_interval;         // holds the js interval variable for rotation animations
+        this.base_distance   = 2000;    // 
         this.distance        = 2000;    // POV for 3D sphere
         this.map_points      = [];      // array of points from map.js
         this.points_2D       = [];      // array of all 2D points, coordinates are calculated every frame
@@ -60,7 +61,7 @@
             var self = this;
             var rotation = self.rotation;
             
-            self.rotateTo(0,0,0, function() 
+            self.rotateTo(0,0,0, 1.0, function() 
             {
                 $('#interface').fadeOut(2000);
                 $('#map').css('opacity','1');
@@ -68,7 +69,7 @@
             });
         };
         
-        this.rotateTo = function(x,y,z, callback)
+        this.rotateTo = function(x,y,z, zoom, callback)
         {   
             var self = this;
             
@@ -79,8 +80,9 @@
                 self.rotation.x = self.rotateAxis(self.rotation.x, x, 25);
                 self.rotation.y = self.rotateAxis(self.rotation.y, y, 25);
                 self.rotation.z = self.rotateAxis(self.rotation.z, z, 25);
+                self.zoom       = self.rotateAxis(self.zoom, zoom, 70);
                 
-                if ( self.rotation.x == x && self.rotation.y == y && self.rotation.z == z)
+                if ( self.rotation.x == x && self.rotation.y == y && self.rotation.z == z && self.zoom == zoom)
                 {
                     clearInterval(self.rotation_interval);
                     callback();
@@ -95,7 +97,7 @@
             var multiplier = (current > target) ? -1 : 1;
             
             return (difference > self.deg_to_rad(1)) ? current + multiplier * difference/pace : target;
-        };        
+        };     
         
         this.setup = function()
         {   
@@ -255,6 +257,15 @@
                  rotation.x += self.deg_to_rad(Math.abs(y)); 
                  rotation.x = (rotation.x >= self.deg_to_rad(360)) ? self.deg_to_rad(0) : rotation.x;
             }
+            
+            // stage zoom calculation
+            $('#interface').mousewheel(function(event, delta, deltaX, deltaY) 
+            {
+                self.zoom += deltaY / 10000;
+                self.zoom = (self.zoom > 5.0) ? 5.0 : self.zoom;
+                self.zoom = (self.zoom < 1.0) ? 1.0 : self.zoom;
+            });
+            self.distance = self.base_distance * self.zoom;
             
             //playhead //comment out to get rid of playhead
             var playhead    = self.playhead_layer.getChildren()[0];
