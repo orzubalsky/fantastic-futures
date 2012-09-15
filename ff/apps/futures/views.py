@@ -17,14 +17,8 @@ def index(request):
     layers["sounds"] = { 'title': "sounds", 'url': reverse('sound-layer'),}
     layer_json = json.dumps(layers)
     
-    constellations = Constellation.objects.all()
-    constellations_json = serializers.serialize('json', constellations, indent=4, 
-        excludes=('updated', 'created', 'is_active', 'user'), 
-        relations= {
-            'connections': 
-                {'fields': ('sound_1','sound_2','sound_1_volume','sound_2_volume') }
-            }
-    )
+    constellations      = Constellation.objects.all()
+    constellations_json = constellations_to_json(constellations)
     feedback_form       = FeedbackForm()
     add_sound_form      = GeoSoundForm()
     constellation_form  = ConstellationForm()
@@ -79,6 +73,15 @@ def sound_to_json(sound_object):
     }
     return data
     
+def constellations_to_json(constellation_queryset):
+    constellations_json = serializers.serialize('json', constellation_queryset, indent=4, 
+        excludes=('updated', 'created', 'is_active', 'user'), 
+        relations= {
+            'connections': 
+                {'fields': ('sound_1','sound_2','sound_1_volume','sound_2_volume') }
+            }
+    )
+    return constellations_json  
 
 def start(request):
     csrf_token = get_token(request)

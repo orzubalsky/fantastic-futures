@@ -5,7 +5,7 @@ from django.utils import simplejson as json
 from django.utils.safestring import mark_safe
 from django.core.mail import mail_admins, send_mail
 from futures.forms import *
-from futures.views import sound_to_json
+from futures.views import sound_to_json, constellations_to_json
 
 @dajaxice_register(method='POST')
 def submit_feedback(request, form):
@@ -57,7 +57,10 @@ def submit_constellation(request, form, connections, rotation):
                 connection.save()
             new_constellation.connections.add(connection)
             
-        html = render_to_string("constellations.html", {'constellations': Constellation.objects.all()})
+        constellations = Constellation.objects.all()
+        constellations_json = constellations_to_json(constellations)            
+        html = render_to_string("constellations.html", {'constellations': constellations, 'constellations_json': constellations_json })
+        
         
         return json.dumps({'success':True, 'constellations':html})
     return json.dumps({'success':False, 'errors': constellation_form.errors})

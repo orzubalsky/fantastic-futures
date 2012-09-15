@@ -51,7 +51,7 @@
         	$("#errorText").click(function() {
         	  $("#error").fadeToggle("fast", "linear");
         	});
-        	$("#constellationMenu h2").click(function() {
+        	$("#constellationMenu h2").live('click', function() {
         	  $("#constellationMenuContent").fadeToggle("fast", "linear");
         	  $("#constellationMenu #scrollUp").fadeToggle("fast", "linear");
         	  $("#constellationMenu #scrollDown").fadeToggle("fast", "linear");
@@ -62,14 +62,16 @@
         	  $("#aboutLinks #toggleAr").fadeToggle("fast", "linear");
         	  $("#aboutLinks #toggleEn").fadeToggle("fast", "linear");
         	});
-            $('#constellationMenuContent a').hover(function (e)
+            $('#constellationMenuContent a').live('mouseenter', function (e)
             { 
         	    e.preventDefault();
         	    
                 var id = lib.getId($(this).attr('id'));
                 site.ffinterface.loadConstellation(id, true); 
-            }, function(e) 
+            });
+            $('#constellationMenuContent a').live('mouseleave', function (e)            
             {
+                clearInterval(site.ffinterface.rotation_interval);
                 site.ffinterface.clearConnections();
             });        	       	
         	$('#contactUs a').click(function(e)
@@ -202,12 +204,10 @@
         this.addConstellation_callback = function(data)
 		{
 		    if (data.success == true)
-		    {
-                // lib.log(data);
-                // 
-                // // 0. rerender constellation menu
-                //                 $('#constellationMenuContainer').html(data.constellations);
-                // 
+		    {            
+                // 0. rerender constellation menu
+                $('#constellationMenuContainer').html(data.constellations);
+            
                 // 1. fade out form
                 $('#addConstellationForm').fadeOut(800, function() 
                 {

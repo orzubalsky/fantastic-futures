@@ -239,6 +239,10 @@
             // stage drag rotation calculation
             var rotation_canvas = self.rotation_layer.getChildren()[0];
             if (rotation_canvas.isDragging()) {
+                
+                // stop any rotation animation that was running
+                 clearInterval(self.rotation_interval);
+                
                  var mousePos = self.stage.getMousePosition();
                  
                  var s = 10;
