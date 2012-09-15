@@ -38,20 +38,11 @@
         <div id="bottomMenu">
             <!--------ADD SOUND-------->
             <a href="#" id="addSoundText"><h2>+ ADD A SOUND</h2></a>
-
-            <!--------CONSTELLATION MENU-------->
-            <div id="constellationMenu">
-            	<a href="#"><h2>CONSTELLATIONS</h2></a>
-            	<div id="scrollUp"></div>
-					    <div id="constellationMenuContent">
-					    {% for c in constellations %}
-					      <a href="#" id="c_{{ c.pk }}">{{ c.title|upper }}<a><br />
-					    {% endfor %}
-						  <!--<a>A1482324</a><br><a class="selected">ALPHA OMEGA</a><br><a>POTATO</a><br><a>39JASKN</a><br><a>LISTEN</a><br><a>FOXTROT</a><br/><a>A1482324</a><br><a class="selected">ALPHA OMEGA</a><br><a>POTATO</a><br><a>39JASKN</a><br><a>LISTEN</a><br><a>FOXTROT</a><br/><a>A1482324</a><br><a class="selected">ALPHA OMEGA</a><br><a>POTATO</a><br><a>39JASKN</a><br><a>LISTEN</a><br><a>FOXTROT</a>-->
-					</div>
-            	
-            	<div id="scrollDown"></div>
-            </div>            
+            <div id="constellationMenuContainer">
+              {% include "constellations.html" %}
+            </div>
+        </div>
+            
         </div>
 	
         <!--------ADD SOUND-------->
@@ -224,8 +215,8 @@
            		$('#constellationMenuContent').scrollTo('+=10px',500, { axis: 'y'});
            });*/
        
-           if ($.browser.mozilla) {
-          		speed=10;
+      if ($.browser.mozilla) {
+        speed=10;
 			} else { 
 				speed=3;
 			}

@@ -1,29 +1,29 @@
 ;(function($){
 	var ffinterface = window.site.ffinterface = new function() 
 	{
-	    this.running = false;
-	    this.frameRate;
-	    this.width;
-	    this.height;
-	    this.lastClick       = -1;
-        this.sphere;
-        this.rotation;
-        this.rotation_interval;
-        this.distance        = 2000;
-        this.map_points      = [];
-        this.points_2D       = [];
-        this.connections_2D  = [];
-        this.constellation;
-        this.map_points_count;
-        this.sphere_point_count;
-        this.stage;
-        this.rotation_layer;
-        this.points_layer;       
-        this.connections_layer;
-        this.playhead_layer;
-        this.playhead = 0;
-		this.addButton = 0;
-		this.is_playing = false;
+	    this.running = false;           // represents the high level state of the entire interface
+	    this.frameRate;                 // refresh rate
+	    this.width;                     // window width
+	    this.height;                    // window height
+	    this.lastClick       = -1;      // holds the sound shape object that was clicked on last
+        this.sphere;                    // an object that contains the entire 3D space TODO: move this out of this file
+        this.rotation;                  // 3D rotation for the sphere, in radians. {x: 0.0, y: 0.0, z:0.0 }
+        this.rotation_interval;         // holds the js interval variable for rotation animations
+        this.distance        = 2000;    // POV for 3D sphere
+        this.map_points      = [];      // array of points from map.js
+        this.points_2D       = [];      // array of all 2D points, coordinates are calculated every frame
+        this.connections_2D  = [];      // array of all connections 
+        this.constellation;             // current active constellation
+        this.map_points_count;          // keeps track of map sound count. this is used to determine whether a new sound was added
+        this.stage;                     // kineticJS stage 
+        this.points_layer;              // kinteticJS layer to hold all sound shapes
+        this.connections_layer;         // kinteticJS layer to hold all connection lines
+        this.playhead_layer;            // kinteticJS layer to animate the circular playhead
+        this.rotation_layer;            // kinteticJS layer, allows drag interaction to rotate the stage
+        this.playhead = 0;              // this is actually the radius of the circular playhead
+		this.addButton = 0;             // this is used to check whether the "save constellation" appeared
+		this.is_playing = false;        // this is used to check whether the player is playing or paused
+		this.zoom = 1.0;                
 
         /* set up the interface and run it */
         this.init = function()

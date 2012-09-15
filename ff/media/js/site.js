@@ -200,6 +200,11 @@
 		{
 		    if (data.success == true)
 		    {
+                // lib.log(data);
+                // 
+                // // 0. rerender constellation menu
+                //                 $('#constellationMenuContainer').html(data.constellations);
+                // 
                 // 1. fade out form
                 $('#addConstellationForm').fadeOut(800, function() 
                 {

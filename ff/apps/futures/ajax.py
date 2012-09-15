@@ -1,3 +1,4 @@
+from django.template.loader import render_to_string
 from dajaxice.decorators import dajaxice_register
 from dajaxice.utils import deserialize_form
 from django.utils import simplejson as json
@@ -12,8 +13,7 @@ def submit_feedback(request, form):
     feedback_form = FeedbackForm(deserialize_form(form))
         
     if feedback_form.is_valid():
-        message = "from: %s, message: %s" % (feedback_form.cleaned_data.get('email'), feedback_form.cleaned_data.get('message'))        
-        # mail_admins('Feedback Receieved!', message, fail_silently=False)
+        message = "from: %s \n message: %s" % (feedback_form.cleaned_data.get('email'), feedback_form.cleaned_data.get('message'))        
         send_mail('FF | Feedback Receieved!', message, 'noreply@fantasticfutures.fm', ('youngestforever@gmail.com',))
         
         return json.dumps({'success':True})
@@ -55,8 +55,9 @@ def submit_constellation(request, form, connections, rotation):
             except Connection.DoesNotExist:
                 connection = Connection(sound_1=sound_1, sound_2=sound_2)        
                 connection.save()
-            
             new_constellation.connections.add(connection)
+            
+        html = render_to_string("constellations.html", {'constellations': Constellation.objects.all()})
         
-        return json.dumps({'success':True})
+        return json.dumps({'success':True, 'constellations':html})
     return json.dumps({'success':False, 'errors': constellation_form.errors})
