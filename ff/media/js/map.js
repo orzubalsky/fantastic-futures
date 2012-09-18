@@ -46,7 +46,7 @@
             
             var map = new OpenLayers.Map("map", {
 				projection: new OpenLayers.Projection("DYMAX"),
-		        maxExtent: new OpenLayers.Bounds( 0,0,860,400),
+		        maxExtent: new OpenLayers.Bounds(-50,50,860,420),
 				allOverlays: true,
 				controls: [
 				    new OpenLayers.Control.Navigation({
