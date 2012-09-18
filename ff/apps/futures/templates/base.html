@@ -215,37 +215,5 @@
   <script type="text/javascript" src="{{ MEDIA_URL }}js/player.js"></script>
   <script type="text/javascript" src="{{ MEDIA_URL }}js/interface.js"></script>	
 	{% block extra_js %}{% endblock %}	
-	<script type="text/javascript">
-	
-	/*
-           $('#scrollDown').mouseover(function(){
-           		$('#constellationMenuContent').scrollTo('+=10px',500, { axis: 'y'});
-           });
-    */   
-           if ($.browser.mozilla) {
-          		speed=10;
-			} else { 
-				speed=3;
-			}
-		
-           $('#scrollUp').bind('mouseenter', function() {
-				this.iid = setInterval(function() {
-				   // do something 
-				   $('#constellationMenuContent').scrollTo('-='+speed+'px', { axis: 'y'});
-				}, 25);
-			}).bind('mouseleave', function(){
-				this.iid && clearInterval(this.iid);
-			});
-
-           $('#scrollDown').bind('mouseenter', function() {
-				this.iid = setInterval(function() {
-				   // do something 
-				   $('#constellationMenuContent').scrollTo('+='+speed+'px', { axis: 'y'});
-				}, 25);
-			}).bind('mouseleave', function(){
-				this.iid && clearInterval(this.iid);
-			});
-
-    </script>
 </body>
 </html>

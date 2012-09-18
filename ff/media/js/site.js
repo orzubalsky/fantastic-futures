@@ -6,6 +6,7 @@
 		this.init = function() 
 		{
 		    this.menus();
+		    this.constellationMenuScroll();
 		    this.WIDTH  = $('#interface').width();
 		    this.HEIGHT = $('#interface').height();
 		    site.ajaxUpload.init();
@@ -16,6 +17,40 @@
 		this.debug = function()
 		{
         	
+		};
+		
+		this.constellationMenuScroll = function()
+		{
+	
+	        /*
+           $('#scrollDown').mouseover(function(){
+           		$('#constellationMenuContent').scrollTo('+=10px',500, { axis: 'y'});
+           });
+           */   
+           
+           if ($.browser.mozilla) {
+          		speed=10;
+			} else { 
+				speed=3;
+			}
+		
+           $('#scrollUp').live('mouseenter', function() {
+				this.iid = setInterval(function() {
+				   // do something 
+				   $('#constellationMenuContent').scrollTo('-='+speed+'px', { axis: 'y'});
+				}, 25);
+			}).live('mouseleave', function(){
+				this.iid && clearInterval(this.iid);
+			});
+
+           $('#scrollDown').live('mouseenter', function() {
+				this.iid = setInterval(function() {
+				   // do something 
+				   $('#constellationMenuContent').scrollTo('+='+speed+'px', { axis: 'y'});
+				}, 25);
+			}).live('mouseleave', function(){
+				this.iid && clearInterval(this.iid);
+			});
 		};
 		
 		this.menus = function()
