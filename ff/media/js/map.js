@@ -51,17 +51,19 @@
 				controls: [
 				    new OpenLayers.Control.Navigation({
 				        dragPanOptions: {
-				            enableKinetic:true
-				            
-				        }
+				            enableKinetic: false,
+				        },
+                        zoomWheelEnabled : false
 				    }),
 				    new OpenLayers.Control.Attribution(),
+				    /*
 				    new OpenLayers.Control.Zoom({
 				        zoomInId: "customZoomIn",
 				        zoomOutId: "customZoomOut"
 				    })
+				    */
 				],
-			});
+			});			
 			
 			return map;        
         };
@@ -105,6 +107,7 @@
     			} ); 					
     			layer.events.register("loadend", layer, function() 
     			{
+                   
                    // save coordinates                   
                    site.ffinterface.map_points = [];
                    for(var i=0; i<layer.features.length; i++)
