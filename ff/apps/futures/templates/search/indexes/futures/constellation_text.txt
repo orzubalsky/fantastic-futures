@@ -1,0 +1,10 @@
+{{ object.title }}
+{{ object.created_by }}
+{{ object.location }}
+
+{% for c in object.connections.all %}
+{{ c.sound_1.title }}
+{{ c.sound_2.title }}
+{% endfor %}
+
+{{ object.tags }}

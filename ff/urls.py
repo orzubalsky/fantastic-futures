@@ -11,6 +11,7 @@ dajaxice_autodiscover()
 urlpatterns = patterns('',
 
     url(dajaxice_config.dajaxice_url, include('dajaxice.urls')),    
+    (r'^search/', include('haystack.urls')),    
     url(r'^', include('futures.urls')),
     url(r'^admin/', include(admin.site.urls)),
     
