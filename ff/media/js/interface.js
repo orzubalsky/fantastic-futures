@@ -262,7 +262,7 @@
             $('#interface').mousewheel(function(event, delta, deltaX, deltaY) 
             {
                 self.zoom += deltaY / 10000;
-                self.zoom = (self.zoom > 5.0) ? 5.0 : self.zoom;
+                self.zoom = (self.zoom > 15.0) ? 15.0 : self.zoom;
                 self.zoom = (self.zoom < 1.0) ? 1.0 : self.zoom;
             });
             self.distance = self.base_distance * self.zoom;

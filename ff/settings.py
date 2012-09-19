@@ -127,6 +127,7 @@ INSTALLED_APPS = (
     'ajaxuploader',                 # ajax file uploader
     'taggit',                       # tagging app
     'chronograph',                  # admin based cron job management
+    'haystack',                     # search framework    
     'classic',                      # ff v2 datamodels, used here mostly for migrating data
     'futures',                      # fantastic futures!
 )
@@ -176,3 +177,12 @@ try:
     LOCAL_SETTINGS
 except NameError:
     from local_settings import *
+    
+HAYSTACK_CONNECTIONS = {
+    'default': {
+        'ENGINE': 'haystack.backends.elasticsearch_backend.ElasticsearchSearchEngine',
+        'URL': 'http://127.0.0.1:9200/',
+        'INDEX_NAME': 'haystack',
+    },
+}
+    
