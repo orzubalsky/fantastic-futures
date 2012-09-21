@@ -45,6 +45,7 @@ h2 {
 	left:35px;
 	top:5px;
 	padding:2px;
+	background:url(../images/transparent.png);
 }
 #loadingGif {
 	width:100%;
