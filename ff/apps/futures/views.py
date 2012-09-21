@@ -22,6 +22,7 @@ def index(request):
     feedback_form       = FeedbackForm()
     add_sound_form      = GeoSoundForm()
     constellation_form  = ConstellationForm()
+    search_form         = GeoSearchForm()
 
     return render_to_response(
         'index.html', { 
@@ -29,6 +30,7 @@ def index(request):
             'feedback_form'         : feedback_form,
             'add_sound_form'        : add_sound_form,
             'constellation_form'    : constellation_form,
+            'search_form'           : search_form,
             'google_api_key'        : settings.GOOGLE_API_KEY,
             'constellations'        : constellations,
             'constellations_json'   : constellations_json,

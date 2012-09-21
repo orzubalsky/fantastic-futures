@@ -24,7 +24,8 @@
         this.playhead = 0;              // this is actually the radius of the circular playhead
 		this.addButton = 0;             // this is used to check whether the "save constellation" appeared
 		this.is_playing = false;        // this is used to check whether the player is playing or paused
-		this.zoom = 1.0;                
+		this.zoom = 1.0;
+		this.search_results = { 'Geosounds': [], 'Constellations': [] }; 
 
         /* set up the interface and run it */
         this.init = function()
@@ -275,8 +276,8 @@
                 radius = (radius.x < self.width / 2) ? radius.x + 1 : 0;
                 playhead.setRadius(radius);                
             }
-             
-			//unhide to get rid of playhead
+            
+            //unhide to get rid of playhead
             /*var radius = self.playhead;
             radius = (radius < self.width / 2) ? radius + 1 : 0;
             self.playhead = radius;*/
@@ -305,6 +306,14 @@
                 lib.log("a sound was added");
                 self.map_points_count = self.map_points.length;
                 self.mapPointToSpherePoint(self.map_points[self.map_points_count-1]);                
+            }
+            
+            // style sounds and constellations according to the search results
+            self.styleAllSearchedSoundShapes();
+            
+            if (self.search_results.Constellations.length > 0)
+            {
+                var searched_constellations = self.search_results.Constellations;
             }
             
             // rebuild projected 2d point array
@@ -682,15 +691,51 @@
                 {
                     soundShape.getChildren()[1].setFill('black');
                 }
-            }		    
-		};
-		
-		this.newConnectionFromTwoSoundShapes = function(soundShape_1, soundShape_2)
-		{
-		    var self = this;
-		    
-            c = new self.Connection3D();
+            }
+        };
+        
+        this.styleAllSearchedSoundShapes = function()
+        {
+            var self = this;
+
+            var allSoundsShapes = self.points_layer.getChildren();
+            var searched_sounds = self.search_results.Geosounds;
             
+            for(var i=0; i<allSoundsShapes.length; i++)
+            {
+                var soundShape = allSoundsShapes[i];
+                
+                if (searched_sounds.length > 0)
+                {
+                    for (var j=0; j<searched_sounds.length; j++)
+                    {
+                        var searched_sound = searched_sounds[j];
+
+                        if (soundShape.getAttrs().id == searched_sound.id)
+                        {
+                            // color the "halo" shape
+                            soundShape.getChildren()[0].setFill("red");
+                            break;
+                        }
+                        else 
+                        {
+                            soundShape.getChildren()[0].setFill("#ccc");
+                        }
+                    }
+                }
+                else
+                {
+                    soundShape.getChildren()[0].setFill("#ccc");
+                }
+            }
+        };
+        
+        this.newConnectionFromTwoSoundShapes = function(soundShape_1, soundShape_2)
+        {
+            var self = this;
+
+            c = new self.Connection3D();
+
             c.sound_1 = soundShape_1.getAttrs().id;
             c.sound_2 = soundShape_2.getAttrs().id;
             c.index_1 = soundShape_1.getAttrs().index;

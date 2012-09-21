@@ -1,8 +1,16 @@
 from django import forms
+from haystack.forms import SearchForm
+from haystack.utils.geo import Point, D
 from django.forms.formsets import BaseFormSet
 from django.utils.translation import ugettext as _
 from django.core.validators import *
 from futures.models import *
+
+class GeoSearchForm(SearchForm):
+    def search(self):
+        # First, store the SearchQuerySet received from other processing.
+        sqs = super(GeoSearchForm, self).search()
+        return sqs
 
 class FeedbackForm(forms.Form):
     message     = forms.CharField(label="Please leave us any comments or questions.", widget=forms.Textarea)

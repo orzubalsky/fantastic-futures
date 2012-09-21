@@ -4,8 +4,31 @@ from dajaxice.utils import deserialize_form
 from django.utils import simplejson as json
 from django.utils.safestring import mark_safe
 from django.core.mail import mail_admins, send_mail
+from haystack.query import SearchQuerySet
 from futures.forms import *
 from futures.views import sound_to_json, constellations_to_json
+
+
+@dajaxice_register(method='POST')
+def autocomplete(request, q):
+    search_results = SearchQuerySet().auto_query(q)
+
+    results = { 'Geosounds': [], 'Constellations': [] }
+
+    for search_result in search_results:
+        data = searchresult_to_json(search_result)
+        results[data["type"]].append(data)
+            
+    return json.dumps({ 'success': True, 'results': results })
+
+def searchresult_to_json(search_result):
+    data = {
+        "type"  : search_result.verbose_name_plural, 
+        "id"    : search_result.pk,
+        "score" : search_result.score,
+    }    
+    return data
+
 
 @dajaxice_register(method='POST')
 def submit_feedback(request, form):
@@ -18,8 +41,8 @@ def submit_feedback(request, form):
         
         return json.dumps({'success':True})
     return json.dumps({'success':False, 'errors': feedback_form.errors})
-    
-    
+
+
 @dajaxice_register(method='POST')
 def submit_sound(request, form, tags):
     add_sound_form = GeoSoundForm(deserialize_form(form))
@@ -36,7 +59,8 @@ def submit_sound(request, form, tags):
         
         return json.dumps({'success':True, 'geojson':geo_json})
     return json.dumps({'success':False, 'errors': add_sound_form.errors})
-    
+
+
 @dajaxice_register(method='POST')
 def submit_constellation(request, form, connections, rotation):
     constellation_form = ConstellationForm(deserialize_form(form))
