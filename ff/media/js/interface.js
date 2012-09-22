@@ -24,7 +24,9 @@
         this.playhead = 0;              // this is actually the radius of the circular playhead
 		this.addButton = 0;             // this is used to check whether the "save constellation" appeared
 		this.is_playing = false;        // this is used to check whether the player is playing or paused
-		this.zoom = 1.0;                
+		this.zoom = 1.0;  
+		this.playheadCount=0;  
+		this.playheadIntervals=5;		//this is how often the playhead gets redrawn. A high number=less frequency of redrawing            
 
         /* set up the interface and run it */
         this.init = function()
@@ -43,8 +45,8 @@
             self.rotation_layer      = new Kinetic.Layer();
             self.points_layer        = new Kinetic.Layer();        
             self.connections_layer   = new Kinetic.Layer();            
-            self.playhead_layer      = new Kinetic.Layer();
-            
+            self.playhead_layer      = new Kinetic.Layer();            
+
             self.setup();            
 
             // Set framerate to 30 fps
@@ -270,10 +272,12 @@
             //playhead //comment out to get rid of playhead
             var playhead    = self.playhead_layer.getChildren()[0];
             var radius      = playhead.getRadius();
+	
             if (self.is_playing)
-            {
+            {	
                 radius = (radius.x < self.width / 2) ? radius.x + 1 : 0;
-                playhead.setRadius(radius);                
+				playhead.setRadius(radius); 	   
+
             }
              
 			//unhide to get rid of playhead
@@ -313,22 +317,22 @@
         
         this.draw = function()
         {
-            var self = this;
-            
+            	var self = this;
+		
             self.points_layer.clear();
             self.connections_layer.clear();
-            self.playhead_layer.clear();
-                                           
+            //self.playhead_layer.clear();
+			
             for(var i=0; i<self.points_layer.getChildren().length; i++)
             {
                 var point = self.points_2D[i];
                 var sound = self.points_layer.getChildren()[i];
                 var halo = sound.getChildren()[0];
                 var core = sound.getChildren()[1];
-                
+               
                 sound.setX(point.x);
                 sound.setY(point.y);
-                
+               
                 var attrs = sound.getAttrs();
                 attrs.point_3d.x = point.point_3d.x;
                 attrs.point_3d.y = point.point_3d.y;
@@ -336,7 +340,7 @@
 
                 sound.setAttrs(attrs);
             }                        
-            
+           
             for(var i=0; i<self.connections_layer.getChildren().length; i++)
             {
                 var connection = self.sphere.connections[i];
@@ -344,14 +348,26 @@
 
                 var p1 = self.points_2D[connection.index_1];
                 var p2 = self.points_2D[connection.index_2];
-    
+   
                 child.setPoints([ {x: p1.x, y: p1.y}, {x: p2.x, y: p2.y} ]);
             }            
-            
-            self.playhead_layer.draw();            
+           	
+			//self.playhead_layer.draw();   
             self.rotation_layer.draw();
             self.points_layer.draw();
             self.connections_layer.draw();
+	
+			if (this.playheadCount%this.playheadIntervals==0){
+				$(".kineticjs-content canvas:first-child").fadeIn(800);
+				$(".kineticjs-content canvas:first-child").fadeOut(1800);
+				self.playhead_layer.clear();
+				self.playhead_layer.draw(); 
+			
+				this.playheadCount++;   
+			}      
+			else {
+				this.playheadCount++;
+			}
         }
         
         
@@ -476,7 +492,7 @@
                         sound.interval = setInterval(function() 
                         {
                             radius = (radius <= 20) ? radius + 0.1 : 5;
-                            halo.setRadius(radius);
+                            	halo.setRadius(radius);
                         }, self.frameRate);
                     }, 500);
                                         
@@ -733,9 +749,9 @@
                 y               : self.height / 2,
                 alpha           : 0.8,		        
                 radius          : 0,
-                fill            : "#eeeeff",
-                stroke          : "white",
-                strokeWidth     : 1,
+                //fill            : "#eeeeff",
+                stroke          : "#666666",
+                strokeWidth     : .25,
 		    });
 		    
             self.playhead_layer.add(playhead);
