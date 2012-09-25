@@ -214,7 +214,7 @@
             var layer = new OpenLayers.Layer.Vector( "Triangle strokes", {
              projection: new OpenLayers.Projection("DYMAX"),
              style : { 'fillColor' : '#c8ebff', 'fillOpacity' : 0, 'strokeColor' : '#ededed', 'strokeWidth' : .5, 'strokeOpacity' : 1, 'strokeDashstyle' : 'longdash' },
-                            renderers: ["Canvas"]                
+             renderers: ["Canvas"]                
             });
             
             return layer;            

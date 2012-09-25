@@ -731,7 +731,10 @@
                         if (soundShape.getAttrs().id == searched_sound.id)
                         {
                             // color the "halo" shape
-                            soundShape.getChildren()[0].setFill("red");
+                            var searchScore=Math.round((searched_sound.score/5)*255); //trying to correlate score to color
+                            soundShape.getChildren()[0].setFill('rgb('+searchScore+',0,0)');
+                            console.log(searchScore);
+                            //soundShape.getChildren()[0].setFill("red");
                             break;
                         }
                         else 
