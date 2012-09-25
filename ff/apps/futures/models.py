@@ -41,7 +41,9 @@ class UserProfile(Base):
     slug                = SlugField()    
 
 class GeoSound(Base):
-         
+    class Meta:
+        verbose_name_plural = "geosounds"
+                     
     def random_z():
         return round(random.uniform(-7.0, 7.0), 2)
         
@@ -118,13 +120,15 @@ class Connection(Base):
 
 
 class Constellation(Base):
-
+    class Meta:
+        verbose_name_plural = "constellations"
+        
     title               = CharField(max_length=100, blank=False, null=False)
     created_by          = CharField(max_length=100, blank=False, null=True)
     location            = CharField(max_length=150, blank=True, null=True)
     user                = ForeignKey(User, blank=True, null=True)
     slug                = SlugField()
-    connections         = ManyToManyField(Connection)
+    connections         = ManyToManyField(Connection, related_name="connections")
     rotation_x          = FloatField(default=0)
     rotation_y          = FloatField(default=0)
     rotation_z          = FloatField(default=0)

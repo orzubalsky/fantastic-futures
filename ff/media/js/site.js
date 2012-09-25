@@ -6,7 +6,8 @@
 		this.init = function() 
 		{
 		    this.menus();
-		    this.constellationMenuScroll();
+//		    this.constellationMenuScroll();
+        this.searchForm();
 		    this.WIDTH  = $('#interface').width();
 		    this.HEIGHT = $('#interface').height();
 		    site.ajaxUpload.init();
@@ -17,6 +18,33 @@
 		this.debug = function()
 		{
         	
+		};
+		
+		this.searchForm = function()
+		{		  
+		    var self = this;
+		    
+            $('#search input[name=q]').live('input paste', function() 
+            {
+                var value = $(this).val();
+                if (value.length > 1)
+                {
+                    Dajaxice.futures.autocomplete(self.autocomplete_callback, {'q':value});              
+                }
+                else 
+                {
+                    site.ffinterface.search_results = { 'Geosounds': [], 'Constellations': [] }; 
+                }
+            });
+		};
+		
+		this.autocomplete_callback = function(data)
+		{
+            var self = this;
+            if (data.success == true)
+            {
+                site.ffinterface.search_results = data.results;
+            }
 		};
 		
 		this.constellationMenuScroll = function()
@@ -191,7 +219,19 @@
                     'connections'   : connections,
                     'rotation'      : site.ffinterface.rotation
                 });
-        	});            
+        	});    
+            $('#customZoomIn').live('click', function(e) 
+        	{
+        	    e.preventDefault();
+        	    
+        	    site.ffinterface.changeZoom(0.2);
+        	});
+            $('#customZoomOut').live('click', function(e) 
+        	{
+        	    e.preventDefault();
+        	    
+        	    site.ffinterface.changeZoom(-0.2);
+        	});        	
 		};
 		
 		this.addSound_callback = function(data)

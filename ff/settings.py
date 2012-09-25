@@ -127,6 +127,8 @@ INSTALLED_APPS = (
     'ajaxuploader',                 # ajax file uploader
     'taggit',                       # tagging app
     'chronograph',                  # admin based cron job management
+    'haystack',                     # search framework    
+    'tastypie',                     # REST API
     'classic',                      # ff v2 datamodels, used here mostly for migrating data
     'futures',                      # fantastic futures!
 )
@@ -153,7 +155,7 @@ LOGGING = {
         'console':{
             'level':'DEBUG',
             'class':'logging.StreamHandler'
-        },        
+        },
     },
     'loggers': {
         'django.request': {
@@ -176,3 +178,4 @@ try:
     LOCAL_SETTINGS
 except NameError:
     from local_settings import *
+    

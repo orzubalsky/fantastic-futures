@@ -39,6 +39,8 @@
                 onComplete: function( id, fileName, responseJSON ) 
                 {
                 	$('.qq-upload-file, .qq-upload-size, .qq-upload-cancel').hide();	
+                    $('.progressBarContainer').fadeOut(200);
+                	
                 	$('#id_filename').val('uploads/' + fileName);
 					$('.progressBarContainer .progress').html("YAY! WE HAZ THE FILE:"+fileName);			
                 },
