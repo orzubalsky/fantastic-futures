@@ -511,7 +511,7 @@
                         else 
                         {
                             // if there aren't, this is the first sound ever clicked, and anything is possible!
-                            self.styleAllInactiveSoundShapes('white');                            
+                            self.styleAllInactiveSoundShapes('white');
                         }                        
                     }
                     else
@@ -530,6 +530,13 @@
                                 $('#addConstellationText').fadeToggle("fast", "linear");
                                 self.addButton = 1;
                             }
+                            
+                            // expand the playhead so the radius is as big as the sound that's closest to the center
+                            var sound_1_distance_from_center = self.dist(self.lastClick.getX(), self.lastClick.getY(), self.width/2, self.height/2);                            
+                            var sound_2_distance_from_center = self.dist(this.getX(), this.getY(), self.width/2, self.height/2);                            
+                            var closest_distance             = (sound_1_distance_from_center < sound_2_distance_from_center) ? sound_1_distance_from_center : sound_2_distance_from_center;
+                            var playhead                     = self.playhead_layer.getChildren()[0];
+                            playhead.setRadius(closest_distance);
                             
                             // set the interface to playing mode!
                             self.is_playing = true;
