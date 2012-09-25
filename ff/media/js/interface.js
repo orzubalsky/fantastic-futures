@@ -261,11 +261,13 @@
                  var s = 10;
                  var x = ((mousePos.x * 2*s) - self.width*s) / self.width;
                  var y = ((mousePos.y * 2*s) - self.height*s) / self.height;
-
-                 rotation.y += self.deg_to_rad(Math.abs(x));
+                 
+                 rotationYAmount = self.deg_to_rad(Math.abs(x)) / self.zoom;
+                 rotation.y += rotationYAmount;
                  rotation.y = (rotation.y >= self.deg_to_rad(360)) ? self.deg_to_rad(0) : rotation.y;
 
-                 rotation.x += self.deg_to_rad(Math.abs(y)); 
+                 rotationXAmount = self.deg_to_rad(Math.abs(y)) / self.zoom;
+                 rotation.x += rotationXAmount;
                  rotation.x = (rotation.x >= self.deg_to_rad(360)) ? self.deg_to_rad(0) : rotation.x;
             }
             
