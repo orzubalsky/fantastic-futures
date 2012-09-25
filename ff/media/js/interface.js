@@ -277,7 +277,13 @@
             if (self.is_playing)
             {	
                 radius = (radius.x < self.width / 2) ? radius.x + 1 : 0;
-				playhead.setRadius(radius); 	   
+				playhead.setRadius(radius); 
+				/*
+				$(".kineticjs-content canvas:first-child").html("<div id='stripes'></div>");
+				$(".kineticjs-content canvas:first-child #stripes").css("background", "url(../images/stripes_white.png)");
+				$(".kineticjs-content canvas:first-child #stripes").css("height", "100%");
+				$(".kineticjs-content canvas:first-child #stripes").css("width", "800px");
+				$(".kineticjs-content canvas:first-child #stripes").css("z-index", "1000");*/
 
             }
              
@@ -756,14 +762,11 @@
                 y               : self.height / 2,
                 alpha           : 0.8,		        
                 radius          : 0,
-                fill            : "#f9f9f9",
+                fill            : "#f6f9f9",
                 stroke          : "#efefef",
                 strokeWidth     : .25,
 		    });
 		    
-			/*self.setFill({
-					            image: images.stripes,
-					           });*/
             self.playhead_layer.add(playhead);
 		    self.stage.add(self.playhead_layer);            
 		    
