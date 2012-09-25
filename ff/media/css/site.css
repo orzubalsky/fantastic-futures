@@ -494,7 +494,7 @@ a#customZoomIn, a#customZoomOut {
 	width:100%;
 	position:fixed;
 	bottom:0;
-	z-index:3;
+	z-index:1;
 }
 #search {
 	display:block;

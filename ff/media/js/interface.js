@@ -421,7 +421,7 @@
 				        'top'   : (this.getAttrs().y-110) + 'px',
                         'left'  : (this.getAttrs().x-27) + 'px'				        
                     })
-                    .fadeToggle("fast", "linear");
+                    .fadeIn("400");
 
 				if (this.getAttrs().story==""){
 					$('.story').css('display','none');
@@ -443,7 +443,7 @@
                 $('#container').css({'cursor':'default'});
                 
                 // hide the sound text div
-				$('.soundText').fadeToggle("fast", "linear");
+				$('.soundText').fadeOut("400");
 				
 				// reset the sound style
                 if (!this.getAttrs().active)
