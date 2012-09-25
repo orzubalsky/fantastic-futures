@@ -98,7 +98,17 @@
             var multiplier = (current > target) ? -1 : 1;
             
             return (difference > self.deg_to_rad(1)) ? current + multiplier * difference/pace : target;
-        };     
+        };  
+        
+        this.changeZoom = function(amount)
+        {
+            var self = this;
+            
+            self.zoom += amount;
+            
+            self.zoom = (self.zoom > 15.0) ? 15.0 : self.zoom;
+            self.zoom = (self.zoom < 1.0) ? 1.0 : self.zoom;
+        };   
         
         this.setup = function()
         {   
@@ -262,9 +272,7 @@
             // stage zoom calculation
             $('#interface').mousewheel(function(event, delta, deltaX, deltaY) 
             {
-                self.zoom += deltaY / 10000;
-                self.zoom = (self.zoom > 15.0) ? 15.0 : self.zoom;
-                self.zoom = (self.zoom < 1.0) ? 1.0 : self.zoom;
+                self.changeZoom(deltaY / 10000);
             });
             self.distance = self.base_distance * self.zoom;
             

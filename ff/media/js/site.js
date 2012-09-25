@@ -219,7 +219,19 @@
                     'connections'   : connections,
                     'rotation'      : site.ffinterface.rotation
                 });
-        	});            
+        	});    
+            $('#customZoomIn').live('click', function(e) 
+        	{
+        	    e.preventDefault();
+        	    
+        	    site.ffinterface.changeZoom(0.2);
+        	});
+            $('#customZoomOut').live('click', function(e) 
+        	{
+        	    e.preventDefault();
+        	    
+        	    site.ffinterface.changeZoom(-0.2);
+        	});        	
 		};
 		
 		this.addSound_callback = function(data)
