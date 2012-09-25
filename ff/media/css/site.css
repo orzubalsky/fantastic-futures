@@ -509,6 +509,13 @@ a#customZoomIn, a#customZoomOut {
 	font-family:"Andale Mono", "Droid Sans", Helvetica, Arial, sans-serif;
 	color: #005fff;
 	font-size:1em;
-
-
+}
+#ajaxUploadContainer.complete .progressBarContainer .progressBar .progress  {
+    padding: 2px;
+	height:12px;
+	background-color:yellow;
+	overflow:hidden;
+}
+#ajaxUploadContainer .progressBarContainer .progressBar {
+	background-color:white;
 }

@@ -26,7 +26,7 @@
 		this.is_playing = false;        // this is used to check whether the player is playing or paused
 		this.zoom = 1.0;  
 		this.playheadCount=0;  
-		this.playheadIntervals=5;		//this is how often the playhead gets redrawn. A high number=less frequency of redrawing            
+		this.playheadIntervals=20;		//this is how often the playhead gets redrawn. A high number=less frequency of redrawing            
 
         /* set up the interface and run it */
         this.init = function()
@@ -239,6 +239,7 @@
         {      
             var self = this;
             var rotation = self.rotation;
+
              
             // stage drag rotation calculation
             var rotation_canvas = self.rotation_layer.getChildren()[0];
@@ -314,7 +315,7 @@
             // rebuild projected 2d point array
             self.sphereRefresh();
         }
-        
+
         this.draw = function()
         {
             	var self = this;
@@ -322,7 +323,7 @@
             self.points_layer.clear();
             self.connections_layer.clear();
             //self.playhead_layer.clear();
-			
+	
             for(var i=0; i<self.points_layer.getChildren().length; i++)
             {
                 var point = self.points_2D[i];
@@ -357,13 +358,19 @@
             self.points_layer.draw();
             self.connections_layer.draw();
 	
-			if (this.playheadCount%this.playheadIntervals==0){
-				$(".kineticjs-content canvas:first-child").fadeIn(800);
-				$(".kineticjs-content canvas:first-child").fadeOut(1800);
+			if (this.playheadCount%this.playheadIntervals==0){ //playhead does something at regular intervals
 				self.playhead_layer.clear();
 				self.playhead_layer.draw(); 
-			
+			/*//makes playhead flash
+				$(".kineticjs-content canvas:first-child").fadeOut(800, function(){
+					self.playhead_layer.clear();
+				});
+				$(".kineticjs-content canvas:first-child").fadeIn(800, function(){
+					self.playhead_layer.draw(); 
+				});
+			*/
 				this.playheadCount++;   
+				
 			}      
 			else {
 				this.playheadCount++;
@@ -749,11 +756,14 @@
                 y               : self.height / 2,
                 alpha           : 0.8,		        
                 radius          : 0,
-                //fill            : "#eeeeff",
-                stroke          : "#666666",
+                fill            : "#f9f9f9",
+                stroke          : "#efefef",
                 strokeWidth     : .25,
 		    });
 		    
+			/*self.setFill({
+					            image: images.stripes,
+					           });*/
             self.playhead_layer.add(playhead);
 		    self.stage.add(self.playhead_layer);            
 		    

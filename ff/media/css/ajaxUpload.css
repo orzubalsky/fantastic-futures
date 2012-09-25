@@ -47,8 +47,8 @@
 #ajaxUploadContainer .progressBarContainer {
     background-color: yellow;
     display: none;
-    width: 244px;    
-    height: 16px;
+    width: 240px;    
+    /*height: 16px;*/
     position: absolute;
     top: 0;
     left: 0;
@@ -65,8 +65,7 @@
     background-color: white;	
 }
 #ajaxUploadContainer .progressBarContainer .progressBar .progress {
-    background-color: blue;
-    width: 70%;
+    width: 100%;
     height: 100%;	
 }
 #ajaxUploadContainer.complete .progressBarContainer .progressBar .progress {
