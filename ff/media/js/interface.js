@@ -24,6 +24,8 @@
         this.playhead = 0;              // this is actually the radius of the circular playhead
 		this.addButton = 0;             // this is used to check whether the "save constellation" appeared
 		this.is_playing = false;        // this is used to check whether the player is playing or paused
+		this.playheadCount=0;  
+		this.playheadIntervals=20;		//this is how often the playhead gets redrawn. A high number=less frequency of redrawing            
 		this.zoom = 1.0;
 		this.search_results = { 'Geosounds': [], 'Constellations': [] }; 
 
@@ -44,8 +46,8 @@
             self.rotation_layer      = new Kinetic.Layer();
             self.points_layer        = new Kinetic.Layer();        
             self.connections_layer   = new Kinetic.Layer();            
-            self.playhead_layer      = new Kinetic.Layer();
-            
+            self.playhead_layer      = new Kinetic.Layer();            
+
             self.setup();            
 
             // Set framerate to 30 fps
@@ -248,6 +250,7 @@
         {      
             var self = this;
             var rotation = self.rotation;
+
              
             // stage drag rotation calculation
             var rotation_canvas = self.rotation_layer.getChildren()[0];
@@ -281,10 +284,18 @@
             //playhead //comment out to get rid of playhead
             var playhead    = self.playhead_layer.getChildren()[0];
             var radius      = playhead.getRadius();
+	
             if (self.is_playing)
-            {
+            {	
                 radius = (radius.x < self.width / 2) ? radius.x + 1 : 0;
-                playhead.setRadius(radius);                
+				playhead.setRadius(radius); 
+				/*
+				$(".kineticjs-content canvas:first-child").html("<div id='stripes'></div>");
+				$(".kineticjs-content canvas:first-child #stripes").css("background", "url(../images/stripes_white.png)");
+				$(".kineticjs-content canvas:first-child #stripes").css("height", "100%");
+				$(".kineticjs-content canvas:first-child #stripes").css("width", "800px");
+				$(".kineticjs-content canvas:first-child #stripes").css("z-index", "1000");*/
+
             }
             
             //unhide to get rid of playhead
@@ -329,25 +340,25 @@
             // rebuild projected 2d point array
             self.sphereRefresh();
         }
-        
+
         this.draw = function()
         {
-            var self = this;
-            
+            	var self = this;
+		
             self.points_layer.clear();
             self.connections_layer.clear();
-            self.playhead_layer.clear();
-                                           
+            //self.playhead_layer.clear();
+	
             for(var i=0; i<self.points_layer.getChildren().length; i++)
             {
                 var point = self.points_2D[i];
                 var sound = self.points_layer.getChildren()[i];
                 var halo = sound.getChildren()[0];
                 var core = sound.getChildren()[1];
-                
+               
                 sound.setX(point.x);
                 sound.setY(point.y);
-                
+               
                 var attrs = sound.getAttrs();
                 attrs.point_3d.x = point.point_3d.x;
                 attrs.point_3d.y = point.point_3d.y;
@@ -355,7 +366,7 @@
 
                 sound.setAttrs(attrs);
             }                        
-            
+           
             for(var i=0; i<self.connections_layer.getChildren().length; i++)
             {
                 var connection = self.sphere.connections[i];
@@ -363,14 +374,32 @@
 
                 var p1 = self.points_2D[connection.index_1];
                 var p2 = self.points_2D[connection.index_2];
-    
+   
                 child.setPoints([ {x: p1.x, y: p1.y}, {x: p2.x, y: p2.y} ]);
             }            
-            
-            self.playhead_layer.draw();            
+           	
+			//self.playhead_layer.draw();   
             self.rotation_layer.draw();
             self.points_layer.draw();
             self.connections_layer.draw();
+	
+			if (this.playheadCount%this.playheadIntervals==0){ //playhead does something at regular intervals
+				self.playhead_layer.clear();
+				self.playhead_layer.draw(); 
+			/*//makes playhead flash
+				$(".kineticjs-content canvas:first-child").fadeOut(800, function(){
+					self.playhead_layer.clear();
+				});
+				$(".kineticjs-content canvas:first-child").fadeIn(800, function(){
+					self.playhead_layer.draw(); 
+				});
+			*/
+				this.playheadCount++;   
+				
+			}      
+			else {
+				this.playheadCount++;
+			}
         }
         
         
@@ -417,7 +446,7 @@
 				        'top'   : (this.getAttrs().y-110) + 'px',
                         'left'  : (this.getAttrs().x-27) + 'px'				        
                     })
-                    .fadeToggle("fast", "linear");
+                    .fadeIn("400");
 
 				if (this.getAttrs().story==""){
 					$('.story').css('display','none');
@@ -439,7 +468,7 @@
                 $('#container').css({'cursor':'default'});
                 
                 // hide the sound text div
-				$('.soundText').fadeToggle("fast", "linear");
+				$('.soundText').fadeOut("400");
 				
 				// reset the sound style
                 if (!this.getAttrs().active)
@@ -495,7 +524,7 @@
                         sound.interval = setInterval(function() 
                         {
                             radius = (radius <= 20) ? radius + 0.1 : 5;
-                            halo.setRadius(radius);
+                            	halo.setRadius(radius);
                         }, self.frameRate);
                     }, 500);
                                         
@@ -798,9 +827,9 @@
                 y               : self.height / 2,
                 alpha           : 0.8,		        
                 radius          : 0,
-                fill            : "#eeeeff",
-                stroke          : "white",
-                strokeWidth     : 1,
+                fill            : "#f6f9f9",
+                stroke          : "#efefef",
+                strokeWidth     : .25,
 		    });
 		    
             self.playhead_layer.add(playhead);

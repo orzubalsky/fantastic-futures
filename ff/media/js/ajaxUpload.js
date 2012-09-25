@@ -29,7 +29,7 @@
                 	var percentage=Math.round((loaded/total)*100);
                 	lib.log(percentage);
                 	$('#ajaxUploadContainer').addClass('progress');		
-                	$('.progressBarContainer .progress').css({'width':percentage+'%'});		
+                	$('.progressBarContainer .progress').css({'width':percentage+'%'});	
                 },
                 onCancel: function(id, fileName)
                 {
@@ -42,6 +42,7 @@
                     $('.progressBarContainer').fadeOut(200);
                 	
                 	$('#id_filename').val('uploads/' + fileName);
+					$('.progressBarContainer .progress').html("YAY! WE HAZ THE FILE:"+fileName);			
                 },
                 onAllComplete: function( uploads ) {
                 // uploads is an array of maps
