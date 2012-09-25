@@ -53,7 +53,8 @@ h2 {
 	position:absolute;
 	left:0;
 	top:0;
-	background:url(../images/loading.gif);
+	background:url(../images/loading_stripes.gif);
+	z-index:1000;
 }
 #logo {
 	background:url(../images/logo2.png);
