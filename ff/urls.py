@@ -5,17 +5,28 @@ from dajaxice.core import dajaxice_autodiscover, dajaxice_config
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from haystack.views import SearchView, search_view_factory
 from futures.forms import GeoSearchForm
+from tastypie.api import Api
+from futures.api import *
 
 
 admin.autodiscover()
 dajaxice_autodiscover()
+
+
+v1_api = Api(api_name='v1')
+v1_api.register(UserResource())
+v1_api.register(GeoSoundResource())
+v1_api.register(ConnectionResource())
+v1_api.register(ConstellationResource())
+
 
 # direct browser requests to the different apps
 urlpatterns = patterns('',
 
     url(dajaxice_config.dajaxice_url, include('dajaxice.urls')),    
     url(r'^', include('futures.urls')),
-    url(r'^admin/', include(admin.site.urls)),   
+    url(r'^admin/', include(admin.site.urls)),
+    (r'^api/', include(v1_api.urls)),
 )
 
 # search url pattern

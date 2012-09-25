@@ -128,7 +128,7 @@ class Constellation(Base):
     location            = CharField(max_length=150, blank=True, null=True)
     user                = ForeignKey(User, blank=True, null=True)
     slug                = SlugField()
-    connections         = ManyToManyField(Connection)
+    connections         = ManyToManyField(Connection, related_name="connections")
     rotation_x          = FloatField(default=0)
     rotation_y          = FloatField(default=0)
     rotation_z          = FloatField(default=0)
