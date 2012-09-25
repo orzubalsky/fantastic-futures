@@ -28,6 +28,7 @@
 		this.playheadIntervals=20;		//this is how often the playhead gets redrawn. A high number=less frequency of redrawing            
 		this.zoom = 1.0;
 		this.search_results = { 'Geosounds': [], 'Constellations': [] }; 
+		
 
         /* set up the interface and run it */
         this.init = function()
@@ -47,7 +48,7 @@
             self.points_layer        = new Kinetic.Layer();        
             self.connections_layer   = new Kinetic.Layer();            
             self.playhead_layer      = new Kinetic.Layer();            
-
+				
             self.setup();            
 
             // Set framerate to 30 fps
@@ -284,18 +285,11 @@
             //playhead //comment out to get rid of playhead
             var playhead    = self.playhead_layer.getChildren()[0];
             var radius      = playhead.getRadius();
-	
+			        
             if (self.is_playing)
             {	
                 radius = (radius.x < self.width / 2) ? radius.x + 1 : 0;
 				playhead.setRadius(radius); 
-				/*
-				$(".kineticjs-content canvas:first-child").html("<div id='stripes'></div>");
-				$(".kineticjs-content canvas:first-child #stripes").css("background", "url(../images/stripes_white.png)");
-				$(".kineticjs-content canvas:first-child #stripes").css("height", "100%");
-				$(".kineticjs-content canvas:first-child #stripes").css("width", "800px");
-				$(".kineticjs-content canvas:first-child #stripes").css("z-index", "1000");*/
-
             }
             
             //unhide to get rid of playhead
@@ -383,23 +377,25 @@
             self.points_layer.draw();
             self.connections_layer.draw();
 	
-			if (this.playheadCount%this.playheadIntervals==0){ //playhead does something at regular intervals
+			self.playhead_layer.clear();
+			self.playhead_layer.draw();
+			/*if (this.playheadCount%this.playheadIntervals==0){ //playhead does something at regular intervals
 				self.playhead_layer.clear();
 				self.playhead_layer.draw(); 
-			/*//makes playhead flash
+			//makes playhead flash
 				$(".kineticjs-content canvas:first-child").fadeOut(800, function(){
 					self.playhead_layer.clear();
 				});
 				$(".kineticjs-content canvas:first-child").fadeIn(800, function(){
 					self.playhead_layer.draw(); 
 				});
-			*/
+			
 				this.playheadCount++;   
 				
 			}      
 			else {
 				this.playheadCount++;
-			}
+			}*/
         }
         
         
@@ -761,7 +757,8 @@
                         {
                             // color the "halo" shape
                             var searchScore=Math.round((searched_sound.score/5)*255)*5; //trying to correlate score to color
-                            soundShape.getChildren()[0].setFill('rgb('+searchScore+',0,0)');
+                            //soundShape.getChildren()[0].setFill('rgb('+searchScore+',0,0)');
+							soundShape.getChildren()[0].setFill('rgb('+searchScore+',0,0)');
                             //console.log(searchScore);
                             //soundShape.getChildren()[0].setFill("red");
                             break;
@@ -821,13 +818,18 @@
 		this.playhead = function()
 		{
 		    var self = this;
+			//trying to fill with stripey image
+			self.stripes = new Image();
+			self.stripes.src = MEDIA_URL +"images/stripes.png";
+		
 		    
 		    var playhead = new Kinetic.Circle({
                 x               : self.width / 2,
                 y               : self.height / 2,
                 alpha           : 0.8,		        
                 radius          : 0,
-                fill            : "#f6f9f9",
+               	//fill            : "#f6f9f9",
+				fill			: {image: self.stripes, offset: [0, 0]},
                 stroke          : "#efefef",
                 strokeWidth     : .25,
 		    });
