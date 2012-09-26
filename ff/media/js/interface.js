@@ -429,7 +429,7 @@
 				timeout     : '',
 				interval    : '',
 		    });
-		    		    		     
+		    			    		    		     
             sound.on("mouseover", function() 
             {
                 // change cursor 
@@ -635,8 +635,8 @@
 			
 			//checking if sound is new and changing the color
 			if (sound.getAttrs().isNew) {
-			//	halo.setFill('#005fff');
-				halo.setFill('#666');
+				halo.setFill('#005fff');
+				// halo.setFill('#666');
 			}
 			 
 			/*if (sound.getAttrs().justAdded) {
@@ -765,8 +765,10 @@
                         {
                             // color the "halo" shape
 							//console.log(searched_sound.score);
-                            var searchScore=Math.round((searched_sound.score/range)*255); //trying to correlate score to color
-                            soundShape.getChildren()[0].setFill('rgb('+searchScore+',0,'+searchScore+')');
+                            //var searchScore=Math.round((searched_sound.score/range)*255); //trying to correlate score to color
+                            var searchScore = Math.round(self.map(searched_sound.score, 0.3, 0.7, 0, 255));                            
+                            soundShape.getChildren()[0].setFill('rgb('+(searchScore)+','+(searchScore)+','+(0)+')');
+                            
 							//soundShape.getChildren()[0].setFill('rgb(255,0,0)');
                             //console.log(searchScore);
                             //soundShape.getChildren()[0].setFill("red");
@@ -774,13 +776,27 @@
                         }
                         else 
                         {
-                            soundShape.getChildren()[0].setFill("#ccc");
+                            if (soundShape.getAttrs().isNew)
+                            {
+                                soundShape.getChildren()[0].setFill("666");                                
+                            }
+                            else 
+                            {
+                                soundShape.getChildren()[0].setFill("#ccc");                                
+                            }
                         }
                     }
                 }
                 else
                 {
-                    soundShape.getChildren()[0].setFill("#ccc");
+                    if (soundShape.getAttrs().isNew)
+                    {
+                        soundShape.getChildren()[0].setFill("666");                                
+                    }
+                    else 
+                    {
+                        soundShape.getChildren()[0].setFill("#ccc");                                
+                    }                    
                 }
             }
         };

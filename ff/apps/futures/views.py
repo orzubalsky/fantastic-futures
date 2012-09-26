@@ -73,6 +73,7 @@ def sound_to_json(sound_object):
             "is_recent" : sound_object.is_recent
         }
     }
+    print sound_object.is_recent
     return data
     
 def constellations_to_json(constellation_queryset):
