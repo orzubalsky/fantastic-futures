@@ -6,7 +6,7 @@
 		this.init = function() 
 		{
 		    this.menus();
-//		    this.constellationMenuScroll();
+		    this.constellationMenuScroll();
         this.searchForm();
 		    this.WIDTH  = $('#interface').width();
 		    this.HEIGHT = $('#interface').height();
@@ -49,12 +49,14 @@
 		
 		this.constellationMenuScroll = function()
 		{
-	
-	        /*
-           $('#scrollDown').mouseover(function(){
+	/*
+	    	$('#scrollUp').hover(function(){
+	           		$('#constellationMenuContent').scrollTo('-=10px',500, { axis: 'y'});
+	           });
+           $('#scrollDown').hover( function(){
            		$('#constellationMenuContent').scrollTo('+=10px',500, { axis: 'y'});
-           });
-           */   
+           });*/
+
            
            if ($.browser.mozilla) {
           		speed=10;
@@ -62,21 +64,21 @@
 				speed=3;
 			}
 		
-           $('#scrollUp').live('mouseenter', function() {
+           $('#scrollUp').mouseenter(function() {
 				this.iid = setInterval(function() {
 				   // do something 
 				   $('#constellationMenuContent').scrollTo('-='+speed+'px', { axis: 'y'});
 				}, 25);
-			}).live('mouseleave', function(){
+			}).mouseleave(function(){
 				this.iid && clearInterval(this.iid);
 			});
 
-           $('#scrollDown').live('mouseenter', function() {
+          	$('#scrollDown').mouseenter(function() {
 				this.iid = setInterval(function() {
 				   // do something 
 				   $('#constellationMenuContent').scrollTo('+='+speed+'px', { axis: 'y'});
 				}, 25);
-			}).live('mouseleave', function(){
+			}).mouseleave(function(){
 				this.iid && clearInterval(this.iid);
 			});
 		};

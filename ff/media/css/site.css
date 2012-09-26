@@ -107,6 +107,7 @@ h2 {
 	display:none;
 	position:relative;
 	top:-5px;
+	cursor:pointer;
 }
 #constellationMenu #scrollUp {
 	height:10px;
@@ -114,7 +115,8 @@ h2 {
 	display:block;
 	display:none;
 	position:relative;
-	top:-5px;
+	top:-8px;
+	cursor:pointer;
 }
 #contContentContainer {
 	

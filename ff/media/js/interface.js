@@ -311,7 +311,7 @@
                         player.play();
 						sound.getChildren()[1].setFill("#005fff");	//style sound that is playing
                     }
-                }
+                }	
             }
             
             
