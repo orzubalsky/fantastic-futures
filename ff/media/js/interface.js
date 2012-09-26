@@ -766,7 +766,7 @@
                             // color the "halo" shape
 							//console.log(searched_sound.score);
                             var searchScore=Math.round((searched_sound.score/range)*255); //trying to correlate score to color
-                            soundShape.getChildren()[0].setFill('rgb('+searchScore+',0,0)');
+                            soundShape.getChildren()[0].setFill('rgb('+searchScore+',0,'+searchScore+')');
 							//soundShape.getChildren()[0].setFill('rgb(255,0,0)');
                             //console.log(searchScore);
                             //soundShape.getChildren()[0].setFill("red");
