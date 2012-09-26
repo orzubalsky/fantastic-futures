@@ -496,7 +496,8 @@
                      // create a player instance for this sound
                      if (this.getAttrs().player == '')
             	     {
-            	         var player = new site.Player(this.getAttrs().id, this.getAttrs().index, this.getAttrs().data.filename, 0.8);
+                         var volume = self.map(radius, 5, 20, 0.2, 0.9);            	         
+            	         var player = new site.Player(this.getAttrs().id, this.getAttrs().index, this.getAttrs().data.filename, volume);
             	         this.setAttrs({player: player});
         		         this.getAttrs().player.init();
     		         }
@@ -519,8 +520,14 @@
                         // animate the radius in a loop
                         sound.interval = setInterval(function() 
                         {
+                            // radius
                             radius = (radius <= 20) ? radius + 0.1 : 5;
-                            	halo.setRadius(radius);
+                            halo.setRadius(radius);
+                            
+                            // use the value of radius to determine the sound volume
+                            var volume = self.map(radius, 5, 20, 0.2, 0.9);
+                            shape.getAttrs().player.updateVolume(volume);
+                            
                         }, self.frameRate);
                     }, 500);
                                         
