@@ -570,7 +570,7 @@
                             var sound_2_distance_from_center = self.dist(this.getX(), this.getY(), self.width/2, self.height/2);                            
                             var closest_distance             = (sound_1_distance_from_center < sound_2_distance_from_center) ? sound_1_distance_from_center : sound_2_distance_from_center;
                             var playhead                     = self.playhead_layer.getChildren()[0];
-                            playhead.setRadius(closest_distance);
+                            playhead.setRadius(closest_distance-1); //subtracted 1 just so that first sound will change colors.
                             
                             // set the interface to playing mode!
                             self.is_playing = true;
