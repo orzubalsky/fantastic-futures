@@ -823,8 +823,10 @@
 		    
 		    $(window).keypress(function(e) 
 		    {
+		        var key = e.which || e.keyCode || e.keyChar;
+            
 		        // return, backspace, escape, space
-                if (e.keyCode == 8 || e.keyCode == 13 || e.keyCode == 27 || e.keyCode == 32)
+                if (key == 8 || key == 13 || key == 27 || key == 32)
                 {
                     self.is_playing = !self.is_playing;
                     
