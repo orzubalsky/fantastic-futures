@@ -758,7 +758,7 @@
                             // color the "halo" shape
                             var searchScore=Math.round((searched_sound.score/5)*255)*5; //trying to correlate score to color
                             //soundShape.getChildren()[0].setFill('rgb('+searchScore+',0,0)');
-							soundShape.getChildren()[0].setFill('rgb('+searchScore+',0,0)');
+							soundShape.getChildren()[0].setFill('rgb('+searchScore+',255,'+searchScore+')');
                             //console.log(searchScore);
                             //soundShape.getChildren()[0].setFill("red");
                             break;
@@ -820,7 +820,7 @@
 		    var self = this;
 			//trying to fill with stripey image
 			self.stripes = new Image();
-			self.stripes.src = MEDIA_URL +"images/stripes.png";
+			self.stripes.src = MEDIA_URL +"images/stripes_5.png";
 		
 		    
 		    var playhead = new Kinetic.Circle({
