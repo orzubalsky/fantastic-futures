@@ -846,8 +846,11 @@
 		{
 		    var self = this;
 			//trying to fill with stripey image
-			self.stripes = new Image();
-			self.stripes.src = MEDIA_URL +"images/stripes_5.png";
+			
+			//can you look at this? stripey background for playhead
+			
+			/*self.stripes = new Image();
+			self.stripes.src = MEDIA_URL +"images/stripes_5.png";*/
 		
 		    
 		    var playhead = new Kinetic.Circle({
@@ -855,8 +858,8 @@
                 y               : self.height / 2,
                 alpha           : 0.8,		        
                 radius          : 0,
-               	//fill            : "#f6f9f9",
-				fill			: {image: self.stripes, offset: [0, 0]},
+               	fill            : "#f6f9f9", 
+				//fill			: {image: self.stripes, offset: [0, 0]}, //add this back in to get stripes
                 stroke          : "#efefef",
                 strokeWidth     : .25,
 		    });

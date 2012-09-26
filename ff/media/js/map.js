@@ -22,22 +22,32 @@
 			// base layers
 			var countries   = self.countriesLayer();
 			var triFill     = self.dymaxTriFill();
-
+			
 			// Create new map
 			self.map = self.createMap();
-			           
+			var currentTime = new Date();
+			lib.log("created map: "+currentTime.getTime());    
+			       
             // add base layers to map
 			self.map.addLayers( [ triFill, countries ] );
+			var currentTime = new Date();
+			lib.log("added base layers to map: "+currentTime.getTime());
 			
 			// initial zoom
 			self.map.zoomTo(2.5);
+			var currentTime = new Date();
+			lib.log("initialize zoom: "+currentTime.getTime());
 
             // add features to the dymax layer
             self.addDymaxFeaturesToLayer(triFill);
+			var currentTime = new Date();
+			lib.log("add features to the dymax layer: "+currentTime.getTime());
        
 		    // add sounds layer
             self.soundLayer = self.get_data_layers();
             self.map.addLayers(self.soundLayer);
+			var currentTime = new Date();
+			lib.log("add sounds layer: "+currentTime.getTime());
         };
         
         this.createMap = function() 
@@ -106,7 +116,9 @@
                     renderers: ["Canvas"]				
     			} ); 					
     			layer.events.register("loadend", layer, function() 
-    			{
+    			{	
+					var currentTime = new Date();
+					lib.log("start sound loadend: "+currentTime.getTime());
                    
                    // save coordinates                   
                    site.ffinterface.map_points = [];
@@ -120,6 +132,9 @@
                    }
                    $('#map').hide();
                    $('#interface').show();
+
+					var currentTime = new Date();
+					lib.log("interface loaded: "+currentTime.getTime());
     			});                
     	        layers.push(layer);
     	        
