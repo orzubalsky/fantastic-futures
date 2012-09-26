@@ -752,12 +752,13 @@
                     for (var j=0; j<searched_sounds.length; j++)
                     {
                         var searched_sound = searched_sounds[j];
+						var range = 1;
 
                         if (soundShape.getAttrs().id == searched_sound.id)
                         {
                             // color the "halo" shape
 							//console.log(searched_sound.score);
-                            var searchScore=Math.round((searched_sound.score/5)*255)*10; //trying to correlate score to color
+                            var searchScore=Math.round((searched_sound.score/range)*255); //trying to correlate score to color
                             soundShape.getChildren()[0].setFill('rgb('+searchScore+',0,0)');
 							//soundShape.getChildren()[0].setFill('rgb(255,0,0)');
                             //console.log(searchScore);

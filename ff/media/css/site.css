@@ -53,7 +53,7 @@ h2 {
 	position:absolute;
 	left:0;
 	top:0;
-	background:url(../images/loading_stripes.gif);
+	background:url(../images/loading_greystripes.gif);
 	z-index:1000;
 }
 #logo {
@@ -439,7 +439,7 @@ h2 {
 	background: transparent;	
 	color:white;
 	text-align:right;
-	
+	cursor:pointer;
 }
 #feedback #feedback_tab {
 	background:url(../images/feedback_sm.png) no-repeat 0px 5px;
