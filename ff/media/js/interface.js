@@ -850,7 +850,7 @@
 			//can you look at this? stripey background for playhead
 			
 			/*self.stripes = new Image();
-			self.stripes.src = MEDIA_URL +"images/stripes_5.png";*/
+			self.stripes.src = STATIC_URL +"images/stripes_5.png";*/
 		
 		    
 		    var playhead = new Kinetic.Circle({

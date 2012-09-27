@@ -252,7 +252,7 @@
 				projection : new OpenLayers.Projection("EPSG:4326"),
 	            strategies: [ new OpenLayers.Strategy.Fixed() ],
 	            protocol: new OpenLayers.Protocol.HTTP( {
-	                url: MEDIA_URL + "data/93211.kml",
+	                url: STATIC_URL + "data/93211.kml",
 	                format: new OpenLayers.Format.KML()
 	            } ),
 				style : { 'fillColor' : '#b2b2b2', 'fillOpacity' : 1, 'pointRadius' : 1, 'stroke' : false },
@@ -268,7 +268,7 @@
 				projection : new OpenLayers.Projection("EPSG:4326"),
 	            strategies: [ new OpenLayers.Strategy.Fixed() ],
 	            protocol: new OpenLayers.Protocol.HTTP( {
-	                url: MEDIA_URL + "data/worldCountries.kml",
+	                url: STATIC_URL + "data/worldCountries.kml",
 	                format: new OpenLayers.Format.KML()
 	            } ),
 				style : { 'fillColor' : '#ededed', 'fillOpacity' : 1, 'strokeColor' : '#fff', 'strokeWidth' : 0.7 },

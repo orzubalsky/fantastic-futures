@@ -3,7 +3,7 @@
 	{
 	    this.id = id,
 	    this.index = index,
-		this.file = MEDIA_URL + file,
+		this.file = STATIC_URL + file,
 		this.volume = volume;
 	    this.playerId = 'player_' + index + '_' + id;
 	    this.$player;
@@ -25,7 +25,7 @@
     			});
     		},
             volume: self.volume,    		
-    		swfPath: MEDIA_URL + "js/lib",
+    		swfPath: STATIC_URL + "js/lib",
     		solution: "flash, html",
     		supplied: "mp3",
             preload: 'auto',    		
