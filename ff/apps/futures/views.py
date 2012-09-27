@@ -11,6 +11,8 @@ from django.template.defaultfilters import slugify
 from django.utils import simplejson as json
 from django.utils.safestring import mark_safe
 from ajaxuploader.views import AjaxFileUploader
+from cache_utils.decorators import cached
+
 
 def index(request):
     layers = {}
@@ -40,6 +42,11 @@ def view_sound(request, sound_slug):
     pass
 
 def sound_layer(request):
+    geo_json = serialize_sound_layer()
+    return HttpResponse(geo_json, content_type='application/json', status=200)
+    
+@cached(0)
+def serialize_sound_layer():
     sounds = GeoSound.objects.all().order_by('created')
 
     results = []
@@ -51,12 +58,11 @@ def sound_layer(request):
         'type':'FeatureCollection',
         'features': results,
     }
-    geo_json = mark_safe(json.dumps(result_data))
-  
-    return HttpResponse(geo_json, content_type='application/json', status=200)
+    geo_json = mark_safe(json.dumps(result_data))    
     
-    
-# called from w/in layer_view
+    return geo_json
+
+@cached(0)
 def sound_to_json(sound_object):
     data = {
         "type"              : "Feature", 
@@ -73,9 +79,9 @@ def sound_to_json(sound_object):
             "is_recent" : sound_object.is_recent
         }
     }
-    print sound_object.is_recent
     return data
     
+@cached(0)
 def constellations_to_json(constellation_queryset):
     constellations_json = serializers.serialize('json', constellation_queryset, indent=4, 
         excludes=('updated', 'created', 'is_active', 'user'), 
