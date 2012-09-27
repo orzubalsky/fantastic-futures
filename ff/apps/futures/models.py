@@ -6,12 +6,16 @@ from django.core.files.base import ContentFile
 from django.conf import settings
 from django.core.files import File
 from django.core.files.storage import default_storage as storage        
-from django.contrib.gis.geos import Point  
+from django.db.models.signals import pre_delete, post_save
+from django.contrib.gis.geos import Point
+from django.dispatch import receiver  
+from django.core.cache import cache
 from django_countries import CountryField
 from taggit.managers import TaggableManager      
 from datetime import *
 from futures.validators import *
 import os, sys, pytz, uuid, random
+
 
 class Base(Model):
     """
@@ -108,6 +112,11 @@ class GeoSound(Base):
         return ",".join([tag.name for tag in self.tags.all()])   
         
         
+@receiver(pre_delete, sender=GeoSound)
+@receiver(post_save, sender=GeoSound)
+def invalidate_json_sounds(sender, **kwargs):
+    cache.delete('json_sounds')
+        
 class Connection(Base):
 
     sound_1         = ForeignKey(GeoSound, related_name="sound_1")
@@ -154,4 +163,9 @@ class Constellation(Base):
         super(Constellation, self).save(*args, **kwargs)
 
         # return the newly created model
-        return self        
+        return self       
+
+@receiver(pre_delete, sender=GeoSound)
+@receiver(post_save, sender=GeoSound)
+def invalidate_json_constellations(sender, **kwargs):
+    cache.delete('json_constellations')

@@ -3,6 +3,7 @@ from django.template import RequestContext
 from django.http import HttpResponseRedirect, HttpResponse
 from django.core.urlresolvers import reverse
 from django.core import serializers
+from django.core.cache import cache
 from django.forms.formsets import formset_factory
 from django.conf import settings
 from futures.models import *
@@ -11,8 +12,6 @@ from django.template.defaultfilters import slugify
 from django.utils import simplejson as json
 from django.utils.safestring import mark_safe
 from ajaxuploader.views import AjaxFileUploader
-from cache_utils.decorators import cached
-
 
 def index(request):
     layers = {}
@@ -42,10 +41,13 @@ def view_sound(request, sound_slug):
     pass
 
 def sound_layer(request):
-    geo_json = serialize_sound_layer()
+    if cache.get('json_sounds') == None:
+        geo_json = serialize_sound_layer()        
+        cache.set('json_sounds', geo_json, 0)
+    else:
+        geo_json = cache.get('json_sounds')
     return HttpResponse(geo_json, content_type='application/json', status=200)
     
-@cached(0)
 def serialize_sound_layer():
     sounds = GeoSound.objects.all().order_by('created')
 
@@ -62,7 +64,6 @@ def serialize_sound_layer():
     
     return geo_json
 
-@cached(0)
 def sound_to_json(sound_object):
     data = {
         "type"              : "Feature", 
@@ -81,15 +82,19 @@ def sound_to_json(sound_object):
     }
     return data
     
-@cached(0)
 def constellations_to_json(constellation_queryset):
-    constellations_json = serializers.serialize('json', constellation_queryset, indent=4, 
-        excludes=('updated', 'created', 'is_active', 'user'), 
-        relations= {
-            'connections': 
-                {'fields': ('sound_1','sound_2','sound_1_volume','sound_2_volume') }
-            }
-    )
+    if cache.get('json_constellations') == None:
+        constellations_json = serializers.serialize('json', constellation_queryset, indent=4, 
+            excludes=('updated', 'created', 'is_active', 'user'), 
+            relations= {
+                'connections': 
+                    {'fields': ('sound_1','sound_2','sound_1_volume','sound_2_volume') }
+                }
+        )
+        cache.set('json_constellations', constellations_json, 0)
+    else:
+        constellations_json = cache.get('json_constellations')
+
     return constellations_json  
 
 def start(request):
