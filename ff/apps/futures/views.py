@@ -43,7 +43,7 @@ def view_sound(request, sound_slug):
 def sound_layer(request):
     if cache.get('json_sounds') == None:
         geo_json = serialize_sound_layer()        
-        cache.set('json_sounds', geo_json, 0)
+        cache.set('json_sounds', geo_json, 60*60*24*7)
     else:
         geo_json = cache.get('json_sounds')
     return HttpResponse(geo_json, content_type='application/json', status=200)
@@ -91,7 +91,7 @@ def constellations_to_json(constellation_queryset):
                     {'fields': ('sound_1','sound_2','sound_1_volume','sound_2_volume') }
                 }
         )
-        cache.set('json_constellations', constellations_json, 0)
+        cache.set('json_constellations', constellations_json, 60*60*24*7)
     else:
         constellations_json = cache.get('json_constellations')
 
