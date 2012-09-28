@@ -28,6 +28,7 @@
 		this.playheadIntervals=20;		//this is how often the playhead gets redrawn. A high number=less frequency of redrawing            
 		this.zoom = 1.0;
 		this.search_results = { 'Geosounds': [], 'Constellations': [] }; 
+		this.images;
 		
 
         /* set up the interface and run it */
@@ -39,27 +40,67 @@
     	    self.width              = $('#interface').width();
     	    self.height             = $('#interface').height();            
             self.sphere             = new self.Sphere3D();
-            self.stage              = new Kinetic.Stage({
-                container: "interface",
-                width: self.width,
-                height: self.height,                     
-            });
-            self.rotation_layer      = new Kinetic.Layer();
-            self.points_layer        = new Kinetic.Layer();        
-            self.connections_layer   = new Kinetic.Layer();            
-            self.playhead_layer      = new Kinetic.Layer();            
-				
-            self.setup();            
+            
+            var sources = {
+                playhead_fill   : STATIC_URL + 'images/stripes_5.png',
+                loading_gif     : STATIC_URL + 'images/loading_greystripes.gif'
+            };
+            
+            self.loadImages(sources, function(images) 
+            {
+                self.images = images;
+                self.stage              = new Kinetic.Stage({
+                    container: "interface",
+                    width: self.width,
+                    height: self.height,                     
+                });
+                self.rotation_layer      = new Kinetic.Layer();
+                self.points_layer        = new Kinetic.Layer();        
+                self.connections_layer   = new Kinetic.Layer();            
+                self.playhead_layer      = new Kinetic.Layer();            
 
-            // Set framerate to 30 fps
-            self.framerate = 1000/30;
-            
-            // run update-draw loop
-            setInterval(function() { self.update(); self.draw(); }, self.framerate);
-            
-            self.running = true;            
+                self.setup();            
+
+                // Set framerate to 30 fps
+                self.framerate = 1000/30;
+
+                // run update-draw loop
+                setInterval(function() { self.update(); self.draw(); }, self.framerate);
+
+                self.running = true;
+            });
         };
         
+        
+        this.loadImages = function(sources, callback) 
+        {
+            var self = this;
+
+            var images = {};
+            var loadedImages  = 0;
+            var numImages     = 0;
+
+            // get num of sources
+            for(var src in sources) 
+            {
+                numImages++;
+            }
+
+            for(var src in sources) 
+            {   
+                images[src] = new Image();
+                images[src].onload = function() 
+                {
+                    if (++loadedImages >= numImages) 
+                    {
+                        callback(images);
+                    }
+                };
+                images[src].src = sources[src];
+            }
+        };
+
+
         this.resetRotation = function()
         {
             var self = this;
@@ -859,7 +900,7 @@
                 alpha           : 0.8,		        
                 radius          : 0,
                	//fill            : "#f6f9f9", 
-				fill			: {image: self.stripes, offset: [0, 0]}, //add this back in to get stripes
+				fill			: {image: self.images.playhead_fill, offset: [0, 0]}, //add this back in to get stripes
                 stroke          : "#efefef",
                 strokeWidth     : .25,
 		    });
