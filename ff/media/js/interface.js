@@ -901,9 +901,11 @@
                     for (var i=0; i<sounds.length; i++)
                     {
                         var sound = sounds[i];
-                        var player = sound.getAttrs().player;
-                        
-                        (self.is_playing) ? player.play() : player.pause();
+                        if (sound.getAttrs().active)
+                        {
+                            var player = sound.getAttrs().player;
+                            (self.is_playing) ? player.play() : player.pause();                            
+                        }
                     }
                 }
 		    });
