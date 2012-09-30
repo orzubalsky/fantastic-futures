@@ -15,6 +15,7 @@
         this.points_2D       = [];      // array of all 2D points, coordinates are calculated every frame
         this.connections_2D  = [];      // array of all connections 
         this.constellation;             // current active constellation
+        this.loading_constellation = false  // set to true when a constellation is loaded (rotated + zoomed)
         this.map_points_count;          // keeps track of map sound count. this is used to determine whether a new sound was added
         this.stage;                     // kineticJS stage 
         this.points_layer;              // kinteticJS layer to hold all sound shapes
@@ -128,7 +129,7 @@
                 self.rotation.x = self.rotateAxis(self.rotation.x, x, 25);
                 self.rotation.y = self.rotateAxis(self.rotation.y, y, 25);
                 self.rotation.z = self.rotateAxis(self.rotation.z, z, 25);
-                self.zoom       = self.rotateAxis(self.zoom, zoom, 100);
+                self.zoom       = self.rotateAxis(self.zoom, zoom, 12);
                 
                 if ( self.rotation.x == x && self.rotation.y == y && self.rotation.z == z && self.zoom == zoom)
                 {
@@ -234,7 +235,7 @@
             return self.sphere.connections;
         };
         
-        this.loadConstellation = function(id, rotate)
+        this.previewConstellation = function(id, rotate, callback)
         {
             var self = this;
             
@@ -249,7 +250,10 @@
                     
                     if (rotate)
                     {
-                        self.rotateTo(constellation.rotation_x, constellation.rotation_y, constellation.rotation_z, constellation.zoom, function() {});
+                        self.rotateTo(constellation.rotation_x, constellation.rotation_y, constellation.rotation_z, constellation.zoom, function() 
+                        {
+                            callback();
+                        });
                     }
                     
                     for (var j=0; j<constellation.connections.length; j++)
@@ -259,22 +263,48 @@
 
                         connection.sound_1 = db_connection.sound_1;
                         connection.sound_2 = db_connection.sound_2;
+                        
                         connection.index_1 = self.getPointIndexFromId(db_connection.sound_1);             
                         connection.index_2 = self.getPointIndexFromId(db_connection.sound_2);
                         self.sphere.connections.push(connection);                        
-                        self.addConnectionToLayer(connection);
-                    }                    
+                        self.addConnectionToLayer(connection);                     
+                    }
                 }
             }
         };      
         
+         this.loadConstellation = function(id, rotate)
+         {
+            var self = this;
+            
+            self.loading_constellation = true;
+            
+            self.previewConstellation(id, rotate, function() 
+            {
+                // after rotation/zoom is done, set loading_constellation to reflect the current state
+                self.loading_constellation = false;
+                
+                // set active state for all connected sounds
+                self.setActiveStateForAllSounds();
+                
+                // start the player
+                self.is_playing = true;
+                
+            });
+
+         };
+
         this.clearConnections = function() 
         {
             var self = this;
             
-            self.connections_2D = [];
-            self.sphere.connections = [];
-            self.connections_layer.removeChildren();
+            if (self.loading_constellation == false)
+            {
+                clearInterval(self.rotation_interval);                
+                self.connections_2D = [];
+                self.sphere.connections = [];
+                self.connections_layer.removeChildren();
+            }
         };  
         
         this.getPointIndexFromId = function(sound_id)
@@ -376,7 +406,7 @@
                     if (sound.getAttrs().active == true)
                     {
                         player.stop();                      
-    				    sound.getChildren()[1].setFill("#000");	//style sound that isn't playing                        
+                        sound.getChildren()[1].setFill("#000");	//style sound that isn't playing                        
                     }                    	                    
                 }
             }
@@ -562,12 +592,12 @@
                 {
                      // create a player instance for this sound
                      if (this.getAttrs().player == '')
-            	     {
+                     {
                          var volume = self.map(radius, 5, 20, 0.2, 0.9);            	         
-            	         var player = new site.Player(this.getAttrs().id, this.getAttrs().index, this.getAttrs().data.filename, volume);
-            	         this.setAttrs({player: player});
-        		         this.getAttrs().player.init();
-    		         }
+                         var player = new site.Player(this.getAttrs().id, this.getAttrs().index, this.getAttrs().data.filename, volume);
+                         this.setAttrs({player: player});
+                         this.getAttrs().player.init();
+                     }
 
                      // change the "core" color
                      this.getChildren()[1].setFill('#005fff');
@@ -763,11 +793,39 @@
             
             return false;
         };
+        
+        this.setActiveStateForAllSounds = function()
+        {
+             var self = this;
 
-		this.styleAllOtherActiveSoundShapes = function(clickedSoundShape, color)
-		{
-		    var self = this;
-		    
+             var allSoundsShapes = self.points_layer.getChildren();		    
+
+             for(var i=0; i<allSoundsShapes.length; i++)
+             {
+                 var soundShape = allSoundsShapes[i];            
+                 
+                 // if the sound is connected to connections it's always "active"
+                 if (self.soundShapeConnectsToExistingConnection(soundShape))
+                 {
+                     soundShape.getAttrs().active = true;
+                     
+                     // create a player instance for this sound
+                     if (soundShape.getAttrs().player == '')
+                     {
+                         var radius = self.map(soundShape.getAttrs().data.volume, 0.2, 0.8, 5, 20, true);		                	         
+                         var volume = self.map(radius, 5, 20, 0.2, 0.9);            	         
+                         var player = new site.Player(soundShape.getAttrs().id, soundShape.getAttrs().index, soundShape.getAttrs().data.filename, volume);
+                         soundShape.setAttrs({player: player});
+                         soundShape.getAttrs().player.init();
+                     }
+                 }
+             }
+        };
+
+        this.styleAllOtherActiveSoundShapes = function(clickedSoundShape, color)
+        {
+            var self = this;
+
             var allSoundsShapes = self.points_layer.getChildren();		    
 
             for(var i=0; i<allSoundsShapes.length; i++)
@@ -914,9 +972,6 @@
 		this.playhead = function()
 		{
 		    var self = this;
-			//trying to fill with stripey image
-			
-			//can you look at this? stripey background for playhead
 			
 			self.stripes = new Image();
 			self.stripes.src = STATIC_URL +"images/stripes_5.png";
