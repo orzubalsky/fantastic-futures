@@ -5,25 +5,25 @@
 	    this.csrvToken;
 		this.init = function() 
 		{
-		    this.menus();
-		    this.constellationMenuScroll();
-        this.searchForm();
-		    this.WIDTH  = $('#interface').width();
-		    this.HEIGHT = $('#interface').height();
-		    site.ajaxUpload.init();
-		    site.map.init();
-		    this.debug();
-		};
-		
-		this.debug = function()
-		{
-        	
-		};
-		
-		this.searchForm = function()
-		{		  
-		    var self = this;
-		    
+            this.menus();
+            this.constellationMenuScroll();
+            this.searchForm();
+            this.WIDTH  = $('#interface').width();
+            this.HEIGHT = $('#interface').height();
+            site.ajaxUpload.init();
+            site.map.init();
+            this.debug();
+        };
+
+        this.debug = function()
+        {
+	        
+        };
+
+        this.searchForm = function()
+        {
+            var self = this;
+
             $('#search input[name=q]').live('input paste', function() 
             {
                 var value = $(this).val();
@@ -132,11 +132,17 @@
         	    e.preventDefault();
         	    
                 var id = lib.getId($(this).attr('id'));
-                site.ffinterface.loadConstellation(id, true); 
+                site.ffinterface.previewConstellation(id, true, function() {}); 
             });
+            $('#constellationMenuContent a').live('click', function (e)
+            { 
+        	    e.preventDefault();
+        	    
+                var id = lib.getId($(this).attr('id'));
+                site.ffinterface.loadConstellation(id, true); 
+            });            
             $('#constellationMenuContent a').live('mouseleave', function (e)            
             {
-                clearInterval(site.ffinterface.rotation_interval);
                 site.ffinterface.clearConnections();
             });        	       	
         	$('#contactUs a').click(function(e)

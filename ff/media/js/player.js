@@ -50,7 +50,7 @@
 	site.Player.prototype.play = function()
 	{
 		var self = this;
-        self.$player.jPlayer("playHead", 0).jPlayer("play");		
+        self.$player.jPlayer("play");		
 	};
 	
 	site.Player.prototype.stop = function()

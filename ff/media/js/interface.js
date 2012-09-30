@@ -15,6 +15,7 @@
         this.points_2D       = [];      // array of all 2D points, coordinates are calculated every frame
         this.connections_2D  = [];      // array of all connections 
         this.constellation;             // current active constellation
+        this.loading_constellation = false  // set to true when a constellation is loaded (rotated + zoomed)
         this.map_points_count;          // keeps track of map sound count. this is used to determine whether a new sound was added
         this.stage;                     // kineticJS stage 
         this.points_layer;              // kinteticJS layer to hold all sound shapes
@@ -28,7 +29,12 @@
 		this.playheadIntervals=20;		//this is how often the playhead gets redrawn. A high number=less frequency of redrawing            
 		this.zoom = 1.0;
 		this.search_results = { 'Geosounds': [], 'Constellations': [] }; 
+<<<<<<< HEAD
 		this.justAddedCountdown = 0;
+=======
+		this.images;
+		
+>>>>>>> 25599c491f1c5280d466faeacaf9e7d87189a473
 
         /* set up the interface and run it */
         this.init = function()
@@ -39,27 +45,70 @@
     	    self.width              = $('#interface').width();
     	    self.height             = $('#interface').height();            
             self.sphere             = new self.Sphere3D();
-            self.stage              = new Kinetic.Stage({
-                container: "interface",
-                width: self.width,
-                height: self.height,                     
-            });
-            self.rotation_layer      = new Kinetic.Layer();
-            self.points_layer        = new Kinetic.Layer();        
-            self.connections_layer   = new Kinetic.Layer();            
-            self.playhead_layer      = new Kinetic.Layer();            
-				
-            self.setup();            
+            
+            var sources = {
+                playhead_fill   : STATIC_URL + 'images/stripes_5.png',
+                loading_gif     : STATIC_URL + 'images/loading_greystripes.gif'
+            };
+            
+            // first load images, then init kineticJS shapes and everything else
+            self.loadImages(sources, function(images) 
+            {
+                // assign the loaded images to the interface scope
+                self.images = images;
+                
+                self.stage              = new Kinetic.Stage({
+                    container: "interface",
+                    width: self.width,
+                    height: self.height,                     
+                });
+                self.rotation_layer      = new Kinetic.Layer();
+                self.points_layer        = new Kinetic.Layer();        
+                self.connections_layer   = new Kinetic.Layer();            
+                self.playhead_layer      = new Kinetic.Layer();            
 
-            // Set framerate to 30 fps
-            self.framerate = 1000/30;
-            
-            // run update-draw loop
-            setInterval(function() { self.update(); self.draw(); }, self.framerate);
-            
-            self.running = true;            
+                self.setup();            
+
+                // Set framerate to 30 fps
+                self.framerate = 1000/30;
+
+                // run update-draw loop
+                setInterval(function() { self.update(); self.draw(); }, self.framerate);
+
+                self.running = true;
+            });
         };
         
+        
+        this.loadImages = function(sources, callback) 
+        {
+            var self = this;
+
+            var images = {};
+            var loadedImages  = 0;
+            var numImages     = 0;
+
+            // get num of sources
+            for(var src in sources) 
+            {
+                numImages++;
+            }
+
+            for(var src in sources) 
+            {   
+                images[src] = new Image();
+                images[src].onload = function() 
+                {
+                    if (++loadedImages >= numImages) 
+                    {
+                        callback(images);
+                    }
+                };
+                images[src].src = sources[src];
+            }
+        };
+
+
         this.resetRotation = function()
         {
             var self = this;
@@ -84,7 +133,7 @@
                 self.rotation.x = self.rotateAxis(self.rotation.x, x, 25);
                 self.rotation.y = self.rotateAxis(self.rotation.y, y, 25);
                 self.rotation.z = self.rotateAxis(self.rotation.z, z, 25);
-                self.zoom       = self.rotateAxis(self.zoom, zoom, 100);
+                self.zoom       = self.rotateAxis(self.zoom, zoom, 12);
                 
                 if ( self.rotation.x == x && self.rotation.y == y && self.rotation.z == z && self.zoom == zoom)
                 {
@@ -190,7 +239,7 @@
             return self.sphere.connections;
         };
         
-        this.loadConstellation = function(id, rotate)
+        this.previewConstellation = function(id, rotate, callback)
         {
             var self = this;
             
@@ -205,7 +254,10 @@
                     
                     if (rotate)
                     {
-                        self.rotateTo(constellation.rotation_x, constellation.rotation_y, constellation.rotation_z, constellation.zoom, function() {});
+                        self.rotateTo(constellation.rotation_x, constellation.rotation_y, constellation.rotation_z, constellation.zoom, function() 
+                        {
+                            callback();
+                        });
                     }
                     
                     for (var j=0; j<constellation.connections.length; j++)
@@ -215,22 +267,48 @@
 
                         connection.sound_1 = db_connection.sound_1;
                         connection.sound_2 = db_connection.sound_2;
+                        
                         connection.index_1 = self.getPointIndexFromId(db_connection.sound_1);             
                         connection.index_2 = self.getPointIndexFromId(db_connection.sound_2);
                         self.sphere.connections.push(connection);                        
-                        self.addConnectionToLayer(connection);
-                    }                    
+                        self.addConnectionToLayer(connection);                     
+                    }
                 }
             }
         };      
         
+         this.loadConstellation = function(id, rotate)
+         {
+            var self = this;
+            
+            self.loading_constellation = true;
+            
+            self.previewConstellation(id, rotate, function() 
+            {
+                // after rotation/zoom is done, set loading_constellation to reflect the current state
+                self.loading_constellation = false;
+                
+                // set active state for all connected sounds
+                self.setActiveStateForAllSounds();
+                
+                // start the player
+                self.is_playing = true;
+                
+            });
+
+         };
+
         this.clearConnections = function() 
         {
             var self = this;
             
-            self.connections_2D = [];
-            self.sphere.connections = [];
-            self.connections_layer.removeChildren();
+            if (self.loading_constellation == false)
+            {
+                clearInterval(self.rotation_interval);                
+                self.connections_2D = [];
+                self.sphere.connections = [];
+                self.connections_layer.removeChildren();
+            }
         };  
         
         this.getPointIndexFromId = function(sound_id)
@@ -303,15 +381,38 @@
                 var sound = sounds[i];
                 var player = sound.getAttrs().player;
                 var distance_from_center = self.dist(sound.getX(), sound.getY(), self.width/2, self.height/2);
-                if (distance_from_center == radius)
-                {                    
+                
+                // when sound shape is inside playhead
+                if (distance_from_center <= radius)
+                {
+                    // play sound from the beginning when playhead hits sound shape
+                    if (distance_from_center == radius)
+                    {                    
+                        if (sound.getAttrs().active == true)
+                        {
+                            player.stop();  
+                            player.play();
+                            sound.getChildren()[1].setFill("#005fff");	//style sound that is playing
+                        }
+                    }
+            
+                    if (sound.getAttrs().active == true && !player.$player.data("jPlayer").status.paused)
+                    {                    
+					    sound.getChildren()[1].setFill("#005fff");	//style sound that is playing
+				    }
+				    else 
+				    {
+					    sound.getChildren()[1].setFill("#000");	//style sound that isn't playing				        
+				    }
+                } 
+                else 
+                {
                     if (sound.getAttrs().active == true)
                     {
-                        player.stop();  
-                        player.play();
-						sound.getChildren()[1].setFill("#005fff");	//style sound that is playing
-                    }
-                }	
+                        player.stop();                      
+                        sound.getChildren()[1].setFill("#000");	//style sound that isn't playing                        
+                    }                    	                    
+                }
             }
             
             
@@ -495,12 +596,12 @@
                 {
                      // create a player instance for this sound
                      if (this.getAttrs().player == '')
-            	     {
+                     {
                          var volume = self.map(radius, 5, 20, 0.2, 0.9);            	         
-            	         var player = new site.Player(this.getAttrs().id, this.getAttrs().index, this.getAttrs().data.filename, volume);
-            	         this.setAttrs({player: player});
-        		         this.getAttrs().player.init();
-    		         }
+                         var player = new site.Player(this.getAttrs().id, this.getAttrs().index, this.getAttrs().data.filename, volume);
+                         this.setAttrs({player: player});
+                         this.getAttrs().player.init();
+                     }
 
                      // change the "core" color
                      this.getChildren()[1].setFill('#005fff');
@@ -699,11 +800,39 @@
             
             return false;
         };
+        
+        this.setActiveStateForAllSounds = function()
+        {
+             var self = this;
 
-		this.styleAllOtherActiveSoundShapes = function(clickedSoundShape, color)
-		{
-		    var self = this;
-		    
+             var allSoundsShapes = self.points_layer.getChildren();		    
+
+             for(var i=0; i<allSoundsShapes.length; i++)
+             {
+                 var soundShape = allSoundsShapes[i];            
+                 
+                 // if the sound is connected to connections it's always "active"
+                 if (self.soundShapeConnectsToExistingConnection(soundShape))
+                 {
+                     soundShape.getAttrs().active = true;
+                     
+                     // create a player instance for this sound
+                     if (soundShape.getAttrs().player == '')
+                     {
+                         var radius = self.map(soundShape.getAttrs().data.volume, 0.2, 0.8, 5, 20, true);		                	         
+                         var volume = self.map(radius, 5, 20, 0.2, 0.9);            	         
+                         var player = new site.Player(soundShape.getAttrs().id, soundShape.getAttrs().index, soundShape.getAttrs().data.filename, volume);
+                         soundShape.setAttrs({player: player});
+                         soundShape.getAttrs().player.init();
+                     }
+                 }
+             }
+        };
+
+        this.styleAllOtherActiveSoundShapes = function(clickedSoundShape, color)
+        {
+            var self = this;
+
             var allSoundsShapes = self.points_layer.getChildren();		    
 
             for(var i=0; i<allSoundsShapes.length; i++)
@@ -859,9 +988,11 @@
                     for (var i=0; i<sounds.length; i++)
                     {
                         var sound = sounds[i];
-                        var player = sound.getAttrs().player;
-                        
-                        (self.is_playing) ? player.play() : player.pause();
+                        if (sound.getAttrs().active)
+                        {
+                            var player = sound.getAttrs().player;
+                            (self.is_playing) ? player.play() : player.pause();                            
+                        }
                     }
                 }
 		    });
@@ -872,9 +1003,6 @@
 		this.playhead = function()
 		{
 		    var self = this;
-			//trying to fill with stripey image
-			
-			//can you look at this? stripey background for playhead
 			
 			/*
 			self.stripes = new Image();
@@ -885,8 +1013,13 @@
                 y               : self.height / 2,
                 alpha           : 0.8,		        
                 radius          : 0,
+<<<<<<< HEAD
                	fill            : "#f6f9f9", 
 				//fill			: {image: self.stripes, offset: [0, 0]}, //add this back in to get stripes
+=======
+               	//fill            : "#f6f9f9", 
+				fill			: {image: self.images.playhead_fill, offset: [0, 0]}, //add this back in to get stripes
+>>>>>>> 25599c491f1c5280d466faeacaf9e7d87189a473
                 stroke          : "#efefef",
                 strokeWidth     : .25,
 		    });
