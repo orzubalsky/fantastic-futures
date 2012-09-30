@@ -46,9 +46,12 @@
                 loading_gif     : STATIC_URL + 'images/loading_greystripes.gif'
             };
             
+            // first load images, then init kineticJS shapes and everything else
             self.loadImages(sources, function(images) 
             {
+                // assign the loaded images to the interface scope
                 self.images = images;
+                
                 self.stage              = new Kinetic.Stage({
                     container: "interface",
                     width: self.width,
@@ -344,15 +347,38 @@
                 var sound = sounds[i];
                 var player = sound.getAttrs().player;
                 var distance_from_center = self.dist(sound.getX(), sound.getY(), self.width/2, self.height/2);
-                if (distance_from_center == radius)
-                {                    
+                
+                // when sound shape is inside playhead
+                if (distance_from_center <= radius)
+                {
+                    // play sound from the beginning when playhead hits sound shape
+                    if (distance_from_center == radius)
+                    {                    
+                        if (sound.getAttrs().active == true)
+                        {
+                            player.stop();  
+                            player.play();
+                            sound.getChildren()[1].setFill("#005fff");	//style sound that is playing
+                        }
+                    }
+            
+                    if (sound.getAttrs().active == true && !player.$player.data("jPlayer").status.paused)
+                    {                    
+					    sound.getChildren()[1].setFill("#005fff");	//style sound that is playing
+				    }
+				    else 
+				    {
+					    sound.getChildren()[1].setFill("#000");	//style sound that isn't playing				        
+				    }
+                } 
+                else 
+                {
                     if (sound.getAttrs().active == true)
                     {
-                        player.stop();  
-                        player.play();
-						sound.getChildren()[1].setFill("#005fff");	//style sound that is playing
-                    }
-                }	
+                        player.stop();                      
+    				    sound.getChildren()[1].setFill("#000");	//style sound that isn't playing                        
+                    }                    	                    
+                }
             }
             
             
