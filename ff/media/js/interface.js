@@ -29,12 +29,8 @@
 		this.playheadIntervals=20;		//this is how often the playhead gets redrawn. A high number=less frequency of redrawing            
 		this.zoom = 1.0;
 		this.search_results = { 'Geosounds': [], 'Constellations': [] }; 
-<<<<<<< HEAD
 		this.justAddedCountdown = 0;
-=======
 		this.images;
-		
->>>>>>> 25599c491f1c5280d466faeacaf9e7d87189a473
 
         /* set up the interface and run it */
         this.init = function()
@@ -1013,13 +1009,7 @@
                 y               : self.height / 2,
                 alpha           : 0.8,		        
                 radius          : 0,
-<<<<<<< HEAD
-               	fill            : "#f6f9f9", 
-				//fill			: {image: self.stripes, offset: [0, 0]}, //add this back in to get stripes
-=======
-               	//fill            : "#f6f9f9", 
 				fill			: {image: self.images.playhead_fill, offset: [0, 0]}, //add this back in to get stripes
->>>>>>> 25599c491f1c5280d466faeacaf9e7d87189a473
                 stroke          : "#efefef",
                 strokeWidth     : .25,
 		    });
