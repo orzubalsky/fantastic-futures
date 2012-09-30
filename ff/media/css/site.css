@@ -53,6 +53,7 @@ h2 {
 	position:absolute;
 	left:0;
 	top:0;
+	display: none;
 	background:url(../images/loading_greystripes.gif);
 	z-index:1000;
 }
@@ -146,7 +147,7 @@ h2 {
 	z-index: 2;
 	margin-top:0px;
 	padding-top:0px;
-	display:none;
+	display:block;
 	min-height:170px;
 	width:265px;
 	background-color:#005fff;

@@ -19,12 +19,15 @@
                 allowedExtensions: ['mp3'],
                 onSubmit: function(id, fileName)
                 {
+                    lib.log("submit")
                     $('.progressBarContainer').show();
                     $('#uploadText').text(fileName).show();
                     
                 },
                 onProgress: function(id, fileName, loaded, total)
                 {
+                    lib.log("progress")
+                    
                 	$('.qq-upload-file, .qq-upload-size, .qq-upload-cancel').hide();
                 	var percentage=Math.round((loaded/total)*100);
                 	lib.log(percentage);
@@ -38,16 +41,21 @@
                 },
                 onComplete: function( id, fileName, responseJSON ) 
                 {
+                    lib.log("complete")
+                    
                 	$('.qq-upload-file, .qq-upload-size, .qq-upload-cancel').hide();	
                     $('.progressBarContainer').fadeOut(200);
                 	
                 	$('#id_filename').val('uploads/' + fileName);
 					$('.progressBarContainer .progress').html("YAY! WE HAZ THE FILE:"+fileName);			
                 },
-                onAllComplete: function( uploads ) {
-                // uploads is an array of maps
-                // the maps look like this: { file: FileObject, response: JSONServerResponse }
-                $('#ajaxUploadContainer').removeClass().addClass('complete');
+                onAllComplete: function( uploads ) 
+                {
+                    lib.log("all complete")
+                    
+                    // uploads is an array of maps
+                    // the maps look like this: { file: FileObject, response: JSONServerResponse }
+                    $('#ajaxUploadContainer').removeClass().addClass('complete');
                 },              
                 params: {
                    'csrf_token': self.csrfToken,
