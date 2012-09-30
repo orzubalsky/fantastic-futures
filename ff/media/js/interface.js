@@ -28,7 +28,7 @@
 		this.playheadIntervals=20;		//this is how often the playhead gets redrawn. A high number=less frequency of redrawing            
 		this.zoom = 1.0;
 		this.search_results = { 'Geosounds': [], 'Constellations': [] }; 
-		
+		this.justAddedCountdown = 0;
 
         /* set up the interface and run it */
         this.init = function()
@@ -424,7 +424,7 @@
 				location	: point.sphere_point.location,
 				story		: point.sphere_point.story,
 				isNew		: point.sphere_point.is_recent,
-				justAdded	: false,
+				justAdded	: true,
 				player      : '',
 				timeout     : '',
 				interval    : '',
@@ -635,12 +635,15 @@
 			
 			//checking if sound is new and changing the color
 			if (sound.getAttrs().isNew) {
-				halo.setFill('#005fff');
+				//halo.setFill('#005fff');
 				// halo.setFill('#666');
 			}
 			 
+			//trying to style sound that was just added 
 			/*if (sound.getAttrs().justAdded) {
 				sound.setAlpha(1);
+				halo.setFill('#005fff');
+				core.setFill('#005fff');
 			}*/
 			
 			//trying to add animation
@@ -775,28 +778,50 @@
                             break;
                         }
                         else 
-                        {
-                            if (soundShape.getAttrs().isNew)
+                        {		
+							if (soundShape.getAttrs().isNew)
                             {
-                                soundShape.getChildren()[0].setFill("666");                                
+                                soundShape.getChildren()[0].setFill("666");    
+                            	lib.log('searched 1');
                             }
                             else 
                             {
-                                soundShape.getChildren()[0].setFill("#ccc");                                
-                            }
+                                soundShape.getChildren()[0].setFill("#ccc");        //turns halo grey after the page loads                        
+                            	lib.log('searched 2');
+							}	
                         }
                     }
                 }
                 else
                 {
-                    if (soundShape.getAttrs().isNew)
-                    {
-                        soundShape.getChildren()[0].setFill("666");                                
-                    }
-                    else 
-                    {
-                        soundShape.getChildren()[0].setFill("#ccc");                                
-                    }                    
+	
+					if (soundShape.getAttrs().justAdded && this.justAddedCountdown==0) {	//huong
+					soundShape.getChildren()[0].setFill("#005fff");
+					soundShape.getChildren()[1].setFill("black");
+						this.justAddedCountdown=1;
+						lib.log("set timeout"+soundShape.getAttrs().id);
+					setTimeout(function() 
+	                    {
+	                   		soundShape.getChildren()[0].setFill("#ccc");
+							soundShape.getChildren()[1].setFill("black");
+							soundShape.getAttrs().justAdded=false;
+							lib.log("timeout dun!"+soundShape.getAttrs().id);
+	                    }, 5000);
+	
+					
+	
+					}
+					/*
+					else {
+                  	  if (soundShape.getAttrs().isNew)
+	                    {
+	                        soundShape.getChildren()[0].setFill("666");                                
+	                    }
+	                    else 
+	                    {
+	                        soundShape.getChildren()[0].setFill("#ccc");       //turns halo grey after the page loads                          
+	                    }      
+	              	}*/
                 }
             }
         };
@@ -842,6 +867,8 @@
 		    });
 		};
 		
+		
+		
 		this.playhead = function()
 		{
 		    var self = this;
@@ -849,17 +876,17 @@
 			
 			//can you look at this? stripey background for playhead
 			
+			/*
 			self.stripes = new Image();
-			self.stripes.src = STATIC_URL +"images/stripes_5.png";
-		
-		    
+			self.stripes.src = STATIC_URL +"images/stripes_5.png";*/
+
 		    var playhead = new Kinetic.Circle({
                 x               : self.width / 2,
                 y               : self.height / 2,
                 alpha           : 0.8,		        
                 radius          : 0,
-               	//fill            : "#f6f9f9", 
-				fill			: {image: self.stripes, offset: [0, 0]}, //add this back in to get stripes
+               	fill            : "#f6f9f9", 
+				//fill			: {image: self.stripes, offset: [0, 0]}, //add this back in to get stripes
                 stroke          : "#efefef",
                 strokeWidth     : .25,
 		    });
