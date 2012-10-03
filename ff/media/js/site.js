@@ -116,11 +116,16 @@
         	$("#errorText").click(function() {
         	  $("#error").fadeToggle("fast", "linear");
         	});
-        	$("#constellationMenu h2").live('click', function() {
+        	$("#constellationMenu h2").live('mouseenter', function() {
         	  $("#constellationMenuContent").fadeToggle("fast", "linear");
         	  $("#constellationMenu #scrollUp").fadeToggle("fast", "linear");
         	  $("#constellationMenu #scrollDown").fadeToggle("fast", "linear");
         	});		
+        	$("#constellationMenu #constellationMenuContent").live('mouseleave', function() {
+        	  $("#constellationMenuContent").fadeToggle("fast", "linear");
+        	  $("#constellationMenu #scrollUp").fadeToggle("fast", "linear");
+        	  $("#constellationMenu #scrollDown").fadeToggle("fast", "linear");
+        	});        	
         	$("#toggleLanguage").click(function() {
         	  $("#about .description.arabic").fadeToggle("fast", "linear");
         	  $("#about .description.english").fadeToggle("fast", "linear");
