@@ -72,7 +72,14 @@
                 // run update-draw loop
                 setInterval(function() { self.update(); self.draw(); }, self.framerate);
 
-                self.running = true;
+                setTimeout(function() 
+                {
+                    var rotate_to = lib.random(180,180);
+                    var zoom_to = lib.random(200,100) / 100;
+                    
+                    self.rotateTo(self.deg_to_rad(rotate_to), self.deg_to_rad(rotate_to), self.deg_to_rad(0) ,zoom_to, 90, function() {}); 
+                    self.running = true;                    
+                }, 400);
             });
         };
         
@@ -111,7 +118,7 @@
             var self = this;
             var rotation = self.rotation;
             
-            self.rotateTo(0,0,0, 1.0, function() 
+            self.rotateTo(0,0,0, 1.0, 25, function() 
             {
                 $('#interface').fadeOut(2000);
                 $('#map').css('opacity','1');
@@ -119,20 +126,20 @@
             });
         };
         
-        this.rotateTo = function(x,y,z, zoom, callback)
+        this.rotateTo = function(x,y,z, zoom, pace, callback)
         {   
             var self = this;
-            
+                        
             clearInterval(self.rotation_interval)
             
             self.is_animating = true;
             
             self.rotation_interval = setInterval(function() 
             {   
-                self.rotation.x = self.rotateAxis(self.rotation.x, x, 25);
-                self.rotation.y = self.rotateAxis(self.rotation.y, y, 25);
-                self.rotation.z = self.rotateAxis(self.rotation.z, z, 25);
-                self.zoom       = self.rotateAxis(self.zoom, zoom, 12);
+                self.rotation.x = self.rotateAxis(self.rotation.x, x, pace);
+                self.rotation.y = self.rotateAxis(self.rotation.y, y, pace);
+                self.rotation.z = self.rotateAxis(self.rotation.z, z, pace);
+                self.zoom       = self.rotateAxis(self.zoom, zoom, Math.round(pace/2));
                 
                 if ( self.rotation.x == x && self.rotation.y == y && self.rotation.z == z && self.zoom == zoom)
                 {
@@ -255,7 +262,7 @@
                     
                     if (rotate)
                     {
-                        self.rotateTo(constellation.rotation_x, constellation.rotation_y, constellation.rotation_z, constellation.zoom, function() 
+                        self.rotateTo(constellation.rotation_x, constellation.rotation_y, constellation.rotation_z, constellation.zoom, 25, function() 
                         {
                             callback();
                         });
