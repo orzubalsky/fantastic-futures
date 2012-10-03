@@ -281,7 +281,7 @@
             self.loading_constellation = true;
             
             self.previewConstellation(id, rotate, function() 
-            {
+            {                
                 // after rotation/zoom is done, set loading_constellation to reflect the current state
                 self.loading_constellation = false;
                 
@@ -299,7 +299,7 @@
         {
             var self = this;
             
-            if (self.loading_constellation == false)
+            if (self.loading_constellation == false && self.is_playing == false)
             {
                 clearInterval(self.rotation_interval);                
                 self.connections_2D = [];
