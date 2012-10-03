@@ -9,6 +9,7 @@
         this.sphere;                    // an object that contains the entire 3D space TODO: move this out of this file
         this.rotation;                  // 3D rotation for the sphere, in radians. {x: 0.0, y: 0.0, z:0.0 }
         this.rotation_interval;         // holds the js interval variable for rotation animations
+        this.is_animating = false;      // represents the state of rotation & zooming
         this.base_distance   = 2000;    // 
         this.distance        = 2000;    // POV for 3D sphere
         this.map_points      = [];      // array of points from map.js
@@ -124,6 +125,8 @@
             
             clearInterval(self.rotation_interval)
             
+            self.is_animating = true;
+            
             self.rotation_interval = setInterval(function() 
             {   
                 self.rotation.x = self.rotateAxis(self.rotation.x, x, 25);
@@ -134,6 +137,7 @@
                 if ( self.rotation.x == x && self.rotation.y == y && self.rotation.z == z && self.zoom == zoom)
                 {
                     clearInterval(self.rotation_interval);
+                    self.is_animating = false;
                     callback();
                 }
             }, self.frameRate);
@@ -327,13 +331,17 @@
             var self = this;
             var rotation = self.rotation;
 
+            self.is_animating = false;
              
             // stage drag rotation calculation
             var rotation_canvas = self.rotation_layer.getChildren()[0];
-            if (rotation_canvas.isDragging()) {
+            if (rotation_canvas.isDragging()) 
+            {
                 
                 // stop any rotation animation that was running
                  clearInterval(self.rotation_interval);
+                 
+                 self.is_animating = true;
                 
                  var mousePos = self.stage.getMousePosition();
                  
@@ -352,12 +360,11 @@
             
             // stage zoom calculation
             $('#interface').mousewheel(function(event, delta, deltaX, deltaY) 
-            {
+            {                
                 self.changeZoom(deltaY / 10000);
             });
             self.distance = self.base_distance * self.zoom;
             
-            //playhead //comment out to get rid of playhead
             var playhead    = self.playhead_layer.getChildren()[0];
             var radius      = playhead.getRadius();
 			        
@@ -399,7 +406,7 @@
                 } 
                 else 
                 {
-                    if (sound.getAttrs().active == true)
+                    if (sound.getAttrs().active == true && self.is_animating)
                     {
                         player.stop();                      
                         sound.getChildren()[1].setFill("#000");	//style sound that isn't playing                        
