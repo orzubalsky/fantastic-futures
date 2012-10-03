@@ -44,6 +44,12 @@ class UserProfile(Base):
     country_code        = CharField(max_length=10, blank=True, null=True)
     slug                = SlugField()    
 
+
+class Collection(Base):
+    title               = CharField(max_length=100, blank=True, null=True)
+    description         = TextField(blank=True, null=True)
+
+
 class GeoSound(Base):
     class Meta:
         verbose_name_plural = "geosounds"
@@ -64,6 +70,7 @@ class GeoSound(Base):
     point               = PointField()
     z                   = FloatField(default=random_z)
     default_volume      = FloatField(default=random_default_volume)
+    collections         = ManyToManyField(Collection, related_name="collections")    
     tags                = TaggableManager()    
     
     objects = GeoManager()
@@ -102,6 +109,10 @@ class GeoSound(Base):
         # save tags to sound
         for t in tags:
             self.tags.add(t)
+        
+        # connect the sound to the v3 collection
+        v3_collection, created = Collection.objects.get_or_create(title='fantastic futures v3', defaults={'title': 'fantastic futures v3'})
+        self.collections.add(v3_collection)
         
         # return the newly created model
         return self

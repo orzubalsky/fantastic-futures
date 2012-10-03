@@ -124,6 +124,10 @@ class SoundManager(Manager):
                 for tag_old_join_row in tag_old_join_rows:
                     tag = Tag.objects.using('classic').get(pk=tag_old_join_row.tag_id)
                     geosound.tags.add(tag.title)
+
+            # connect the sound to the v3 collection
+            v3_collection, created = Collection.objects.get_or_create(title='fantastic futures v3', defaults={'title': 'fantastic futures v3'})
+            self.collections.add(v3_collection)
         except:
             pass
 
