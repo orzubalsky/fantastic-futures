@@ -11,7 +11,7 @@
             this.WIDTH  = $('#interface').width();
             this.HEIGHT = $('#interface').height();
             site.ajaxUpload.init();
-            //site.map.init();
+            site.map.init();
             this.debug();
         };
 

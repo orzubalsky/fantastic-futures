@@ -14,8 +14,7 @@ class UserProfileResource(ModelResource):
         excludes        = ['slug', 'country_code', 'number', 'country', 'state', 'city']
         allowed_methods = ['get']
         
-
-
+        
 class UserResource(ModelResource):
     class Meta:
         queryset        = User.objects.all()
@@ -33,8 +32,7 @@ class GeoSoundResource(ModelResource):
         allowed_methods = ['get']
         form            = FormValidation(form_class=GeoSoundForm)
         
-
-
+        
 class ConnectionResource(ModelResource):
     class Meta:
         queryset        = Connection.objects.all()

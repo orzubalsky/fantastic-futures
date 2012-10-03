@@ -919,24 +919,23 @@
                 }
                 else
                 {
-	
-					if (soundShape.getAttrs().justAdded && this.justAddedCountdown==0) {	//huong
-					soundShape.getChildren()[0].setFill("#005fff");
-					soundShape.getChildren()[1].setFill("black");
+					/*	
+					if (soundShape.getAttrs().justAdded && this.justAddedCountdown==0) 
+					{	//huong
+					    soundShape.getChildren()[0].setFill("#005fff");
+					    soundShape.getChildren()[1].setFill("black");
 						this.justAddedCountdown=1;
+					
 						lib.log("set timeout"+soundShape.getAttrs().id);
-					setTimeout(function() 
+					    setTimeout(function() 
 	                    {
 	                   		soundShape.getChildren()[0].setFill("#ccc");
 							soundShape.getChildren()[1].setFill("black");
 							soundShape.getAttrs().justAdded=false;
 							lib.log("timeout dun!"+soundShape.getAttrs().id);
 	                    }, 5000);
-	
-					
-	
 					}
-					/*
+
 					else {
                   	  if (soundShape.getAttrs().isNew)
 	                    {
