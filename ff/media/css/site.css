@@ -147,7 +147,7 @@ h2 {
 	z-index: 2;
 	margin-top:0px;
 	padding-top:0px;
-	display:block;
+	display:none;
 	min-height:170px;
 	width:265px;
 	background-color:#005fff;
