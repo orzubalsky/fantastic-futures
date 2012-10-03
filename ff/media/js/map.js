@@ -158,6 +158,7 @@
                 volume      : feature.data.volume,
                 z           : feature.data.z,
                 is_recent   : feature.data.is_recent,
+                just_added  : feature.data.just_added
             };
             site.ffinterface.map_points.push(map_point);
         };

@@ -198,6 +198,7 @@
             p.filename  = map_point.filename;
             p.volume    = map_point.volume;
             p.is_recent = map_point.is_recent;
+            p.just_added= map_point.just_added;
                         
             // add point to sphere point array
             self.sphere.point.push(p);
@@ -366,11 +367,6 @@
 				playhead.setRadius(radius); 
             }
             
-            //unhide to get rid of playhead
-            /*var radius = self.playhead;
-            radius = (radius < self.width / 2) ? radius + 1 : 0;
-            self.playhead = radius;*/
-
             var sounds = self.points_layer.getChildren();
             for (var i=0; i<sounds.length; i++)
             {
@@ -469,7 +465,6 @@
                 child.setPoints([ {x: p1.x, y: p1.y}, {x: p2.x, y: p2.y} ]);
             }            
            	
-			//self.playhead_layer.draw();   
             self.rotation_layer.draw();
             self.points_layer.draw();
             self.connections_layer.draw();
@@ -521,12 +516,12 @@
 				location	: point.sphere_point.location,
 				story		: point.sphere_point.story,
 				isNew		: point.sphere_point.is_recent,
-				justAdded	: true,
+				justAdded	: point.sphere_point.just_added,
 				player      : '',
 				timeout     : '',
 				interval    : '',
 		    });
-		    			    		    		     
+		    		    			    		    		     
             sound.on("mouseover", function() 
             {
                 // change cursor 
@@ -730,38 +725,16 @@
               strokeWidth   : 0,
             }); 
 			
-			//checking if sound is new and changing the color
-			if (sound.getAttrs().isNew) {
-				//halo.setFill('#005fff');
-				// halo.setFill('#666');
-			}
-			 
-			//trying to style sound that was just added 
-			/*if (sound.getAttrs().justAdded) {
-				sound.setAlpha(1);
-				halo.setFill('#005fff');
-				core.setFill('#005fff');
-			}*/
-			
-			//trying to add animation
-			/*
-			var duration = 1000 ; // we set it to last 1s 
-			var anim = new Kinetic.Animation({
-			    func: function(frame) {
-			        if (frame.time >= duration) {
-			           anim.stop() ;
-			       } else {
-					
-			            sound.setOpacity(frame.time / duration) ;
-			        }
-			    },
-			    node: layer
-			});*/
-			
             sound.add(halo);
             sound.add(core);
-			//anim.start();
             self.points_layer.add(sound);	
+
+            // if this sound was just added, color it in blue for 5 seconds
+            if (sound.getAttrs().justAdded)
+            {
+                halo.setFill('#005fff');
+                setTimeout(function() { halo.setFill('#ccc'); }, 5000);
+            }
 		};
 		
 		this.connectTwoSoundShapes = function(soundShape_1, soundShape_2)
@@ -919,33 +892,17 @@
                 }
                 else
                 {
-					/*	
-					if (soundShape.getAttrs().justAdded && this.justAddedCountdown==0) 
-					{	//huong
-					    soundShape.getChildren()[0].setFill("#005fff");
-					    soundShape.getChildren()[1].setFill("black");
-						this.justAddedCountdown=1;
-					
-						lib.log("set timeout"+soundShape.getAttrs().id);
-					    setTimeout(function() 
-	                    {
-	                   		soundShape.getChildren()[0].setFill("#ccc");
-							soundShape.getChildren()[1].setFill("black");
-							soundShape.getAttrs().justAdded=false;
-							lib.log("timeout dun!"+soundShape.getAttrs().id);
-	                    }, 5000);
-					}
-
-					else {
-                  	  if (soundShape.getAttrs().isNew)
-	                    {
-	                        soundShape.getChildren()[0].setFill("666");                                
-	                    }
-	                    else 
-	                    {
-	                        soundShape.getChildren()[0].setFill("#ccc");       //turns halo grey after the page loads                          
-	                    }      
-	              	}*/
+                    if (!soundShape.getAttrs().justAdded)
+                    {                    
+                        if (soundShape.getAttrs().isNew)
+                        {
+                            soundShape.getChildren()[0].setFill("666");                                
+                        }
+                        else 
+                        {
+                            soundShape.getChildren()[0].setFill("#ccc");       //turns halo grey after the page loads                          
+                        }      
+                    }
                 }
             }
         };
@@ -1080,6 +1037,7 @@
             this.filename;
             this.volume;
             this.is_recent;
+            this.just_added;
         }
         
         this.Connection3D = function()
