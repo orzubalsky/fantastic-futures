@@ -77,8 +77,8 @@ def sound_to_json(sound_object):
             "filename"  : sound_object.sound.name,
             "volume"    : sound_object.default_volume,
             "z"         : sound_object.z,
-            "is_recent" : sound_object.is_recent,
-            "just_added": sound_object.just_added
+            "is_recent" : sound_object.is_recent(),
+            "just_added": sound_object.just_added()
         }
     }
     return data
