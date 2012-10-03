@@ -70,15 +70,14 @@ def submit_constellation(request, form, connections, rotation):
         new_constellation = validForm.save_ajax(rotation)
         
         for c in connections:
+            print c
             sound_1 = GeoSound.objects.get(pk=int(c['sound_1']))
             sound_2 = GeoSound.objects.get(pk=int(c['sound_2']))
+            sound_1_volume = float(c['sound_1_volume'])
+            sound_2_volume = float(c['sound_2_volume'])
             
             # try finding an existing connection
-            try:
-                connection = Connection.objects.get(sound_1=sound_1, sound_2=sound_2)
-            except Connection.DoesNotExist:
-                connection = Connection(sound_1=sound_1, sound_2=sound_2)        
-                connection.save()
+            connection, created = Connection.objects.get_or_create(sound_1=sound_1, sound_1_volume=sound_1_volume, sound_2=sound_2, sound_2_volume=sound_2_volume)            
             new_constellation.connections.add(connection)
             
         constellations = Constellation.objects.all()

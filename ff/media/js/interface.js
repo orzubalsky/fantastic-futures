@@ -244,6 +244,16 @@
         {
             var self = this;
             
+            for (var i=0; i<self.sphere.connections.length; i++)
+            {
+                var c = self.sphere.connections[i];
+                
+                var sound_1 = self.points_layer.getChildren()[c.index_1];
+                var sound_2 = self.points_layer.getChildren()[c.index_2];
+                
+                c.sound_1_volume = self.map(sound_1.getChildren()[0].getAttrs().radius.x, 5, 20, 0.2, 0.9);            	         
+                c.sound_2_volume = self.map(sound_2.getChildren()[0].getAttrs().radius.x, 5, 20, 0.2, 0.9);            	         
+            }
             return self.sphere.connections;
         };
         
@@ -1087,6 +1097,8 @@
             this.sound_2 = 0;
             this.index_1 = 0;
             this.index_2 = 0;
+            this.sound_1_volume = 0.0;
+            this.sound_2_volume = 0.0;
         }
 
         this.Sphere3D = function(radius) 
