@@ -126,7 +126,7 @@ class SoundManager(Manager):
                     geosound.tags.add(tag.title)
 
             # connect the sound to the v3 collection
-            v3_collection, created = Collection.objects.get_or_create(title='fantastic futures v3', defaults={'title': 'fantastic futures v3'})
+            v3_collection, created = Collection.objects.get_or_create(title='fantastic futures v2', defaults={'title': 'fantastic futures v2'})
             self.collections.add(v3_collection)
         except:
             pass
