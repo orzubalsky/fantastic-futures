@@ -276,7 +276,34 @@
                     }
                 }
             }
-        };      
+        };
+        
+        this.previewAllConstellations = function()
+        {
+            var self = this;
+            
+            // first clear the current connections
+            self.clearConnections();
+            
+            for (var i=0; i<CONSTELLATIONS.length; i++)
+            {
+                var constellation = CONSTELLATIONS[i].fields;
+
+                for (var j=0; j<constellation.connections.length; j++)
+                {
+                    var db_connection = constellation.connections[j].fields;
+                    var connection = new self.Connection3D();
+
+                    connection.sound_1 = db_connection.sound_1;
+                    connection.sound_2 = db_connection.sound_2;
+
+                    connection.index_1 = self.getPointIndexFromId(db_connection.sound_1);             
+                    connection.index_2 = self.getPointIndexFromId(db_connection.sound_2);
+                    self.sphere.connections.push(connection);                        
+                    self.addConnectionToLayer(connection);                     
+                }
+            }
+        };
         
          this.loadConstellation = function(id, rotate)
          {
