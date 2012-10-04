@@ -999,24 +999,27 @@
 		    
 		    $(window).keypress(function(e) 
 		    {
-		        var key = e.which || e.keyCode || e.keyChar;
-            
-		        // return, backspace, escape, space
-                if (key == 8 || key == 13 || key == 27 || key == 32)
-                {
-                    self.is_playing = !self.is_playing;
-                    
-                    var sounds = self.points_layer.getChildren();
-                    for (var i=0; i<sounds.length; i++)
+		        if (self.getActiveConnections().length > 0)
+		        {
+    		        var key = e.which || e.keyCode || e.keyChar;
+
+    		        // return, backspace, escape, space
+                    if (key == 8 || key == 13 || key == 27 || key == 32)
                     {
-                        var sound = sounds[i];
-                        if (sound.getAttrs().active)
+                        self.is_playing = !self.is_playing;
+
+                        var sounds = self.points_layer.getChildren();
+                        for (var i=0; i<sounds.length; i++)
                         {
-                            var player = sound.getAttrs().player;
-                            (self.is_playing) ? player.play() : player.pause();                            
+                            var sound = sounds[i];
+                            if (sound.getAttrs().active)
+                            {
+                                var player = sound.getAttrs().player;
+                                (self.is_playing) ? player.play() : player.pause();                            
+                            }
                         }
-                    }
-                }
+                    }		            
+		        }
 		    });
 		};
 		
