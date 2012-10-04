@@ -599,7 +599,7 @@
 				player      : '',
 				timeout     : '',
 				interval    : '',
-		    });
+		    });	
 		    		    			    		    		     
             sound.on("mouseover", function() 
             {
@@ -958,7 +958,7 @@
                         {		
 							if (soundShape.getAttrs().isNew)
                             {
-                                soundShape.getChildren()[0].setFill("666");    
+                                soundShape.getChildren()[0].setFill("#333");    
                             	lib.log('searched 1');
                             }
                             else 
@@ -975,7 +975,7 @@
                     {                    
                         if (soundShape.getAttrs().isNew)
                         {
-                            soundShape.getChildren()[0].setFill("666");                                
+                            soundShape.getChildren()[0].setFill("#333");                                
                         }
                         else 
                         {
@@ -1042,17 +1042,12 @@
 		this.playhead = function()
 		{
 		    var self = this;
-			
-			/*
-			self.stripes = new Image();
-			self.stripes.src = STATIC_URL +"images/stripes_5.png";*/
-
 		    var playhead = new Kinetic.Circle({
                 x               : self.width / 2,
                 y               : self.height / 2,
                 alpha           : 0.8,		        
                 radius          : 0,
-				fill			: {image: self.images.playhead_fill, offset: [0, 0]}, //add this back in to get stripes
+				fill			: {image: self.images.playhead_fill, offset: [0, 0]}, //stripes
                 stroke          : "#efefef",
                 strokeWidth     : .25,
 		    });
