@@ -177,7 +177,7 @@ class Constellation(Base):
         # return the newly created model
         return self       
 
-@receiver(pre_delete, sender=GeoSound)
-@receiver(post_save, sender=GeoSound)
+@receiver(pre_delete, sender=Constellation)
+@receiver(post_save, sender=Constellation)
 def invalidate_json_constellations(sender, **kwargs):
     cache.delete('json_constellations')
