@@ -125,7 +125,7 @@
         	$("#constellationMenu h2").live('mouseleave', function() {
                 site.ffinterface.clearConnections();        	    
         	});        	
-        	$("#constellationMenu #constellationMenuContent").live('mouseleave', function() {
+        	$("#constellationMenu").live('mouseleave', function() {
         	  $("#constellationMenuContent").fadeToggle("fast", "linear");
         	  $("#constellationMenu #scrollUp").fadeToggle("fast", "linear");
         	  $("#constellationMenu #scrollDown").fadeToggle("fast", "linear");

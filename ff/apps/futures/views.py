@@ -95,6 +95,16 @@ def constellations_to_json(constellation_queryset):
         cache.set('json_constellations', constellations_json, 60*60*24*7)
     else:
         constellations_json = cache.get('json_constellations')
+        
+        
+    constellations_json = serializers.serialize('json', constellation_queryset, indent=4, 
+        excludes=('updated', 'created', 'is_active', 'user'), 
+        relations= {
+            'connections': 
+                {'fields': ('sound_1','sound_2','sound_1_volume','sound_2_volume') }
+            }
+    )
+                    
 
     return constellations_json  
 

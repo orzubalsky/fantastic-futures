@@ -251,8 +251,11 @@
                 var sound_1 = self.points_layer.getChildren()[c.index_1];
                 var sound_2 = self.points_layer.getChildren()[c.index_2];
                 
-                c.sound_1_volume = self.map(sound_1.getChildren()[0].getAttrs().radius.x, 5, 20, 0.2, 0.9);            	         
-                c.sound_2_volume = self.map(sound_2.getChildren()[0].getAttrs().radius.x, 5, 20, 0.2, 0.9);            	         
+                c.sound_1_volume = self.map(sound_1.getChildren()[0].getAttrs().radius.x, 5, 20, 0.2, 0.9);
+                c.sound_2_volume = self.map(sound_2.getChildren()[0].getAttrs().radius.x, 5, 20, 0.2, 0.9);
+                
+                c.sound_1_volume = Math.round(c.sound_1_volume*100) / 100;
+                c.sound_2_volume = Math.round(c.sound_2_volume*100) / 100;                
             }
             return self.sphere.connections;
         };
@@ -288,6 +291,19 @@
                         
                         connection.index_1 = self.getPointIndexFromId(db_connection.sound_1);             
                         connection.index_2 = self.getPointIndexFromId(db_connection.sound_2);
+                        
+                        var sound_1 = self.points_layer.getChildren()[connection.index_1];
+                        var sound_1_halo = sound_1.getChildren()[0];
+                        var volume_1 = db_connection.sound_1_volume;
+                        var radius_1 = self.map(volume_1, 0.2, 0.9, 5, 20);
+                        sound_1_halo.setRadius(radius_1);                            
+                        
+                        var sound_2 = self.points_layer.getChildren()[connection.index_2];
+                        var sound_2_halo = sound_2.getChildren()[0];
+                        var volume_2 = db_connection.sound_2_volume;
+                        var radius_2 = self.map(volume_1, 0.2, 0.9, 5, 20);
+                        sound_2_halo.setRadius(radius_2);                            
+                                                
                         self.sphere.connections.push(connection);                        
                         self.addConnectionToLayer(connection);                     
                     }
@@ -313,7 +329,7 @@
 
                     connection.sound_1 = db_connection.sound_1;
                     connection.sound_2 = db_connection.sound_2;
-
+                    
                     connection.index_1 = self.getPointIndexFromId(db_connection.sound_1);             
                     connection.index_2 = self.getPointIndexFromId(db_connection.sound_2);
                     self.sphere.connections.push(connection);                        
@@ -335,6 +351,9 @@
                 
                 // set active state for all connected sounds
                 self.setActiveStateForAllSounds();
+                
+                // reset addButton, so the loaded constellation could be altered and saved
+                self.addButton = 0;
                 
                 // start the player
                 self.is_playing = true;
@@ -701,13 +720,6 @@
                             // make the connection between this sound and the one last clicked
                             c = self.connectTwoSoundShapes(self.lastClick, this);
                             
-                            // show add constellation link upon making the first connection 
-                            if (self.addButton == 0)
-                            {
-                                $('#addConstellationText').fadeToggle("fast", "linear");
-                                self.addButton = 1;
-                            }
-                            
                             // expand the playhead so the radius is as big as the sound that's closest to the center
                             var sound_1_distance_from_center = self.dist(self.lastClick.getX(), self.lastClick.getY(), self.width/2, self.height/2);                            
                             var sound_2_distance_from_center = self.dist(this.getX(), this.getY(), self.width/2, self.height/2);                            
@@ -745,6 +757,13 @@
                                 c = self.connectTwoSoundShapes(self.lastClick, this);                                
                             }  
                         }
+                        
+                        // show add constellation link upon making the first connection 
+                        if (self.addButton == 0)
+                        {
+                            $('#addConstellationText').fadeToggle("fast", "linear");
+                            self.addButton = 1;
+                        }                        
                     }
 
                     // store the sound which was clicked in the interface lastClick variable
