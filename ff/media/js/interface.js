@@ -267,48 +267,60 @@
             // first clear the current connections
             self.clearConnections();
             
+            self.is_playing = false;                        
+            self.togglePlayerSounds();            
+            
             for (var i=0; i<CONSTELLATIONS.length; i++)
             {
                 if (CONSTELLATIONS[i].pk == id)
                 {
                     var constellation = CONSTELLATIONS[i].fields;
-                    
-                    if (rotate)
-                    {
-                        self.rotateTo(constellation.rotation_x, constellation.rotation_y, constellation.rotation_z, constellation.zoom, 25, function() 
-                        {
-                            callback();
-                        });
-                    }
-                    
-                    for (var j=0; j<constellation.connections.length; j++)
-                    {
-                        var db_connection = constellation.connections[j].fields;
-                        var connection = new self.Connection3D();
-
-                        connection.sound_1 = db_connection.sound_1;
-                        connection.sound_2 = db_connection.sound_2;
-                        
-                        connection.index_1 = self.getPointIndexFromId(db_connection.sound_1);             
-                        connection.index_2 = self.getPointIndexFromId(db_connection.sound_2);
-                        
-                        var sound_1 = self.points_layer.getChildren()[connection.index_1];
-                        var sound_1_halo = sound_1.getChildren()[0];
-                        var volume_1 = db_connection.sound_1_volume;
-                        var radius_1 = self.map(volume_1, 0.2, 0.9, 5, 20);
-                        sound_1_halo.setRadius(radius_1);                            
-                        
-                        var sound_2 = self.points_layer.getChildren()[connection.index_2];
-                        var sound_2_halo = sound_2.getChildren()[0];
-                        var volume_2 = db_connection.sound_2_volume;
-                        var radius_2 = self.map(volume_1, 0.2, 0.9, 5, 20);
-                        sound_2_halo.setRadius(radius_2);                            
-                                                
-                        self.sphere.connections.push(connection);                        
-                        self.addConnectionToLayer(connection);                     
-                    }
+                    self.drawConstellation(constellation, rotate, true, callback);
                 }
             }
+        };
+        
+        this.drawConstellation = function(constellation, rotate, volumes, callback) 
+        {
+            var self = this;
+            
+            if (rotate)
+            {
+                self.rotateTo(constellation.rotation_x, constellation.rotation_y, constellation.rotation_z, constellation.zoom, 25, function() 
+                {
+                    callback();
+                });
+            }
+            
+            for (var j=0; j<constellation.connections.length; j++)
+            {
+                var db_connection = constellation.connections[j].fields;
+                var connection = new self.Connection3D();
+
+                connection.sound_1 = db_connection.sound_1;
+                connection.sound_2 = db_connection.sound_2;
+                
+                connection.index_1 = self.getPointIndexFromId(db_connection.sound_1);             
+                connection.index_2 = self.getPointIndexFromId(db_connection.sound_2);
+                
+                if (volumes)
+                {
+                    var sound_1 = self.points_layer.getChildren()[connection.index_1];
+                    var sound_1_halo = sound_1.getChildren()[0];
+                    var volume_1 = db_connection.sound_1_volume;
+                    var radius_1 = self.map(volume_1, 0.2, 0.9, 5, 20);
+                    sound_1_halo.setRadius(radius_1);                            
+
+                    var sound_2 = self.points_layer.getChildren()[connection.index_2];
+                    var sound_2_halo = sound_2.getChildren()[0];
+                    var volume_2 = db_connection.sound_2_volume;
+                    var radius_2 = self.map(volume_1, 0.2, 0.9, 5, 20);
+                    sound_2_halo.setRadius(radius_2);                    
+                }                       
+                                        
+                self.sphere.connections.push(connection);                        
+                self.addConnectionToLayer(connection);                     
+            }            
         };
         
         this.previewAllConstellations = function()
@@ -322,33 +334,22 @@
             {
                 var constellation = CONSTELLATIONS[i].fields;
 
-                for (var j=0; j<constellation.connections.length; j++)
-                {
-                    var db_connection = constellation.connections[j].fields;
-                    var connection = new self.Connection3D();
-
-                    connection.sound_1 = db_connection.sound_1;
-                    connection.sound_2 = db_connection.sound_2;
-                    
-                    connection.index_1 = self.getPointIndexFromId(db_connection.sound_1);             
-                    connection.index_2 = self.getPointIndexFromId(db_connection.sound_2);
-                    self.sphere.connections.push(connection);                        
-                    self.addConnectionToLayer(connection);                     
-                }
+                self.drawConstellation(constellation, false, false, function() {});
             }
         };
         
          this.loadConstellation = function(id, rotate)
          {
             var self = this;
-            
+                        
             self.loading_constellation = true;
+            self.constellation = id;
             
             self.previewConstellation(id, rotate, function() 
             {                
                 // after rotation/zoom is done, set loading_constellation to reflect the current state
                 self.loading_constellation = false;
-                
+                                
                 // set active state for all connected sounds
                 self.setActiveStateForAllSounds();
                 
@@ -356,8 +357,7 @@
                 self.addButton = 0;
                 
                 // start the player
-                self.is_playing = true;
-                
+                self.is_playing = true;              
             });
 
          };
@@ -366,12 +366,21 @@
         {
             var self = this;
             
-            if (self.loading_constellation == false && self.is_playing == false)
+            clearInterval(self.rotation_interval);                
+            self.connections_2D = [];
+            self.sphere.connections = [];
+            self.connections_layer.removeChildren();
+            
+            if (self.constellation > 0 && !self.is_animating)
             {
-                clearInterval(self.rotation_interval);                
-                self.connections_2D = [];
-                self.sphere.connections = [];
-                self.connections_layer.removeChildren();
+                for (var i=0; i<CONSTELLATIONS.length; i++)
+                {
+                    if (CONSTELLATIONS[i].pk == self.constellation)
+                    {
+                        var constellation = CONSTELLATIONS[i].fields;
+                        self.drawConstellation(constellation, true, true, function() {});                        
+                    }
+                }
             }
         };  
         
@@ -1006,23 +1015,28 @@
     		        // return, backspace, escape, space
                     if (key == 8 || key == 13 || key == 27 || key == 32)
                     {
-                        self.is_playing = !self.is_playing;
-
-                        var sounds = self.points_layer.getChildren();
-                        for (var i=0; i<sounds.length; i++)
-                        {
-                            var sound = sounds[i];
-                            if (sound.getAttrs().active)
-                            {
-                                var player = sound.getAttrs().player;
-                                (self.is_playing) ? player.play() : player.pause();                            
-                            }
-                        }
+                        self.is_playing = !self.is_playing;                        
+                        self.togglePlayerSounds();
                     }		            
 		        }
 		    });
 		};
 		
+		this.togglePlayerSounds = function() 
+		{
+		    var self = this;
+		    
+            var sounds = self.points_layer.getChildren();
+            for (var i=0; i<sounds.length; i++)
+            {
+                var sound = sounds[i];
+                if (sound.getAttrs().active)
+                {
+                    var player = sound.getAttrs().player;
+                    (self.is_playing) ? player.play() : player.pause();                            
+                }
+            }		    
+		};
 		
 		
 		this.playhead = function()
