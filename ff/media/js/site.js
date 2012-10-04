@@ -129,13 +129,23 @@
         	  $("#constellationMenuContent").fadeToggle("fast", "linear");
         	  $("#constellationMenu #scrollUp").fadeToggle("fast", "linear");
         	  $("#constellationMenu #scrollDown").fadeToggle("fast", "linear");
-        	});        	
-        	$("#toggleLanguage").click(function() {
-        	  $("#about .description.arabic").fadeToggle("fast", "linear");
-        	  $("#about .description.english").fadeToggle("fast", "linear");
-        	  $("#aboutLinks #toggleAr").fadeToggle("fast", "linear");
-        	  $("#aboutLinks #toggleEn").fadeToggle("fast", "linear");
-        	});
+        	}); 
+			$("#aboutLinks #toggleAr").click(function() {
+				$("#about .description.english").fadeToggle("fast", "linear", function(){
+					$("#about .description.arabic").fadeToggle("fast", "linear");
+				});
+				$("#aboutLinks #toggleAr").fadeToggle("fast", "linear", function(){
+	        	  $("#aboutLinks #toggleEn").fadeToggle("fast", "linear");
+				});
+			}); 
+			$("#aboutLinks #toggleEn").click(function() {
+				$("#about .description.arabic").fadeToggle("fast", "linear", function(){
+					$("#about .description.english").fadeToggle("fast", "linear");
+				});
+				$("#aboutLinks #toggleEn").fadeToggle("fast", "linear", function(){
+	        	  $("#aboutLinks #toggleAr").fadeToggle("fast", "linear");
+				});
+			});	      	
             $('#constellationMenuContent a').live('mouseenter', function (e)
             { 
         	    e.preventDefault();
