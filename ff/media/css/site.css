@@ -1,5 +1,5 @@
 body {
-	font-family:"Andale Mono", "Droid Sans", Helvetica, Arial, sans-serif;
+	font-family:"Andale Mono","Monotype.com",  "Droid Sans", monospace, Helvetica, Arial, sans-serif;
 	font-size:10px;
 	line-height:12px;
 	color:#000; 
@@ -194,7 +194,7 @@ h2 {
 }
 #addSoundForm, #addConstellationForm {
 	color:#FFF;
-	font-family:"Andale Mono", "Droid Sans", Helvetica, Arial, sans-serif;
+	font-family:"Andale Mono", "Monotype.com", "Droid Sans", monospace, Helvetica, Arial, sans-serif;
 	font-size:1em;
 	line-height:12px;
 	padding:0px 15px 5px 10px;
@@ -208,7 +208,7 @@ h2 {
 	border:none;
 	margin:0 0 10px;
 	padding:2px;
-	font-family:"Andale Mono", "Droid Sans", Helvetica, Arial, sans-serif;
+	font-family:"Andale Mono","Monotype.com","Droid Sans", monospace, Helvetica, Arial, sans-serif;
 	font-size:1em;
 }
 ::-webkit-input-placeholder {
@@ -229,7 +229,7 @@ h2 {
 	padding-left:0;
 	margin-left:0;
 	color:#FFF;
-	font-family:"Andale Mono", "Droid Sans", Helvetica, Arial, sans-serif;
+	font-family:"Andale Mono", "Monotype.com", "Droid Sans",  monospace, Helvetica, Arial, sans-serif;
 	font-size:1em;
 	cursor:pointer;
 }
@@ -436,7 +436,7 @@ h2 {
     height: 26px;
 }
 #feedback .formSubmit {
-	font-family:"Andale Mono", "Droid Sans", Helvetica, Arial, sans-serif;
+	font-family:"Andale Mono", "Monotype.com", "Droid Sans", monospace , Arial, sans-serif;
 	width: 270px;
 	padding: 0px;
 	background: transparent;	
@@ -510,7 +510,7 @@ a#customZoomIn, a#customZoomOut {
 	width:84px;
 	background-color:transparent;
 	border:1px #f1f1ff solid;
-	font-family:"Andale Mono", "Droid Sans", Helvetica, Arial, sans-serif;
+	font-family:"Andale Mono", "Monotype.com", "Droid Sans", monospace, Helvetica, Arial, sans-serif;
 	color: #005fff;
 	font-size:1em;
 }
