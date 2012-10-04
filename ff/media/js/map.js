@@ -130,8 +130,11 @@
                    {                       
                        site.ffinterface.init(); 
                    }
-                   $('#map').hide();
-                   $('#interface').show();
+                   	if ($("#map").css("opacity")>0){
+       					$("#map").fadeOut(1000);
+       	                $("#interface").fadeIn(1000);
+       				}
+       				$(".tran1").fadeOut(1000);
 
 					var currentTime = new Date();
 					lib.log("interface loaded: "+currentTime.getTime());

@@ -133,7 +133,7 @@
             clearInterval(self.rotation_interval)
             
             self.is_animating = true;
-            
+                        
             self.rotation_interval = setInterval(function() 
             {   
                 self.rotation.x = self.rotateAxis(self.rotation.x, x, pace);
