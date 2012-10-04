@@ -7,6 +7,8 @@ from django.core.validators import *
 from futures.models import *
 
 class GeoSearchForm(SearchForm):
+    q = forms.CharField(required=False, widget=forms.widgets.TextInput(attrs={'placeholder':'SEARCH'}))
+             
     def search(self):
         # First, store the SearchQuerySet received from other processing.
         sqs = super(GeoSearchForm, self).search()
@@ -23,7 +25,7 @@ class GeoSoundForm(forms.ModelForm):
         fields  = ['created_by', 'location', 'story']
         widgets = {
             'created_by': forms.TextInput(attrs={'placeholder':'YOUR NAME'}),
-            'location': forms.TextInput(attrs={'placeholder':'CITY, STATE, COUNTRY'}),            
+            'location'  : forms.TextInput(attrs={'placeholder':'CITY, STATE, COUNTRY'}),            
             'story'     : forms.Textarea(attrs={'placeholder':'STORY ABOUT THIS SOUND (OPTIONAL)', 'class':'optional'}),
             }
 
