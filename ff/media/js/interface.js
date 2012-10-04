@@ -803,7 +803,7 @@
             if (sound.getAttrs().justAdded)
             {
                 halo.setFill('#005fff');
-                setTimeout(function() { halo.setFill('#ccc'); }, 5000);
+                setTimeout(function() { halo.setFill('#666'); }, 5000);
             }
 		};
 		
