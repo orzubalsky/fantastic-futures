@@ -12,6 +12,8 @@ from django.template.defaultfilters import slugify
 from django.utils import simplejson as json
 from django.utils.safestring import mark_safe
 from ajaxuploader.views import AjaxFileUploader
+from datetime import *
+
 
 def index(request):
     layers = {}
@@ -41,9 +43,22 @@ def view_sound(request, sound_slug):
     pass
 
 def sound_layer(request):
-    if cache.get('json_sounds') == None:
-        geo_json = serialize_sound_layer()        
-        cache.set('json_sounds', geo_json, 60*60*24*7)
+    
+    # count just added sounds, in order to determine how long to cache for later
+    sounds = GeoSound.objects.all()
+    just_added = 0
+    for s in sounds:
+        if s.just_added:
+            just_added += 1
+    
+    # if the cache is cleared, or if a sound was just added, clear the cache
+    if cache.get('json_sounds') == None: 
+        geo_json = serialize_sound_layer()
+        if just_added > 0:
+            # only cache for 60 seconds, so the just_added property isn't stuck
+            cache.set('json_sounds', geo_json, 60)
+        else:
+            cache.set('json_sounds', geo_json, 60*60*24*7)
     else:
         geo_json = cache.get('json_sounds')
     return HttpResponse(geo_json, content_type='application/json', status=200)
@@ -77,10 +92,11 @@ def sound_to_json(sound_object):
             "filename"  : sound_object.sound.name,
             "volume"    : sound_object.default_volume,
             "z"         : sound_object.z,
-            "is_recent" : sound_object.is_recent(),
-            "just_added": sound_object.just_added()
+            "is_recent" : sound_object.is_recent,
+            "just_added": sound_object.just_added
         }
     }
+    
     return data
     
 def constellations_to_json(constellation_queryset):

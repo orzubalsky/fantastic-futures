@@ -4,6 +4,7 @@ from dajaxice.utils import deserialize_form
 from django.utils import simplejson as json
 from django.utils.safestring import mark_safe
 from django.core.mail import mail_admins, send_mail
+from django.core.cache import cache
 from haystack.query import SearchQuerySet
 from futures.forms import *
 from futures.views import sound_to_json, constellations_to_json
@@ -56,7 +57,7 @@ def submit_sound(request, form, tags):
         
         result_data = { 'type':'FeatureCollection', 'features': sound_to_json(new_sound)}
         geo_json = mark_safe(json.dumps(result_data))        
-        
+                
         return json.dumps({'success':True, 'geojson':geo_json})
     return json.dumps({'success':False, 'errors': add_sound_form.errors})
 
