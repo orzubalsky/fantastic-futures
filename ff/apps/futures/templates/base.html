@@ -26,7 +26,7 @@
         <div id="loadingGif"><!--img src="{{ STATIC_URL }}images/loading8.gif" width="100%" height="100%"/--></div>
 		
         <div id="topMenu">
-            <!--------LOGO-------->
+            <!-- LOGO -->
             <a href="#" id="logo"></a>   
             <a href="#" id="addConstellationText"><h2>SAVE A CONSTELLATION?</h2></a>
             <!--a href="#" id="errorText"><h2>SHOW AN ERROR</h2></a-->
@@ -37,7 +37,7 @@
         </div>
 
         <div id="bottomMenu">
-            <!--------ADD SOUND-------->
+            <!-- ADD SOUND -->
             <a href="#" id="addSoundText"><h2>+ ADD A SOUND</h2></a>
             <div id="constellationMenuContainer">
               {% include "constellations.html" %}
@@ -46,7 +46,7 @@
             
         </div>
 	
-        <!--------ADD SOUND-------->
+        <!-- ADD SOUND -->
         <div id="addSound" class="tran1">
         	<canvas id="addSoundTriangle" width="20" height="20"></canvas>
         	<script type="text/javascript">
@@ -94,9 +94,9 @@
               :) SOUND ADDED!
             </div>            
         </div>
-        <!--------ADD SOUND ENDED------->
+        <!-- ADD SOUND ENDED -->
             	 
-        <!--------CONSTELLATION------>
+        <!-- CONSTELLATION -->
         <div id="addConstellation" class="tran1">
         	<canvas id="addConstellationTriangle" width="20" height="20"></canvas>
         	<script type="text/javascript">
@@ -130,10 +130,10 @@
       			:) CONSTELLATION ADDED!
       		</div>        	
         </div>
-        <!--------CONSTELLATION ENDED--------->
+        <!-- CONSTELLATION ENDED -->
 
       
-        <!--------SHOWING CONCERN-------->
+        <!-- SHOWING CONCERN -->
         <div id="error">
         	<canvas id="errorTriangle" width="20" height="20"></canvas>
         	<script type="text/javascript">
@@ -152,9 +152,9 @@
         		<p>CONTACT US AND TRY AGAIN.</p>
         	</div>
         </div>
-        <!--------SHOWING CONCERN ENDED--------->
+        <!-- SHOWING CONCERN ENDED -->
 
-        <!--------ABOUT-------->      
+        <!-- ABOUT -->      
         <div id="about" class="tran1">
           	<img src="{{ STATIC_URL }}images/logo_en_white.png"/><br/><br/>
           	<img src="{{ STATIC_URL }}images/logo_ar_white.png"/>
@@ -179,9 +179,9 @@
           	</ul>
           </div>
         </div>
-        <!--------ABOUT ENDED--------->
+        <!-- ABOUT ENDED -->
 
-        <!--------FEEDBACK-------->
+        <!-- FEEDBACK -->
         <div id="feedback">
               <div id="feedback_tab"></div>
               <h1>Thanks for taking a minute to give us feedback.</h1>
@@ -195,7 +195,7 @@
                   :) SENT!
               </div>              
           </div>
-        <!--------FEEDBACK ENDED-------->
+        <!-- FEEDBACK ENDED -->
 		<div id="footer">
 			<form id="search">
 			  {{ search_form.q }}
