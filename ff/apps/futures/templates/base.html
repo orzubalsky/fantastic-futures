@@ -110,7 +110,7 @@
         		ctx.fill();
         	</script>
         	
-        	<form id="addConstellationForm" action="" method="post">		
+        	<form id="addConstellationForm" action="{% url home %}" method="post">		
         	  {% csrf_token %}  
         	  <div class="errors">
               {{ constellation_form.title.errors }}       	  
@@ -156,8 +156,8 @@
 
         <!-- ABOUT -->      
         <div id="about" class="tran1">
-          	<img src="{{ STATIC_URL }}images/logo_en_white.png"/><br/><br/>
-          	<img src="{{ STATIC_URL }}images/logo_ar_white.png"/>
+          	<img src="{{ STATIC_URL }}images/logo_en_white.png" alt="fantastic futures logo" /><br/><br/>
+          	<img src="{{ STATIC_URL }}images/logo_ar_white.png" alt="fantastic futures logo" />
           	<div class="description english">
           		<p>Fantastic Futures is a collaborative group of individuals from Iraq and the United States. Together, we've created this online platform for mixing and sharing of recorded sounds and stories across cultures. Our goal is to connect citizens from nations in conflict in an open dialogue based around the sharing of field recordings, songs, and interviews. Hopefully, this might help to collapse the barriers of physical space that contribute to the misunderstandings between cultures and to emphasize the subversive value of sharing experiences across political borders.</p>
 
@@ -170,7 +170,7 @@
 
           		<p>ان هذا المنبر مدعوم من قبل ريزوم. </p>
           	</div>
-          	<img src="{{ STATIC_URL }}images/rhizome_logo.png"/>
+          	<img src="{{ STATIC_URL }}images/rhizome_logo.png" alt="rhizome logo" />
           	<div id="aboutLinks">
           	<ul>
           		<li id="toggleLanguage"><a id="toggleAr">Read in Arabic</a><a id="toggleEn">Read in English</a></li>
@@ -185,9 +185,9 @@
         <div id="feedback">
               <div id="feedback_tab"></div>
               <h1>Thanks for taking a minute to give us feedback.</h1>
-              <form id="feedbackForm" method="post" action="">
+              <form id="feedbackForm" method="post" action="{% url home %}">
                   {% csrf_token %}
-                  {{ feedback_form }}
+                  {{ feedback_form.as_p }}
                   <input class="formSubmit" type="submit" value="SUBMIT" />
               </form>
               
@@ -219,7 +219,7 @@
     <script type="text/javascript" src="{{ STATIC_URL }}js/player.js"></script>
     <script type="text/javascript" src="{{ STATIC_URL }}js/interface.js"></script>	
     {% endcompress %}    
-    <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?key={{ google_api_key }}&sensor=false"></script>
+    <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?key={{ google_api_key }}&amp;sensor=false"></script>
 	{% block extra_js %}{% endblock %}	
 </body>
 </html>
