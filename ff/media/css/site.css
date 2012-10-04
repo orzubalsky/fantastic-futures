@@ -5,8 +5,6 @@ body {
 	color:#000; 
 	margin:0;
 }
-/* saf3+, chrome1+ argh! */
-
 a {
 	cursor:pointer;
 	text-decoration:none;
@@ -92,6 +90,7 @@ h2 {
 	bottom:28px;
     
 }
+
 /*constellation menu*/
 #constellationMenu {
 	width:140px;
@@ -526,4 +525,17 @@ a#customZoomIn, a#customZoomOut {
 
 .kineticjs-content canvas:first-child{
 	/*background-color:yellow;*/
+}
+
+
+
+
+
+/*for safari */
+.safari #addSoundText {	
+		position: absolute;
+		right: 105px;
+		bottom: 185px;
+		width: 100px;
+	}
 }
