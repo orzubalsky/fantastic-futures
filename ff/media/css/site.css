@@ -28,8 +28,6 @@ h2 {
 }
 .ie #clicklayer {
 	background-color:white;
-	opacity:.2;
-	filter: alpha(opacity = 20);
 }
 /*detail text about a sound*/
 .soundText {
