@@ -13,7 +13,15 @@
                 var curInput = arrInputs[i];
                 if (!curInput.type || curInput.type == "" || curInput.type == "text")
                 self.handlePlaceholder(curInput);
-            }		    
+            }	
+            
+            var arrTextareas = document.getElementsByTagName("textarea");
+            for (var i = 0; i < arrTextareas.length; i++) 
+            {
+                var curTextarea = arrTextareas[i];
+                self.handlePlaceholder(curTextarea);
+            }
+                        	    
             this.menus();
             this.constellationMenuScroll();
             this.searchForm();
@@ -415,8 +423,8 @@
                     };
                 }
             }
-        }		
-		
+        }	
+
 		this.appendFormError = function(form, message)
 		{
             $('.errors', form).append('<p>' + message + '</p>');		    
