@@ -23,8 +23,13 @@ h2 {
 	height:100%;
 	width:100%;
 	background-color:transparent;
-	z-index:3;
+	z-index:2;
 	display:none;
+}
+.ie #clicklayer {
+	background-color:white;
+	opacity:.2;
+	filter: alpha(opacity = 20);
 }
 /*detail text about a sound*/
 .soundText {
@@ -99,7 +104,7 @@ h2 {
 	left:15px;
 	bottom:32px;
 	height:160px;
-	z-index:3;
+	z-index:2;
 }
 #constellationMenu #scrollDown {
 	height:10px;
@@ -181,7 +186,7 @@ h2 {
 	left:109px;
 	top:260px;
 	display:none;
-	z-index:3;
+	z-index:2;
 	width:265px;
 	min-height:120px;
 	background-color:#005fff;
@@ -302,7 +307,7 @@ h2 {
 	margin:auto;
 	width:130px;
 	display:none;
-	z-index:3;
+	z-index:2;
 	position:relative;
 	
 }
@@ -331,7 +336,7 @@ h2 {
 	position:absolute;
 	top:40px;
 	width:100%;
-	z-index:3;
+	z-index:2;
 }
 #about {
     position:relative;
@@ -342,7 +347,7 @@ h2 {
 	background-color:#005fff;
 	margin:auto;
 	text-align:center;
-	z-index:3;
+	z-index:2;
 }
 #about .description {
 	color:#FFF;
