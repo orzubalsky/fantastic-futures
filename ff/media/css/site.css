@@ -244,7 +244,7 @@ h2 {
     background-color:yellow;
     
 }
-#addSoundForm input#submit, #addConstellationForm input#submit, #locateSoundForm input#submit {
+#addSoundForm input.formSubmit, #addConstellationForm input.formSubmit, #locateSoundForm input.formSubmit {
 	border:none;
 	background-color:transparent;
 	color:#FFF;
