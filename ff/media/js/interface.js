@@ -74,7 +74,7 @@
 
                 setTimeout(function() 
                 {
-                    var rotate_to = lib.random(90,0);
+                    var rotate_to = lib.random(90,30);
                     var zoom_to = lib.random(150,50) / 100;
                     
                     self.rotateTo(self.deg_to_rad(rotate_to), self.deg_to_rad(rotate_to), self.deg_to_rad(0) ,zoom_to, 90, function() {}); 
