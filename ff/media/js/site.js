@@ -401,7 +401,7 @@
                 if (curPlaceholder && curPlaceholder.length > 0) {
                     oTextbox.value = curPlaceholder;
                     oTextbox.setAttribute("old_color", oTextbox.style.color);
-                    oTextbox.style.color = "#c0c0c0";
+                    oTextbox.style.color = "#005fff";
                     oTextbox.onfocus = function() {
                         this.style.color = this.getAttribute("old_color");
                         if (this.value === curPlaceholder)
@@ -409,7 +409,7 @@
                     };
                     oTextbox.onblur = function() {
                         if (this.value === "") {
-                            this.style.color = "#c0c0c0";
+                            this.style.color = "#005fff";
                             this.value = curPlaceholder;
                         }
                     };
