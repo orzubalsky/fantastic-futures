@@ -5,6 +5,15 @@
 	    this.csrvToken;
 		this.init = function() 
 		{
+		    var self = this;
+		    
+            var arrInputs = document.getElementsByTagName("input");
+            for (var i = 0; i < arrInputs.length; i++) 
+            {
+                var curInput = arrInputs[i];
+                if (!curInput.type || curInput.type == "" || curInput.type == "text")
+                self.handlePlaceholder(curInput);
+            }		    
             this.menus();
             this.constellationMenuScroll();
             this.searchForm();
@@ -385,6 +394,28 @@
                 }
             }
 		};
+		
+        this.handlePlaceholder = function(oTextbox) {
+            if (typeof oTextbox.placeholder == "undefined") {
+                var curPlaceholder = oTextbox.getAttribute("placeholder");
+                if (curPlaceholder && curPlaceholder.length > 0) {
+                    oTextbox.value = curPlaceholder;
+                    oTextbox.setAttribute("old_color", oTextbox.style.color);
+                    oTextbox.style.color = "#c0c0c0";
+                    oTextbox.onfocus = function() {
+                        this.style.color = this.getAttribute("old_color");
+                        if (this.value === curPlaceholder)
+                            this.value = "";
+                    };
+                    oTextbox.onblur = function() {
+                        if (this.value === "") {
+                            this.style.color = "#c0c0c0";
+                            this.value = curPlaceholder;
+                        }
+                    };
+                }
+            }
+        }		
 		
 		this.appendFormError = function(form, message)
 		{
