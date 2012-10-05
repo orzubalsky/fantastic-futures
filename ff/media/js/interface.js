@@ -613,7 +613,7 @@
 				        'top'   : (this.getAttrs().y-110) + 'px',
                         'left'  : (this.getAttrs().x-27) + 'px'				        
                     })
-                    .fadeIn("400");
+                    .stop().fadeIn("400");
 
 				if (this.getAttrs().story==""){
 					$('.story').css('display','none');
