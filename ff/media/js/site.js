@@ -263,11 +263,6 @@
 		
 		this.addSound_callback = function(data)
 		{
-		    
-		    // data is returned from the server as content type "text/html",
-		    // returning it as json confused IE9, so we're parsing it as json on the client side
-		    data = JSON.parse(data);
-		    
 		    if (data.success == true)
 		    {
                 // 1. fade out form
