@@ -8,11 +8,11 @@
 /* global variables accessable to all procedures                        */
 /************************************************************************/
 
-const SQRT_3  = Math.sqrt(3);
-const SQRT_5  = Math.sqrt(5);
-const SQRT_8  = Math.sqrt(8);
-const SQRT_10 = Math.sqrt(10);
-const SQRT_15 = Math.sqrt(15);
+var SQRT_3  = Math.sqrt(3);
+var SQRT_5  = Math.sqrt(5);
+var SQRT_8  = Math.sqrt(8);
+var SQRT_10 = Math.sqrt(10);
+var SQRT_15 = Math.sqrt(15);
 
 var v_x = new Array(13);
 var v_y = new Array(13);
