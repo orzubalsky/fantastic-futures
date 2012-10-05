@@ -26,9 +26,6 @@ h2 {
 	z-index:2;
 	display:none;
 }
-.ie #clicklayer {
-	background-color:white;
-}
 /*detail text about a sound*/
 .soundText {
     color:#666;
