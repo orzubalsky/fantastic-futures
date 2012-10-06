@@ -23,9 +23,9 @@ v1_api.register(ConstellationResource())
 # direct browser requests to the different apps
 urlpatterns = patterns('',
 
+    url(r'^admin/', include(admin.site.urls)),
     url(dajaxice_config.dajaxice_url, include('dajaxice.urls')),    
     url(r'^', include('futures.urls')),
-    url(r'^admin/', include(admin.site.urls)),
     (r'^api/', include(v1_api.urls)),
 )
 

@@ -55,7 +55,7 @@ class GeoSound(Base):
         verbose_name_plural = "geosounds"
                      
     def random_z():
-        return round(random.uniform(-7.0, 7.0), 2)
+        return round(random.uniform(-12.0, 12.0), 2)
         
     def random_default_volume():
         return round(random.uniform(0.2, 0.8), 2)
