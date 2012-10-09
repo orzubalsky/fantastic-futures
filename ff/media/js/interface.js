@@ -275,7 +275,7 @@
                 if (CONSTELLATIONS[i].pk == id)
                 {
                     var constellation = CONSTELLATIONS[i].fields;
-                    self.drawConstellation(constellation, rotate, true, callback);
+                    self.drawConstellation(constellation, rotate, true, callback());
                 }
             }
         };
@@ -283,14 +283,6 @@
         this.drawConstellation = function(constellation, rotate, volumes, callback) 
         {
             var self = this;
-            
-            if (rotate)
-            {
-                self.rotateTo(constellation.rotation_x, constellation.rotation_y, constellation.rotation_z, constellation.zoom, 25, function() 
-                {
-                    callback();
-                });
-            }
             
             for (var j=0; j<constellation.connections.length; j++)
             {
@@ -320,7 +312,15 @@
                                         
                 self.sphere.connections.push(connection);                        
                 self.addConnectionToLayer(connection);                     
-            }            
+            }        
+            
+            if (rotate)
+            {
+                self.rotateTo(constellation.rotation_x, constellation.rotation_y, constellation.rotation_z, constellation.zoom, 25, function() 
+                {
+                    callback();
+                });
+            }                
         };
         
         this.previewAllConstellations = function()
@@ -341,12 +341,11 @@
          this.loadConstellation = function(id, rotate)
          {
             var self = this;
-                        
+
             self.loading_constellation = true;
             self.constellation = id;
-            
             self.previewConstellation(id, rotate, function() 
-            {                
+            {                                
                 // after rotation/zoom is done, set loading_constellation to reflect the current state
                 self.loading_constellation = false;
                                 
@@ -858,12 +857,12 @@
              for(var i=0; i<allSoundsShapes.length; i++)
              {
                  var soundShape = allSoundsShapes[i];            
-                 
+              
                  // if the sound is connected to connections it's always "active"
                  if (self.soundShapeConnectsToExistingConnection(soundShape))
                  {
                      soundShape.getAttrs().active = true;
-                     
+
                      // create a player instance for this sound
                      if (soundShape.getAttrs().player == '')
                      {
