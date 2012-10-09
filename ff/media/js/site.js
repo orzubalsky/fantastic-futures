@@ -104,7 +104,8 @@
 		{
 		    var self = this;
 
-        	$("#clickLayer").click(function(){
+        	$("#clickLayer").click(function(e){
+        	    e.preventDefault();
 				if ($("#map").css("opacity")>0){
 					$("#map").fadeOut(1000);
 	                $("#interface").fadeIn(1000);
@@ -117,20 +118,24 @@
         	        }, 1000
 				);
 			});
-        	$("#logo").click(function() {
+        	$("#logo").click(function(e) {
+                e.preventDefault();
         	  $("#about").fadeToggle("fast", "linear");
 			  $("#clickLayer").fadeToggle("fast", "linear");
         	});
-        	$("#addSoundText").click(function() {
+        	$("#addSoundText").click(function(e) {
+        	    e.preventDefault();        	    
         	  $("#addSound").fadeToggle("fast", "linear");
 			   $("#clickLayer").fadeToggle("fast", "linear");
               site.ffinterface.resetRotation();        	  
         	});
-        	$("#addConstellationText").click(function() {
+        	$("#addConstellationText").click(function(e) {
+        	    e.preventDefault();        	    
         	  $("#addConstellation").fadeToggle("fast", "linear");
 			  $("#clickLayer").fadeToggle("fast", "linear");
         	});
-        	$("#errorText").click(function() {
+        	$("#errorText").click(function(e) {
+        	    e.preventDefault();        	    
         	  $("#error").fadeToggle("fast", "linear");
         	});
         	$("#constellationMenu h2").live('mouseenter', function() {
@@ -147,7 +152,8 @@
         	  $("#constellationMenu #scrollUp").fadeToggle("fast", "linear");
         	  $("#constellationMenu #scrollDown").fadeToggle("fast", "linear");
         	}); 
-			$("#aboutLinks #toggleAr").click(function() {
+			$("#aboutLinks #toggleAr").click(function(e) {
+        	    e.preventDefault();			    
 				$("#about .description.english").fadeToggle("fast", "linear", function(){
 					$("#about .description.arabic").fadeToggle("fast", "linear");
 				});
@@ -155,7 +161,8 @@
 	        	  $("#aboutLinks #toggleEn").fadeToggle("fast", "linear");
 				});
 			}); 
-			$("#aboutLinks #toggleEn").click(function() {
+			$("#aboutLinks #toggleEn").click(function(e) {
+        	    e.preventDefault();			    
 				$("#about .description.arabic").fadeToggle("fast", "linear", function(){
 					$("#about .description.english").fadeToggle("fast", "linear");
 				});
@@ -179,6 +186,7 @@
             });            
             $('#constellationMenuContent a').live('mouseleave', function (e)            
             {
+                e.preventDefault();
                 site.ffinterface.clearConnections();
             });        	       	
         	$('#contactUs a').click(function(e)

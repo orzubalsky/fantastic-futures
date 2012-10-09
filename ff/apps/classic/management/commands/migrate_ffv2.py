@@ -10,7 +10,10 @@ def migrate(handle, model):
     queryset = model.objects.using('classic').all()
     for old_db_model in queryset:
         # get fields and values for each db row
-        data = {k: v for k,v in old_db_model.__dict__.items()}
+        
+        data = {}
+        for k,v in old_db_model.__dict__.items():
+            data[k] = v 
 
         # call the appropriate function, according to the rules dictionary
         model.objects.migrate(data)
