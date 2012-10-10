@@ -947,6 +947,7 @@
                             //var searchScore=Math.round((searched_sound.score/range)*255); //trying to correlate score to color
                             var searchScore = Math.round(self.map(searched_sound.score, 0.3, 0.7, 0, 255));                            
                             soundShape.getChildren()[0].setFill('rgb('+(searchScore)+','+(searchScore)+','+(0)+')');
+                            soundShape.getChildren()[0].setFill('rgb(255,255,0)');
                             
 							//soundShape.getChildren()[0].setFill('rgb(255,0,0)');
                             //console.log(searchScore);
