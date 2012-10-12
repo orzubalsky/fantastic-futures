@@ -1,12 +1,13 @@
 from django import forms
 from haystack.forms import SearchForm
-from haystack.utils.geo import Point, D
 from django.forms.formsets import BaseFormSet
 from django.utils.translation import ugettext as _
 from django.core.validators import *
 from futures.models import *
 
 class GeoSearchForm(SearchForm):
+    from haystack.utils.geo import Point, D
+    
     q = forms.CharField(required=False, widget=forms.widgets.TextInput(attrs={'placeholder':'SEARCH'}))
              
     def search(self):

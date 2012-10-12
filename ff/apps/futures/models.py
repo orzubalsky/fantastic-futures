@@ -7,7 +7,6 @@ from django.conf import settings
 from django.core.files import File
 from django.core.files.storage import default_storage as storage        
 from django.db.models.signals import pre_delete, post_save
-from django.contrib.gis.geos import Point
 from django.dispatch import receiver  
 from django.core.cache import cache
 from django_countries import CountryField
@@ -93,6 +92,8 @@ class GeoSound(Base):
     just_added = property(**just_added())    
     
     def save_upload(self, filename, lat, lon, tags, *args, **kwargs):
+        from django.contrib.gis.geos import Point
+        
         "save geosound after ajax uploading an mp3 file"
 
         # store point from coordinates
