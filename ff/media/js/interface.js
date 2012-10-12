@@ -7,9 +7,6 @@
 	    this.height;                    // window height
 	    this.lastClick       = -1;      // holds the sound shape object that was clicked on last
         this.sphere;                    // an object that contains the entire 3D space TODO: move this out of this file
-        this.rotation;                  // 3D rotation for the sphere, in radians. {x: 0.0, y: 0.0, z:0.0 }
-        this.rotation_interval;         // holds the js interval variable for rotation animations
-        this.is_animating = false;      // represents the state of rotation & zooming
         this.base_distance   = 2000;    // 
         this.distance        = 2000;    // POV for 3D sphere
         this.map_points      = [];      // array of points from map.js
@@ -28,7 +25,6 @@
 		this.is_playing = false;        // this is used to check whether the player is playing or paused
 		this.playheadCount=0;  
 		this.playheadIntervals=20;		//this is how often the playhead gets redrawn. A high number=less frequency of redrawing            
-		this.zoom = 1.0;
 		this.search_results = { 'Geosounds': [], 'Constellations': [] }; 
 		this.justAddedCountdown = 0;
 		this.images;
@@ -38,7 +34,6 @@
         {
             var self = this;
             
-            self.rotation           = { x: 0, y: 0, z: 0 };            
     	    self.width              = $('#interface').width();
     	    self.height             = $('#interface').height();            
             self.sphere             = new self.Sphere3D();
@@ -74,10 +69,7 @@
 
                 setTimeout(function() 
                 {
-                    var rotate_to = lib.random(90,30);
-                    var zoom_to = lib.random(150,50) / 100;
-                    
-                    self.rotateTo(self.deg_to_rad(rotate_to), self.deg_to_rad(rotate_to), self.deg_to_rad(0) ,zoom_to, 90, function() {}); 
+                    site.pov.randomize();
                     self.running = true;                    
                 }, 400);
             });
@@ -112,73 +104,19 @@
             }
         };
 
-
-        this.resetRotation = function()
-        {
-            var self = this;
-            var rotation = self.rotation;
-            
-            self.rotateTo(0,0,0, 1.0, 25, function() 
-            {
-                $('#interface').fadeOut(2000);
-                $('#map').css('opacity','1');
-                $('#map').fadeIn(500);                
-            });
-        };
-        
-        this.rotateTo = function(x,y,z, zoom, pace, callback)
-        {   
-            var self = this;
-                        
-            clearInterval(self.rotation_interval)
-            
-            self.is_animating = true;
-                        
-            self.rotation_interval = setInterval(function() 
-            {   
-                self.rotation.x = self.rotateAxis(self.rotation.x, x, pace);
-                self.rotation.y = self.rotateAxis(self.rotation.y, y, pace);
-                self.rotation.z = self.rotateAxis(self.rotation.z, z, pace);
-                self.zoom       = self.rotateAxis(self.zoom, zoom, Math.round(pace/2));
-                
-                if ( self.rotation.x == x && self.rotation.y == y && self.rotation.z == z && self.zoom == zoom)
-                {
-                    clearInterval(self.rotation_interval);
-                    self.is_animating = false;
-                    callback();
-                }
-            }, self.frameRate);
-        };
-        
-        this.rotateAxis = function(current, target, pace)
-        {
-            var self = this;
-            var difference = Math.abs(current - target);
-            var multiplier = (current > target) ? -1 : 1;
-            
-            return (difference > self.deg_to_rad(1)) ? current + multiplier * difference/pace : target;
-        };  
-        
-        this.changeZoom = function(amount)
-        {
-            var self = this;
-            
-            self.zoom += amount;
-            
-            self.zoom = (self.zoom > 15.0) ? 15.0 : self.zoom;
-            self.zoom = (self.zoom < 1.0) ? 1.0 : self.zoom;
-        };   
         
         this.setup = function()
         {   
             var self = this;
+            
+            site.pov.init();
                         
             for(var i=0; i<self.map_points.length; i++)
             {
                 self.mapPointToSpherePoint(self.map_points[i]);
             }
             self.map_points_count = self.map_points.length;        
-            
+                        
     		self.playhead(); //comment out to get rid of playhead
             
             self.setupStageDragging();
@@ -283,7 +221,7 @@
         this.drawConstellation = function(constellation, rotate, volumes, callback) 
         {
             var self = this;
-            
+
             for (var j=0; j<constellation.connections.length; j++)
             {
                 var db_connection = constellation.connections[j].fields;
@@ -316,7 +254,7 @@
             
             if (rotate)
             {
-                self.rotateTo(constellation.rotation_x, constellation.rotation_y, constellation.rotation_z, constellation.zoom, 25, function() 
+                site.pov.rotateTo(constellation.rotation_x, constellation.rotation_y, constellation.rotation_z, constellation.zoom, 25, function() 
                 {
                     callback();
                 });
@@ -365,7 +303,7 @@
         {
             var self = this;
             
-            clearInterval(self.rotation_interval);                
+            site.pov.clear();
             self.connections_2D = [];
             self.sphere.connections = [];
             self.connections_layer.removeChildren();
@@ -400,41 +338,36 @@
         this.update = function()
         {      
             var self = this;
-            var rotation = self.rotation;
 
-            self.is_animating = false;
-             
             // stage drag rotation calculation
             var rotation_canvas = self.rotation_layer.getChildren()[0];
             if (rotation_canvas.isDragging()) 
             {
                 
                 // stop any rotation animation that was running
-                 clearInterval(self.rotation_interval);
-                 
-                 self.is_animating = true;
+                site.pov.clear();
                 
-                 var mousePos = self.stage.getMousePosition();
-                 
-                 var s = 10;
-                 var x = ((mousePos.x * 2*s) - self.width*s) / self.width;
-                 var y = ((mousePos.y * 2*s) - self.height*s) / self.height;
-                 
-                 rotationYAmount = self.deg_to_rad(Math.abs(x)) / self.zoom;
-                 rotation.y += rotationYAmount;
-                 rotation.y = (rotation.y >= self.deg_to_rad(360)) ? self.deg_to_rad(0) : rotation.y;
+                var mousePos = self.stage.getMousePosition();
 
-                 rotationXAmount = self.deg_to_rad(Math.abs(y)) / self.zoom;
-                 rotation.x += rotationXAmount;
-                 rotation.x = (rotation.x >= self.deg_to_rad(360)) ? self.deg_to_rad(0) : rotation.x;
+                var s = 10;
+                var x = ((mousePos.x * 2*s) - self.width*s) / self.width;
+                var y = ((mousePos.y * 2*s) - self.height*s) / self.height;
+
+                rotationYAmount = self.deg_to_rad(Math.abs(x)) / site.pov.zoom;
+                rotationXAmount = self.deg_to_rad(Math.abs(y)) / site.pov.zoom;
+                
+                site.pov.target_rotation.y = site.pov.rotation.y += rotationYAmount;
+                site.pov.target_rotation.x = site.pov.rotation.x += rotationXAmount;
             }
             
             // stage zoom calculation
             $('#interface').mousewheel(function(event, delta, deltaX, deltaY) 
             {                
-                self.changeZoom(deltaY / 10000);
+                site.pov.changeZoom(deltaY / 10000);
             });
-            self.distance = self.base_distance * self.zoom;
+            self.distance = self.base_distance * site.pov.zoom;
+            
+            site.pov.update();
             
             var playhead    = self.playhead_layer.getChildren()[0];
             var radius      = playhead.getRadius();
@@ -1165,8 +1098,8 @@
             var coordinates = self.project3dPoint(sphere_point);
             
             self.points_2D.push({
-                x            : coordinates.x_2d,       // 2d x 
-                y            : coordinates.y_2d,       // 2d y
+                x            : Math.round(coordinates.x_2d),       // 2d x 
+                y            : Math.round(coordinates.y_2d),       // 2d y
                 point_3d     : coordinates.point_3d,   // Point3D object
                 index        : index,                  // point index
                 id           : sphere_point.id,
@@ -1177,7 +1110,7 @@
         this.project3dPoint = function(point)
         {
             var self = this;
-            var rotation = self.rotation;
+            var rotation = site.pov.rotation;
             
             var p = new self.Point3D();
             
