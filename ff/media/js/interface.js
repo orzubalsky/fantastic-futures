@@ -1098,8 +1098,8 @@
             var coordinates = self.project3dPoint(sphere_point);
             
             self.points_2D.push({
-                x            : coordinates.x_2d,       // 2d x 
-                y            : coordinates.y_2d,       // 2d y
+                x            : Math.round(coordinates.x_2d),       // 2d x 
+                y            : Math.round(coordinates.y_2d),       // 2d y
                 point_3d     : coordinates.point_3d,   // Point3D object
                 index        : index,                  // point index
                 id           : sphere_point.id,
