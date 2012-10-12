@@ -127,7 +127,7 @@
         	    e.preventDefault();        	    
         	  $("#addSound").fadeToggle("fast", "linear");
 			   $("#clickLayer").fadeToggle("fast", "linear");
-              site.ffinterface.resetRotation();        	  
+              site.pov.resetRotation();        	  
         	});
         	$("#addConstellationText").click(function(e) {
         	    e.preventDefault();        	    
@@ -276,7 +276,7 @@
         	{
         	    e.preventDefault();
         	    
-        	    site.ffinterface.changeZoom(0.2);
+        	    site.pov.changeZoom(0.2);
         	});
             $('#customZoomOut').live('click', function(e) 
         	{
