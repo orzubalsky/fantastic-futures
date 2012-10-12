@@ -84,6 +84,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.middleware.http.ConditionalGetMiddleware',
+    'futures.middleware.XsSharing',    
     'django.middleware.gzip.GZipMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
