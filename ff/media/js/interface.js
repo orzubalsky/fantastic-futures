@@ -192,8 +192,8 @@
                 c.sound_1_volume = self.map(sound_1.getChildren()[0].getAttrs().radius.x, 5, 20, 0.2, 0.9);
                 c.sound_2_volume = self.map(sound_2.getChildren()[0].getAttrs().radius.x, 5, 20, 0.2, 0.9);
                 
-                c.sound_1_volume = Math.round(c.sound_1_volume*100) / 100;
-                c.sound_2_volume = Math.round(c.sound_2_volume*100) / 100;                
+                c.sound_1_volume = Math.floor(c.sound_1_volume*100) / 100;
+                c.sound_2_volume = Math.floor(c.sound_2_volume*100) / 100;                
             }
             return self.sphere.connections;
         };
@@ -878,7 +878,7 @@
                             // color the "halo" shape
 							//console.log(searched_sound.score);
                             //var searchScore=Math.round((searched_sound.score/range)*255); //trying to correlate score to color
-                            var searchScore = Math.round(self.map(searched_sound.score, 0.3, 0.7, 0, 255));                            
+                            var searchScore = Math.floor(self.map(searched_sound.score, 0.3, 0.7, 0, 255));                            
                             soundShape.getChildren()[0].setFill('rgb('+(searchScore)+','+(searchScore)+','+(0)+')');
                             soundShape.getChildren()[0].setFill('rgb(255,255,0)');
                             
@@ -1098,8 +1098,8 @@
             var coordinates = self.project3dPoint(sphere_point);
             
             self.points_2D.push({
-                x            : Math.round(coordinates.x_2d),       // 2d x 
-                y            : Math.round(coordinates.y_2d),       // 2d y
+                x            : Math.floor(coordinates.x_2d),       // 2d x 
+                y            : Math.floor(coordinates.y_2d),       // 2d y
                 point_3d     : coordinates.point_3d,   // Point3D object
                 index        : index,                  // point index
                 id           : sphere_point.id,
@@ -1180,7 +1180,7 @@
         
         this.dist = function(x1,y1,x2,y2)
         {
-            return Math.round(Math.sqrt( (x2-x1)*(x2-x1) + (y2-y1)*(y2-y1) ));
+            return Math.floor(Math.sqrt( (x2-x1)*(x2-x1) + (y2-y1)*(y2-y1) ));
         }
 	};
 })(jQuery);	
