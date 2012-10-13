@@ -374,7 +374,7 @@
 			        
             if (self.is_playing)
             {	
-                radius = (radius.x < self.width / 2) ? radius.x + 1 : 0;
+                radius = (radius.x < self.width / 2) ? Math.floor(radius.x) + 1 : 0;
 				playhead.setRadius(radius); 
             }
             
@@ -393,6 +393,8 @@
                     {                    
                         if (sound.getAttrs().active == true)
                         {
+                            lib.log(radius);
+                            
                             player.stop();  
                             player.play();
                             sound.getChildren()[1].setFill("#005fff");	//style sound that is playing
