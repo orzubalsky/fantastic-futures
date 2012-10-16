@@ -307,6 +307,8 @@
             	                $('#addSoundCheck').hide();
 								$('#addSoundForm').show();
             	                $('#addSoundForm input, #addSoundForm textarea').not('.formSubmit').val('');
+            	                $('#addSoundForm #uploadText').text('CHOOSE FILE');
+            	                $('#addSoundForm button.time').removeClass('selected').val('0');
             	                
                                 // 6. show sound on map
                                 lib.log(data.geojson);
