@@ -943,7 +943,11 @@
 		    
 		    $(window).keypress(function(e) 
 		    {
-		        if (self.getActiveConnections().length > 0)
+		        // check if a form is open
+		        var formActive = ($('#clickLayer').css('display') == 'block') ? true : false;
+		        lib.log(formActive);
+		        
+		        if (self.getActiveConnections().length > 0 && !formActive)
 		        {
     		        var key = e.which || e.keyCode || e.keyChar;
 
