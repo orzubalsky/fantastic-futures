@@ -106,8 +106,6 @@ TEMPLATE_DIRS = (
 # Example: "/home/media/media.lawrence.com/media/"
 MEDIA_ROOT = os.path.join(PROJECT_DIR, 'media')
 
-ADMIN_MEDIA_PREFIX = '/admin/media/'
-
 AUTH_PROFILE_MODULE = 'futures.UserProfile'
 
 SERIALIZATION_MODULES = {
