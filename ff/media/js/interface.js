@@ -752,7 +752,8 @@
                     this.player.destroy();
                 }
             });		    
-		
+
+
 		    // volume halo ellipse
 		    var halo = new Kinetic.Circle({
                 radius        : radius,
@@ -760,8 +761,8 @@
                 stroke        : "white",
                 strokeWidth   : 0,
 		    });
-		    
-		    // core ellipse for interaction
+
+            // core ellipse for interaction
             var core = new Kinetic.Circle({
               radius        : 2,
               fill          : "black",
