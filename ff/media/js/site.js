@@ -262,14 +262,14 @@
             		            	    
                 var connections = site.ffinterface.getActiveConnections();                
             	$('#addConstellationForm input[name=connection_count]').val(connections.length);
-            	$('#addConstellationForm input[name=zoom]').val(site.ffinterface.zoom);
+            	$('#addConstellationForm input[name=zoom]').val(site.pov.zoom);
             	
                 var data = $(this).serialize();
-            	                
+
                 Dajaxice.futures.submit_constellation(self.addConstellation_callback, {
                     'form'          : data, 
                     'connections'   : connections,
-                    'rotation'      : site.ffinterface.rotation
+                    'rotation'      : site.pov.rotation
                 });
         	});    
             $('#customZoomIn').live('click', function(e) 
@@ -311,7 +311,6 @@
             	                $('#addSoundForm button.time').removeClass('selected').val('0');
             	                
                                 // 6. show sound on map
-                                lib.log(data.geojson);
                                 site.map.addSound(data.geojson);
                                 
                                 // 7. hide map            	                
