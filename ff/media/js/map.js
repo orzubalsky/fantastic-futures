@@ -163,7 +163,7 @@
                 is_recent   : feature.data.is_recent,
                 just_added  : feature.data.just_added
             };
-            site.ffinterface.map_points.push(map_point);
+            site.geosounds.map_points.push(map_point);
         };
         
         this.getGeometryFromFeature = function(feature, layer)
