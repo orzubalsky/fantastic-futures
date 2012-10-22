@@ -6,17 +6,10 @@
 	    this.width;                     // window width
 	    this.height;                    // window height
 	    this.lastClick       = -1;      // holds the sound shape object that was clicked on last
-        this.connections_2D  = [];      // array of all connections 
         this.constellation;             // current active constellation
         this.loading_constellation = false  // set to true when a constellation is loaded (rotated + zoomed)
         this.stage;                     // kineticJS stage 
-        this.connections_layer;         // kinteticJS layer to hold all connection lines
-        this.playhead_layer;            // kinteticJS layer to animate the circular playhead
-        this.playhead = 0;              // this is actually the radius of the circular playhead
 		this.addButton = 0;             // this is used to check whether the "save constellation" appeared
-		this.is_playing = false;        // this is used to check whether the player is playing or paused
-		this.playheadCount=0;  
-		this.playheadIntervals=20;		//this is how often the playhead gets redrawn. A high number=less frequency of redrawing            
 		this.search_results = { 'Geosounds': [], 'Constellations': [] }; 
 		this.justAddedCountdown = 0;
 		this.images;
@@ -55,86 +48,26 @@
                 }, 400);
             });
         };
-        
-        
-        this.loadImages = function(sources, callback) 
-        {
-            var self = this;
 
-            var images = {};
-            var loadedImages  = 0;
-            var numImages     = 0;
 
-            // get num of sources
-            for(var src in sources) 
-            {
-                numImages++;
-            }
-
-            for(var src in sources) 
-            {   
-                images[src] = new Image();
-                images[src].onload = function() 
-                {
-                    if (++loadedImages >= numImages) 
-                    {
-                        callback(images);
-                    }
-                };
-                images[src].src = sources[src];
-            }
-        };
-
-        
         this.setup = function()
         {   
             var self = this;
             
-            self.stage              = new Kinetic.Stage({
-                container: "interface",
-                width: self.width,
-                height: self.height,                     
-            });
+            self.stage = new Kinetic.Stage({container: "interface", width: self.width, height: self.height });
 
-            self.connections_layer   = new Kinetic.Layer();
-            self.playhead_layer      = new Kinetic.Layer();            
+            site.playhead.init();
             
             site.pov.init();
             
             site.geosounds.init();
-
-            self.playhead();
             
-            site.pov.setupStageDragging();
-
-            lib.log(self.stage);
-            
-            self.playerToggleControl();
-
+            site.connections.init();
+                                    
             $("#loadingGif").fadeToggle("fast", "linear");
         }
 
 
-        this.getActiveConnections = function()
-        {
-            var self = this;
-            
-            for (var i=0; i<site.geosounds.sphere.connections.length; i++)
-            {
-                var c = site.geosounds.sphere.connections[i];
-                
-                var sound_1 = self.points_layer.getChildren()[c.index_1];
-                var sound_2 = self.points_layer.getChildren()[c.index_2];
-                
-                c.sound_1_volume = self.map(sound_1.getChildren()[0].getAttrs().radius.x, 5, 20, 0.2, 0.9);
-                c.sound_2_volume = self.map(sound_2.getChildren()[0].getAttrs().radius.x, 5, 20, 0.2, 0.9);
-                
-                c.sound_1_volume = Math.floor(c.sound_1_volume*100) / 100;
-                c.sound_2_volume = Math.floor(c.sound_2_volume*100) / 100;                
-            }
-            return site.geosounds.sphere.connections;
-        };
-        
         this.previewConstellation = function(id, rotate, callback)
         {
             var self = this;
@@ -236,29 +169,7 @@
 
          };
 
-        this.clearConnections = function() 
-        {
-            var self = this;
-            
-            site.pov.clear();
-            self.connections_2D = [];
-            site.geosounds.sphere.connections = [];
-            self.connections_layer.removeChildren();
-            
-            if (self.constellation > 0 && !self.is_animating)
-            {
-                for (var i=0; i<CONSTELLATIONS.length; i++)
-                {
-                    if (CONSTELLATIONS[i].pk == self.constellation)
-                    {
-                        var constellation = CONSTELLATIONS[i].fields;
-                        self.drawConstellation(constellation, true, true, function() {});                        
-                    }
-                }
-            }
-        };  
-        
-        
+
         this.update = function()
         {      
             var self = this;
@@ -270,12 +181,12 @@
             site.pov.update();
             
             // update playhead position
-            var radius = self.updatePlayhead();
+            site.playhead.update();
             
             site.geosounds.update();
             
             // update state of each connection
-            self.updateConnections();
+            site.connections.update();
         }
         
         this.clear = function()
@@ -283,44 +194,9 @@
             var self = this;
 
             site.geosounds.clear();
-            self.connections_layer.clear();
-            self.playhead_layer.clear();
+            site.connections.clear();
+            site.playhead.clear();
         };
-
-
-        this.updatePlayhead = function()
-        {
-            var self = this;
-            
-            var playhead    = self.playhead_layer.getChildren()[0];
-            var radius      = playhead.getRadius();
-
-            if (self.is_playing)
-            {
-                radius = (radius.x < self.width / 2) ? Math.floor(radius.x) + 1 : 0;
-                playhead.setRadius(radius);
-            }
-            
-            return radius;
-        };
-        
-
-        this.updateConnections = function()
-        {
-            var self = this;
-            
-            for(var i=0; i<self.connections_layer.getChildren().length; i++)
-            {
-                var connection = site.geosounds.sphere.connections[i];
-                var child = self.connections_layer.getChildren()[i];
-
-                var p1 = site.geosounds.collection[connection.index_1];
-                var p2 = site.geosounds.collection[connection.index_2];
-
-                child.setPoints([ {x: p1.x, y: p1.y}, {x: p2.x, y: p2.y} ]);
-            }
-        };
-        
 
 
         this.draw = function()
@@ -328,146 +204,49 @@
             var self = this;
             
             site.geosounds.draw();
-            self.connections_layer.draw();
-            self.playhead_layer.draw();
+            site.connections.draw();
+            site.playhead.draw();
         };
-        
-		
-		this.connectTwoSoundShapes = function(soundShape_1, soundShape_2)
-		{
-		    var self = this;
-		    
-            // create connection between the two sounds
-            c = self.newConnectionFromTwoSoundShapes(soundShape_1, soundShape_2);
 
-            // start playing both sounds when the connection is made
-            var sound_1 = site.geosounds.points_layer.getChildren()[c.index_1];
-            var sound_2 = site.geosounds.points_layer.getChildren()[c.index_2];
-            sound_1.getAttrs().player.play();
-            sound_2.getAttrs().player.play();    
 
-            // now show all of the other possible connections by highlighting the other sounds                    
-            site.geosounds.styleAllInactiveSoundShapes('white');		    
-		};
-
-        
-        this.newConnectionFromTwoSoundShapes = function(soundShape_1, soundShape_2)
+        this.loadImages = function(sources, callback) 
         {
             var self = this;
 
-            c = new self.Connection3D();
+            var images = {};
+            var loadedImages  = 0;
+            var numImages     = 0;
 
-            c.sound_1 = soundShape_1.getAttrs().id;
-            c.sound_2 = soundShape_2.getAttrs().id;
-            c.index_1 = soundShape_1.getAttrs().index;
-            c.index_2 = soundShape_2.getAttrs().index;
-            site.geosounds.sphere.connections.push(c);  
-            self.addConnectionToLayer(c);
-            
-            return c;
-        };
-
-        this.playerToggleControl = function()
-        {
-            var self = this;
-            
-            $(window).keypress(function(e) 
+            // get num of sources
+            for(var src in sources) 
             {
-                // check if a form is open
-                var formActive = ($('#clickLayer').css('display') == 'block') ? true : false;
-                
-                if (self.getActiveConnections().length > 0 && !formActive)
-                {
-        	        var key = e.which || e.keyCode || e.keyChar;
+                numImages++;
+            }
 
-        	        // return, backspace, escape, space
-                    if (key == 8 || key == 13 || key == 27 || key == 32)
+            for(var src in sources) 
+            {   
+                images[src] = new Image();
+                images[src].onload = function() 
+                {
+                    if (++loadedImages >= numImages) 
                     {
-                        self.is_playing = !self.is_playing;                        
-                        self.togglePlayerSounds();
-                    }		            
-                }
-            });
+                        callback(images);
+                    }
+                };
+                images[src].src = sources[src];
+            }
         };
 
-        this.togglePlayerSounds = function() 
-        {
-            var self = this;
-            
-            var sounds = site.geosounds.points_layer.getChildren();
-            for (var i=0; i<sounds.length; i++)
-            {
-                var sound = sounds[i];
-                if (sound.getAttrs().active)
-                {
-                    var player = sound.getAttrs().player;
-                    (self.is_playing) ? player.play() : player.pause();                            
-                }
-            }		    
-        };
-        
-        
-        this.playhead = function()
-        {
-            var self = this;
-            var playhead = new Kinetic.Circle({
-                x               : self.width / 2,
-                y               : self.height / 2,
-                alpha           : 0.8,
-                radius          : 0,
-                fill            : {image: self.images.playhead_fill, offset: [0, 0]}, //stripes
-                stroke          : "#efefef",
-                strokeWidth     : .25,
-            });
 
-            self.playhead_layer.add(playhead);
-            self.stage.add(self.playhead_layer);            
-
-        };
-        
-        this.addConnectionToLayer = function(connection)
-        {	
-            var self = this;
-            
-            var p1 = site.geosounds.collection[connection.index_1];
-            var p2 = site.geosounds.collection[connection.index_2];
-		    		    		    
-            var line = new Kinetic.Line({
-                points          : [p1.x, p1.y, p2.x, p2.y],
-                stroke          : "#005fff",
-                strokeWidth     : 0.25,
-                lineCap         : "round",
-                lineJoin        : "round"
-            });
-            self.connections_layer.add(line);
-        };
-
-        
-        this.Connection3D = function()
-        {
-            this.sound_1 = 0;
-            this.sound_2 = 0;
-            this.index_1 = 0;
-            this.index_2 = 0;
-            this.sound_1_volume = 0.0;
-            this.sound_2_volume = 0.0;
-        }
-
-      
-        this.deg_to_rad = function(degrees)
-        {
-            return degrees * Math.PI / 180.0;
-        }
-        
         this.map = function(value, istart, istop, ostart, ostop, confine) 
         {
-      	   var result = ostart + (ostop - ostart) * ((value - istart) / (istop - istart));
-      	   if (confine)
-      	   {
-      	       result = (result > ostop) ? ostop : result;
-      	       result = (result < ostart) ? ostart : result;
-      	   }
-      	   return result;
+           var result = ostart + (ostop - ostart) * ((value - istart) / (istop - istart));
+           if (confine)
+           {
+               result = (result > ostop) ? ostop : result;
+               result = (result < ostart) ? ostart : result;
+           }
+           return result;
         }
 	};
 })(jQuery);	

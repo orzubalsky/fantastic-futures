@@ -23,13 +23,6 @@
             self.map_points_count = self.map_points.length;
                 
             site.ffinterface.stage.add(self.points_layer);
-                    
-            for (var i=0; i<self.sphere.connections.length; i++)
-            {                
-                site.ffinterface.addConnectionToLayer(self.sphere.connections[i]);
-            }          
-        
-            site.ffinterface.stage.add(site.ffinterface.connections_layer);
         };
 
 
@@ -46,16 +39,13 @@
             var self = this;
             
             // check whether a new point was added on the openlayers map
-            // self.drawJustAddedSounds();
+            self.drawJustAddedSounds();
             
             // update geosounds
             for(var i = 0; i < self.collection.length; i++) 
             {
                 self.collection[i].update();
             }            
-
-            // update state of each sounds
-            // self.updateSounds(radius);            
         };
         
         
@@ -64,23 +54,8 @@
             var self = this;
             self.points_layer.draw();
         };
-        
-        
-        this.updateSounds = function(radius)
-        {
-            var self = this;
-            
-            var sounds = self.points_layer.getChildren();
-            for (var i=0; i<sounds.length; i++)
-            {
-                var sound = sounds[i];
-                self.updateSoundCoordinates(sound, i);
-                self.updateSound(sound, radius);
-                self.styleSearchedSoundShape(sound);
-            }
-        };
-        
-        
+
+
         this.drawJustAddedSounds = function()
         {
             var self = this;
@@ -88,7 +63,7 @@
             if (self.map_points.length > self.map_points_count)
             {
                 self.map_points_count = self.map_points.length;
-                self.mapPointToSpherePoint(self.map_points[self.map_points_count-1]);                
+                self.mapPointToGeoSound(self.map_points[self.map_points_count-1]);                
             }
         };        
         
@@ -101,13 +76,10 @@
             map_point.index = self.collection.length;
                         
             // the new sound coordinates
-            var x = self.reverse_projection(map_point.x, map_point.z, site.ffinterface.width/2.0, 100.0, site.pov.distance);
-            var y = self.reverse_projection(map_point.y, map_point.z, site.ffinterface.height/2.0, 100.0, site.pov.distance);
+            map_point.x = self.reverse_projection(map_point.x, map_point.z, site.ffinterface.width/2.0, 100.0, site.pov.distance);
+            map_point.y = self.reverse_projection(map_point.y, map_point.z, site.ffinterface.height/2.0, 100.0, site.pov.distance);
 
-            map_point.x = x;
-            map_point.y = y;
-
-            // create the sond
+            // create the sound
             geosound = new site.Geosound(map_point);
             
             // add sound to collection array

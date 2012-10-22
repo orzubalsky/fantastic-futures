@@ -427,20 +427,16 @@ site.Geosound.prototype.rotateX = function(radians)
 site.Geosound.prototype.rotateY = function(radians)
 {
     var self = this;
-    
-    var x = self.x;
-    
-    self.x = (x * Math.cos(radians)) + (self.z * Math.sin(radians) * -1.0);
-    self.z = (x * Math.sin(radians)) + (self.z * Math.cos(radians));
+        
+    self.x = (self.x * Math.cos(radians)) + (self.z * Math.sin(radians) * -1.0);
+    self.z = (self.x * Math.sin(radians)) + (self.z * Math.cos(radians));
 };
 
 site.Geosound.prototype.rotateZ = function(radians)
 {
     var self = this;
     
-    var x = self.x;
-    
-    self.x = (x * Math.cos(radians)) + (self.y * Math.sin(radians) * -1.0);
-    self.y = (x * Math.sin(radians)) + (self.y * Math.cos(radians));
+    self.x = (self.x * Math.cos(radians)) + (self.y * Math.sin(radians) * -1.0);
+    self.y = (self.x * Math.sin(radians)) + (self.y * Math.cos(radians));
 };
 })(jQuery);
