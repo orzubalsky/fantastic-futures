@@ -115,7 +115,7 @@
                  var soundShape = allSoundsShapes[i];            
               
                  // if the sound is connected to connections it's always "active"
-                 if (self.soundShapeConnectsToExistingConnection(soundShape))
+                 if (site.geosounds.collection[i].soundShapeConnectsToExistingConnection())
                  {
                      soundShape.getAttrs().active = true;
 

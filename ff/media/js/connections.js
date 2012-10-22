@@ -1,8 +1,7 @@
 ;(function($){
 	var connections = window.site.connections = new function() 
 	{
-        this.connections_2D  = [];      // array of all connections 
-        this.connections_layer;         // kinteticJS layer to hold all connection lines
+        this.layer;         // kinteticJS layer to hold all connection lines
         this.collection = [];
 
 
@@ -10,21 +9,21 @@
         {
             var self = this;
             
-            self.connections_layer   = new Kinetic.Layer();
+            self.layer = new Kinetic.Layer();
             
             for (var i=0; i<self.collection.length; i++)
             {                
                 site.ffinterface.addConnectionToLayer(self.sphere.connections[i]);
             }          
         
-            site.ffinterface.stage.add(self.connections_layer);            
+            site.ffinterface.stage.add(self.layer);            
         };
 
 
         this.clear = function()
         {
             var self = this;
-            self.connections_layer.clear();
+            self.layer.clear();
         };
 
 
@@ -32,10 +31,10 @@
         {
             var self = this;
                      
-            for(var i=0; i<self.connections_layer.getChildren().length; i++)
+            for(var i=0; i<self.layer.getChildren().length; i++)
             {
-                var connection = self.connections[i];
-                var child = self.connections_layer.getChildren()[i];
+                var connection = self.collection[i];
+                var child = self.layer.getChildren()[i];
 
                 var p1 = site.geosounds.collection[connection.index_1];
                 var p2 = site.geosounds.collection[connection.index_2];
@@ -48,7 +47,7 @@
         this.draw = function()
         {
             var self = this;
-            self.connections_layer.draw();
+            self.layer.draw();
         };
         
 
@@ -115,18 +114,17 @@
             var self = this;
             
             site.pov.clear();
-            self.connections_2D = [];
-            site.geosounds.sphere.connections = [];
-            self.connections_layer.removeChildren();
+            self.collection = [];
+            self.layer.removeChildren();
             
-            if (self.constellation > 0 && !self.is_animating)
+            if (site.ffinterface.constellation > 0 && !site.pov.is_animating)
             {
                 for (var i=0; i<CONSTELLATIONS.length; i++)
                 {
-                    if (CONSTELLATIONS[i].pk == self.constellation)
+                    if (CONSTELLATIONS[i].pk == site.ffinterface.constellation)
                     {
                         var constellation = CONSTELLATIONS[i].fields;
-                        self.drawConstellation(constellation, true, true, function() {});                        
+                        site.ffinterface.drawConstellation(constellation, true, true, function() {});                        
                     }
                 }
             }

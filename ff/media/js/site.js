@@ -145,7 +145,7 @@
         	  $("#constellationMenu #scrollDown").fadeToggle("fast", "linear");
         	});		
         	$("#constellationMenu h2").live('mouseleave', function() {
-                site.ffinterface.clearConnections();        	    
+                site.connections.clearConnections();        	    
         	});        	
         	$("#constellationMenu").live('mouseleave', function() {
         	  $("#constellationMenuContent").fadeToggle("fast", "linear");
@@ -187,7 +187,7 @@
             $('#constellationMenuContent a').live('mouseleave', function (e)            
             {
                 e.preventDefault();
-                site.ffinterface.clearConnections();
+                site.connections.clearConnections();
             });        	       	
         	$('#contactUs a').click(function(e)
         	{

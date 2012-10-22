@@ -346,13 +346,13 @@ site.Geosound.prototype.aaupdate = function(soundShape, radius)
 };   
  
 
-site.Geosound.prototype.soundShapeConnectsToExistingConnection = function(soundShape)
+site.Geosound.prototype.soundShapeConnectsToExistingConnection = function()
 {
     var self = this;
     
-    for (var i=0; i<site.geosounds.sphere.connections.length; i++)
+    for (var i=0; i<site.connections.collection.length; i++)
     {
-        var c = site.ffinterfance.sphere.connections[i];
+        var c = site.connections.collection[i];
         if (self.index == c.index_1 || self.index == c.index_2)
         {
             return true;

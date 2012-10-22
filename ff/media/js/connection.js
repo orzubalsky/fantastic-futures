@@ -32,7 +32,7 @@ site.Connection.prototype.setup = function()
         lineCap         : "round",
         lineJoin        : "round"
     });
-    self.connections_layer.add(line);  
+    site.connections.layer.add(line);  
 };
 
 

@@ -73,10 +73,10 @@
             var self = this;
             
             // first clear the current connections
-            self.clearConnections();
+            site.connections.clearConnections();
             
-            self.is_playing = false;                        
-            self.togglePlayerSounds();            
+            site.playhead.is_playing = false;
+            site.playhead.togglePlayerSounds();
             
             for (var i=0; i<CONSTELLATIONS.length; i++)
             {
@@ -95,7 +95,7 @@
             for (var j=0; j<constellation.connections.length; j++)
             {
                 var db_connection = constellation.connections[j].fields;
-                var connection = new self.Connection3D();
+                var connection = new site.Connection();
 
                 connection.sound_1 = db_connection.sound_1;
                 connection.sound_2 = db_connection.sound_2;
@@ -118,8 +118,8 @@
                     sound_2_halo.setRadius(radius_2);
                 }
 
-                site.geosounds.sphere.connections.push(connection);
-                self.addConnectionToLayer(connection);
+                site.connections.collection.push(connection);
+                connection.init();
             }        
             
             if (rotate)
@@ -136,7 +136,7 @@
             var self = this;
             
             // first clear the current connections
-            self.clearConnections();
+            site.connections.clearConnections();
             
             for (var i=0; i<CONSTELLATIONS.length; i++)
             {
@@ -158,13 +158,13 @@
                 self.loading_constellation = false;
                                 
                 // set active state for all connected sounds
-                self.setActiveStateForAllSounds();
+                site.geosounds.setActiveStateForAllSounds();
                 
                 // reset addButton, so the loaded constellation could be altered and saved
                 self.addButton = 0;
                 
                 // start the player
-                self.is_playing = true;              
+                site.playhead.is_playing = true;
             });
 
          };

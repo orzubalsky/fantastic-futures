@@ -2,7 +2,7 @@
 var pov = window.site.pov = new function() 
 {
     this.layer;
-    this.base_distance      = 2000;     // 
+    this.base_distance      = 2000;     // used as a constant to multiply by current zoom
     this.distance           = 2000;     // POV for 3D sphere	    
     this.rotation;                      // 3D rotation for the sphere, in radians. {x: 0.0, y: 0.0, z:0.0 }
     this.target_rotation;
