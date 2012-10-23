@@ -97,6 +97,7 @@ var pov = window.pov = new function()
         self.target_rotation = '';
         self.target_zoom = self.zoom;
         self.callback = '';
+        geosounds.lastClick = -1;
     };
 
 
