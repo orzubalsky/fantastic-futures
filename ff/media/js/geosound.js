@@ -20,6 +20,10 @@ Geosound = function(map_point)
     this.timeout    = '';
     this.interval   = '';
     this.shape      = '';
+    this.minVolume  = 0.2;
+    this.maxVolume  = 0.9;
+    this.minRadius  = 5;
+    this.maxRadius  = 20;
 };
 
 Geosound.prototype.init = function()
@@ -42,7 +46,7 @@ Geosound.prototype.setup = function()
     var self = this;
         
     // radius value for halo is calculated according to the sound's default volume
-    var radius = self.map(self.volume, 0.2, 0.8, 5, 20, true);		    
+    var radius = self.radiusFromVolume();
         
     // Kinetic group to store coordinates and meta data about the sound
     self.shape = new Kinetic.Group({
@@ -62,7 +66,7 @@ Geosound.prototype.setup = function()
         $('.soundText').html(self.name+'<br/>'+self.location+'<br/><div class="story">'+self.story+'</div>') 
         .css({ 
             'top'   : (this.getY()-110) + 'px',
-            'left'  : (this.getX()-27) + 'px'				        
+            'left'  : (this.getX()-27) + 'px'
         })
         .stop().fadeIn("400");
 
@@ -71,9 +75,9 @@ Geosound.prototype.setup = function()
         }
 
         // if the sound isn't active, highlight it
-        if (! self.active)
+        if (!self.active)
         {
-            this.setAlpha(1);                    
+            this.setAlpha(1);
         }
     });            
     self.shape.on("mouseout", function() 
@@ -91,7 +95,7 @@ Geosound.prototype.setup = function()
         // reset the sound style
         if (!self.active)
         {
-            this.setAlpha(0.4);                    
+            this.setAlpha(0.4);
         }
     });
     self.shape.on("mouseup", function() 
@@ -103,7 +107,7 @@ Geosound.prototype.setup = function()
     self.shape.on("mousedown", function() 
     {
          // if the sound is connected to connections it's always "active"
-         if (self.soundShapeConnectsToExistingConnection(this))
+         if (self.isConnected(self.shape))
          {
              self.active = true;
          }
@@ -143,11 +147,11 @@ Geosound.prototype.setup = function()
                  self.interval = setInterval(function() 
                  {
                      // radius
-                     radius = (radius <= 20) ? radius + 0.1 : 5;
+                     radius = (radius <= 20) ? radius + 0.2 : 5;
                      halo.setRadius(radius);
                      
                      // use the value of radius to determine the sound volume
-                     var volume = self.map(radius, 5, 20, 0.2, 0.9);
+                     var volume = self.volumeFromRadius(radius);
                      self.player.updateVolume(volume);
                      
                  }, ffinterface.frameRate);
@@ -160,7 +164,7 @@ Geosound.prototype.setup = function()
              if (geosounds.lastClick == -1) 
              {
                  // if there are connections, you can only connect the sound to them
-                 if (connections.getActiveConnections().length > 0)
+                 if (connections.collection.length > 0)
                  {
                      //ffinterface(this, 'white');                            
                  }
@@ -175,46 +179,39 @@ Geosound.prototype.setup = function()
                  // this is the second sound clicked on, several scenarios are possible:
                  
                  // 1. this is the first connection made
-                 if (connections.getActiveConnections().length == 0)
+                 if (connections.collection.length == 0)
                  {
                      // make the connection between this sound and the one last clicked
-                     c = connections.connectTwoSoundShapes(geosounds.lastClick, this);
+                     c = connections.add(geosounds.lastClick, self.id);
                      
                      // expand the playhead so the radius is as big as the sound that's closest to the center
-                     var sound_1_distance_from_center = ffinterface.dist(geosounds.lastClick.getX(), geosounds.lastClick.getY(), ffinterface.width/2, ffinterface.height/2);                            
-                     var sound_2_distance_from_center = ffinterface.dist(this.getX(), this.getY(), ffinterface.width/2, ffinterface.height/2);                            
-                     var closest_distance             = (sound_1_distance_from_center < sound_2_distance_from_center) ? sound_1_distance_from_center : sound_2_distance_from_center;
-                     var playhead                     = ffinterface.playhead_layer.getChildren()[0];
-                     playhead.setRadius(closest_distance-1); //subtracted 1 just so that first sound will change colors.
-                     
-                     // set the interface to playing mode!
-                     self.is_playing = true;
+                     playhead.adjustRadiusForConnection(c);
                  }
                  else 
                  {                            
                      // 2. this is a connection made in succession, right after another was just made
-                     if (self.soundShapeConnectsToExistingConnection(this) == false && self.soundShapeConnectsToExistingConnection(geosounds.lastClick) == true)
+                     if (self.isConnected(self.id) == false && self.isConnected(geosounds.lastClick) == true)
                      {
                          // make the connection between this sound and the one last clicked
-                         c = connections.connectTwoSoundShapes(geosounds.lastClick, this);                                
+                         c = connections.add(geosounds.lastClick, self.id);                                
                      }
                      
                      // 3. this a connection made after resetting he lastClick variable, 
                      //    clicking on a sound that isn't conneted, 
                      //    and connecting it to a sound which is connected
-                     if (self.soundShapeConnectsToExistingConnection(this) == true && self.soundShapeConnectsToExistingConnection(geosounds.lastClick) == false)
+                     if (self.isConnected(self.id) == true && self.isConnected(geosounds.lastClick) == false)
                      {
                          // make the connection between this sound and the one last clicked
-                         c = connections.connectTwoSoundShapes(geosounds.lastClick, this);                                
+                         c = connections.add(geosounds.lastClick, self.id);                                
                      }  
                      
                      // 4. this a connection made after resetting he lastClick variable, 
                      //    clicking on a sound that *is* conneted, 
                      //    and connecting it to a sound which isn't connected
-                     if (self.soundShapeConnectsToExistingConnection(this) == true && self.soundShapeConnectsToExistingConnection(geosounds.lastClick) == true)
+                     if (self.isConnected(self.id) == true && self.isConnected(geosounds.lastClick) == true)
                      {
                          // make the connection between this sound and the one last clicked
-                         c = connections.connectTwoSoundShapes(geosounds.lastClick, this);                                
+                         c = connections.add(geosounds.lastClick, self.id);                                
                      }  
                  }
                  
@@ -226,8 +223,8 @@ Geosound.prototype.setup = function()
                  }                        
              }
 
-             // store the sound which was clicked in the interface lastClick variable
-             geosounds.lastClick = this;
+             // store the id of the sound which was clicked in the interface lastClick variable
+             geosounds.lastClick = self.id;
          }
          else 
          {
@@ -339,14 +336,14 @@ Geosound.prototype.aaupdate = function(soundShape, radius)
 };   
  
 
-Geosound.prototype.soundShapeConnectsToExistingConnection = function()
+Geosound.prototype.isConnected = function(id)
 {
     var self = this;
     
     for (var i=0; i<connections.collection.length; i++)
     {
         var c = connections.collection[i];
-        if (self.index == c.index_1 || self.index == c.index_2)
+        if (id == c.sound_1 || id == c.sound_2)
         {
             return true;
         }
@@ -402,6 +399,18 @@ Geosound.prototype.styleSearchedSoundShape = function(soundShape)
             }      
         }
     }
+};
+
+Geosound.prototype.volumeFromRadius = function(radius)
+{
+    var self = this;
+    return self.map(radius, self.minRadius, self.maxRadius, self.minVolume, self.maxVolume);
+};
+
+Geosound.prototype.radiusFromVolume = function()
+{
+    var self = this;
+    return self.map(self.volume, self.minVolume, self.maxVolume, self.minRadius, self.maxRadius, true);    
 };
 
 Geosound.prototype.map = function(value, istart, istop, ostart, ostop, confine) 

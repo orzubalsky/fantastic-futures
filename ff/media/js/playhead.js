@@ -2,6 +2,7 @@
 	var playhead = window.playhead = new function() 
 	{
         this.layer;                      // kinteticJS layer to animate the circular playhead
+        this.shape;
         this.playhead           = 0;     // this is actually the radius of the circular playhead
 		this.is_playing         = false; // this is used to check whether the player is playing or paused
 		this.playheadCount      = 0;  
@@ -14,7 +15,7 @@
             
             self.layer = new Kinetic.Layer();
             
-            var playhead = new Kinetic.Circle({
+            self.shape = new Kinetic.Circle({
                 x               : ffinterface.width / 2,
                 y               : ffinterface.height / 2,
                 alpha           : 0.8,
@@ -24,7 +25,7 @@
                 strokeWidth     : .25,
             });
 
-            self.layer.add(playhead);
+            self.layer.add(self.shape);
             ffinterface.stage.add(self.layer);
 
             self.playerToggleControl();
@@ -43,13 +44,12 @@
         {
             var self = this;
             
-            var playhead    = self.layer.getChildren()[0];
-            var radius      = playhead.getRadius();
+            var radius = self.shape.getRadius();
 
             if (self.is_playing)
             {
-                radius = (radius.x < self.width / 2) ? Math.floor(radius.x) + 1 : 0;
-                playhead.setRadius(radius);
+                radius = (radius.x < ffinterface.width / 2) ? Math.floor(radius.x) + 1 : 0;
+                self.shape.setRadius(radius);
             }
             
             return radius;
@@ -60,6 +60,23 @@
         {
             var self = this;
             self.layer.draw();
+        };
+        
+        
+        this.adjustRadiusForConnection = function(c)
+        {
+            var sound_1 = geosounds.collection[c.sound_1];
+            var sound_2 = geosounds.collection[c.sound_2];
+                                 
+            var sound_1_distance_from_center = self.dist(sound_1.coords.x, sound_1.coords.y, ffinterface.width/2, ffinterface.height/2);                            
+            var sound_2_distance_from_center = self.dist(sound_2.coords.x, sound_2.coords.y, ffinterface.width/2, ffinterface.height/2);                            
+            
+            var closest_distance             = (sound_1_distance_from_center < sound_2_distance_from_center) ? sound_1_distance_from_center : sound_2_distance_from_center;
+
+            self.shape.setRadius(closest_distance-1); //subtracted 1 just so that first sound will change colors.
+            
+            // set the playhead to playing mode!
+            self.is_playing = true;            
         };
         
 
@@ -100,6 +117,12 @@
                     (self.is_playing) ? player.play() : player.pause();                            
                 }
             }		    
-        };        
+        };
+        
+        this.dist = function(x1,y1,x2,y2)
+        {
+            return Math.floor(Math.sqrt( (x2-x1)*(x2-x1) + (y2-y1)*(y2-y1) ));
+        };
+        
 	};
 })(jQuery);

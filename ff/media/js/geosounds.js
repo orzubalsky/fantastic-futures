@@ -5,7 +5,7 @@
         this.map_points_count;          // keeps track of map sound count. this is used to determine whether a new sound was added
 	    this.lastClick       = -1;      // holds the sound shape object that was clicked on last        
         this.layer;                     // kinteticJS layer to hold all sound shapes
-        this.collection = [];
+        this.collection = {};
 
 
         this.init = function()
@@ -16,7 +16,7 @@
                         
             for(var i=0; i<self.map_points.length; i++)
             {
-                self.mapPointToGeoSound(self.map_points[i]);
+                self.addGeoSound(self.map_points[i]);
             }
             self.map_points_count = self.map_points.length;
                 
@@ -40,13 +40,14 @@
             self.drawJustAddedSounds();
             
             // update geosounds
-            for(var i = 0; i < self.collection.length; i++) 
+            for (var id in self.collection)
             {
-                self.collection[i].update();
-            }            
+                var geosound = self.collection[id];
+                geosound.update();
+            }
         };
-        
-        
+
+
         this.draw = function()
         {
             var self = this;
@@ -61,12 +62,12 @@
             if (self.map_points.length > self.map_points_count)
             {
                 self.map_points_count = self.map_points.length;
-                self.mapPointToGeoSound(self.map_points[self.map_points_count-1]);                
+                self.addGeoSound(self.map_points[self.map_points_count-1]);                
             }
         };        
         
      
-        this.mapPointToGeoSound = function(map_point)
+        this.addGeoSound = function(map_point)
         {
             var self = this;
 
@@ -81,8 +82,8 @@
             geosound = new Geosound(map_point);
             
             // add sound to collection array
-            self.collection.push(geosound);
-            
+            self.collection[map_point.id] = geosound;
+
             geosound.init();             
         };     
         
@@ -184,18 +185,13 @@
         
         this.map = function(value, istart, istop, ostart, ostop, confine) 
         {
-      	   var result = ostart + (ostop - ostart) * ((value - istart) / (istop - istart));
-      	   if (confine)
-      	   {
-      	       result = (result > ostop) ? ostop : result;
-      	       result = (result < ostart) ? ostart : result;
-      	   }
-      	   return result;
-        }
-        
-        this.dist = function(x1,y1,x2,y2)
-        {
-            return Math.floor(Math.sqrt( (x2-x1)*(x2-x1) + (y2-y1)*(y2-y1) ));
-        }        
+            var result = ostart + (ostop - ostart) * ((value - istart) / (istop - istart));
+            if (confine)
+            {
+               result = (result > ostop) ? ostop : result;
+               result = (result < ostart) ? ostart : result;
+            }
+            return result;
+        };      
 	};
 })(jQuery);

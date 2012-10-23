@@ -13,7 +13,8 @@
             
             for (var i=0; i<self.collection.length; i++)
             {                
-                ffinterface.addConnectionToLayer(self.collection[i]);
+                var connection = new Connection();
+                connection.init();
             }          
         
             ffinterface.stage.add(self.layer);            
@@ -31,16 +32,11 @@
         {
             var self = this;
                      
-            for(var i=0; i<self.layer.getChildren().length; i++)
+            for(var i=0; i<self.collection.length; i++)
             {
                 var connection = self.collection[i];
-                var child = self.layer.getChildren()[i];
-
-                var p1 = geosounds.collection[connection.index_1];
-                var p2 = geosounds.collection[connection.index_2];
-
-                child.setPoints([ {x: p1.x, y: p1.y}, {x: p2.x, y: p2.y} ]);
-            }       
+                connection.update();
+            }
         };
         
         
@@ -51,21 +47,27 @@
         };
         
 
-		this.connectTwoSoundShapes = function(soundShape_1, soundShape_2)
+		this.add = function(id_1, id_2)
 		{
 		    var self = this;
 		    
             // create connection between the two sounds
-            c = self.newConnectionFromTwoSoundShapes(soundShape_1, soundShape_2);
+            c = new Connection(id_1, id_2);
+
+            self.collection.push(c);
+            c.init();
 
             // start playing both sounds when the connection is made
-            var sound_1 = geosounds.layer.getChildren()[c.index_1];
-            var sound_2 = geosounds.layer.getChildren()[c.index_2];
-            sound_1.getAttrs().player.play();
-            sound_2.getAttrs().player.play();    
+            var sound_1 = geosounds.collection[id_1];
+            var sound_2 = geosounds.collection[id_2];
+            
+            sound_1.player.play();
+            sound_2.player.play();
 
             // now show all of the other possible connections by highlighting the other sounds                    
-            geosounds.styleAllInactiveSoundShapes('white');		    
+            geosounds.styleAllInactiveSoundShapes('white');
+            
+            return c;
 		};
 
         
@@ -80,8 +82,8 @@
             c.index_1 = soundShape_1.getAttrs().index;
             c.index_2 = soundShape_2.getAttrs().index;
            
-            connections.collection.push(c);  
-            
+            self.collection.push(c);  
+
             c.init();
             
             return c;
