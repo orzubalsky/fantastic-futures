@@ -41,7 +41,7 @@ Geosound.prototype.setup = function()
     var self = this;
         
     // radius value for halo is calculated according to the sound's default volume
-    var radius = ffinterface.map(self.volume, 0.2, 0.8, 5, 20, true);		    
+    var radius = self.map(self.volume, 0.2, 0.8, 5, 20, true);		    
         
     // Kinetic group to store coordinates and meta data about the sound
     self.shape = new Kinetic.Group({
@@ -117,7 +117,7 @@ Geosound.prototype.setup = function()
               // create a player instance for this sound
               if (self.player == '')
               {
-                  var volume = map(radius, 5, 20, 0.2, 0.9);            	         
+                  var volume = self.map(radius, 5, 20, 0.2, 0.9);            	         
                   var player = new Player(self.id, self.index, self.data.filename, volume);
                   self.player =  player;
                   self.player.init();
@@ -146,7 +146,7 @@ Geosound.prototype.setup = function()
                      halo.setRadius(radius);
                      
                      // use the value of radius to determine the sound volume
-                     var volume = map(radius, 5, 20, 0.2, 0.9);
+                     var volume = self.map(radius, 5, 20, 0.2, 0.9);
                      self.player.updateVolume(volume);
                      
                  }, ffinterface.frameRate);
@@ -369,7 +369,7 @@ Geosound.prototype.styleSearchedSoundShape = function(soundShape)
 
             if (self.id == searched_sound.id)
             {
-                var searchScore = Math.floor(map(searched_sound.score, 0.3, 0.7, 0, 255));                            
+                var searchScore = Math.floor(self.map(searched_sound.score, 0.3, 0.7, 0, 255));                            
                 self.shape.getChildren()[0].setFill('rgb('+(searchScore)+','+(searchScore)+','+(0)+')');
                 self.shape.getChildren()[0].setFill('rgb(255,255,0)');
                 break;
@@ -401,5 +401,16 @@ Geosound.prototype.styleSearchedSoundShape = function(soundShape)
             }      
         }
     }
+};
+
+Geosound.prototype.map = function(value, istart, istop, ostart, ostop, confine) 
+{
+   var result = ostart + (ostop - ostart) * ((value - istart) / (istop - istart));
+   if (confine)
+   {
+       result = (result > ostop) ? ostop : result;
+       result = (result < ostart) ? ostart : result;
+   }
+   return result;
 };
 })(jQuery);

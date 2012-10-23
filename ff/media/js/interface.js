@@ -132,17 +132,5 @@
                 images[src].src = sources[src];
             }
         };
-
-
-        this.map = function(value, istart, istop, ostart, ostop, confine) 
-        {
-           var result = ostart + (ostop - ostart) * ((value - istart) / (istop - istart));
-           if (confine)
-           {
-               result = (result > ostop) ? ostop : result;
-               result = (result < ostart) ? ostart : result;
-           }
-           return result;
-        }
 	};
 })(jQuery);	
