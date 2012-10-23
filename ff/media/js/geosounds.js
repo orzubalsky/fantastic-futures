@@ -84,49 +84,17 @@
             self.collection[map_point.id] = geosound;
 
             geosound.init();             
-        };     
-        
-        
-        this.getPointIndexFromId = function(sound_id)
-        {
-            var self = this;
-            
-            for(var j=0; j<self.collection.length; j++)
-            {
-                var geosound = self.collection[j];
-                if (geosound.id == sound_id)
-                {
-                    return geosound.index;
-                }
-            }            
         };
-        
-        
+
+
         this.setActiveStateForAllSounds = function()
         {
              var self = this;
 
-             var allSoundsShapes = self.layer.getChildren();		    
-
-             for(var i=0; i<allSoundsShapes.length; i++)
+             for (var id in self.collection)
              {
-                 var soundShape = allSoundsShapes[i];            
-              
-                 // if the sound is connected to connections it's always "active"
-                 if (geosounds.collection[i].isConnected())
-                 {
-                     soundShape.getAttrs().active = true;
-
-                     // create a player instance for this sound
-                     if (soundShape.getAttrs().player == '')
-                     {
-                         var radius = self.map(soundShape.getAttrs().data.volume, 0.2, 0.8, 5, 20, true);		                	         
-                         var volume = self.map(radius, 5, 20, 0.2, 0.9);            	         
-                         var player = new Player(soundShape.getAttrs().id, soundShape.getAttrs().index, soundShape.getAttrs().data.filename, volume);
-                         soundShape.setAttrs({player: player});
-                         soundShape.getAttrs().player.init();
-                     }
-                 }
+                 var geosound = self.collection[id];
+                 geosound.setActiveState();       
              }
         };
         

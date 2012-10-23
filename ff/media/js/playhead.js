@@ -141,7 +141,7 @@
         {
             var self = this;
             
-            var sounds = geosounds.points_layer.getChildren();
+            var sounds = geosounds.layer.getChildren();
             for (var i=0; i<sounds.length; i++)
             {
                 var sound = sounds[i];

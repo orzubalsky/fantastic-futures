@@ -47,7 +47,7 @@
         };
         
 
-		this.add = function(id_1, id_2)
+		this.add = function(id_1, id_2, startPlaying)
 		{
 		    var self = this;
 		    
@@ -57,15 +57,15 @@
             self.collection.push(c);
             c.init();
 
-            // start playing both sounds when the connection is made
-            var sound_1 = geosounds.collection[id_1];
-            var sound_2 = geosounds.collection[id_2];
+            if (startPlaying)
+            {
+                // start playing both sounds when the connection is made
+                var sound_1 = geosounds.collection[id_1];
+                var sound_2 = geosounds.collection[id_2];
             
-            sound_1.player.play();
-            sound_2.player.play();
-
-            // now show all of the other possible connections by highlighting the other sounds                    
-            geosounds.styleAllInactiveSoundShapes('white');
+                sound_1.player.play();
+                sound_2.player.play();
+            }
             
             return c;
 		};

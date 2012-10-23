@@ -4,6 +4,7 @@
 	    this.collection = [];
         this.constellation;                 // current active constellation
         this.loading_constellation = false  // set to true when a constellation is loaded (rotated + zoomed)
+		this.addButton = false;                 // this is used to check whether the "save constellation" appeared        
 
 
         this.init = function()
@@ -63,31 +64,16 @@
             for (var j=0; j<constellation.connections.length; j++)
             {
                 var db_connection = constellation.connections[j].fields;
-                var connection = new Connection();
-
-                connection.sound_1 = db_connection.sound_1;
-                connection.sound_2 = db_connection.sound_2;
-                
-                connection.index_1 = geosounds.getPointIndexFromId(db_connection.sound_1);             
-                connection.index_2 = geosounds.getPointIndexFromId(db_connection.sound_2);
+                var c = connections.add(db_connection.sound_1, db_connection.sound_2, false);
                 
                 if (volumes)
                 {
-                    var sound_1 = geosounds.layer.getChildren()[connection.index_1];
-                    var sound_1_halo = sound_1.getChildren()[0];
-                    var volume_1 = db_connection.sound_1_volume;
-                    var radius_1 = self.map(volume_1, 0.2, 0.9, 5, 20);
-                    sound_1_halo.setRadius(radius_1);                            
+                    var s1 = geosounds.collection[c.sound_1];
+                    var s2 = geosounds.collection[c.sound_2];
 
-                    var sound_2 = geosounds.layer.getChildren()[connection.index_2];
-                    var sound_2_halo = sound_2.getChildren()[0];
-                    var volume_2 = db_connection.sound_2_volume;
-                    var radius_2 = self.map(volume_1, 0.2, 0.9, 5, 20);
-                    sound_2_halo.setRadius(radius_2);
+                    s1.setVolume(db_connection.sound_1_volume);
+                    s2.setVolume(db_connection.sound_2_volume);
                 }
-
-                connections.collection.push(connection);
-                connection.init();
             }
             
             if (rotate)
@@ -129,7 +115,7 @@
                 geosounds.setActiveStateForAllSounds();
                 
                 // reset addButton, so the loaded constellation could be altered and saved
-                self.addButton = 0;
+                self.addButton = false;
                 
                 // start the player
                 playhead.is_playing = true;

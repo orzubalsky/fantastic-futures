@@ -6,7 +6,6 @@
 	    this.width;                     // window width
 	    this.height;                    // window height
         this.stage;                     // kineticJS stage 
-		this.addButton = 0;             // this is used to check whether the "save constellation" appeared
 		this.search_results = { 'Geosounds': [], 'Constellations': [] }; 
 		this.justAddedCountdown = 0;
 		this.images;
