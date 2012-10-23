@@ -257,7 +257,7 @@ Geosound.prototype.setup = function()
 
     self.shape.add(halo);
     self.shape.add(core);
-    geosounds.points_layer.add(self.shape);	
+    geosounds.layer.add(self.shape);	
 
     // if this sound was just added, color it in blue for 5 seconds
     if (self.justAdded)
@@ -281,22 +281,12 @@ Geosound.prototype.projectTo2D = function()
 {
     var self = this;
     
-    var rotation = pov.rotation;
-    var distance = pov.distance;
-    var width = ffinterface.width;
-    var height = ffinterface.height;    
-    
     var point = {x: self.x, y: self.y, z: self.z};
     
-    point = self.rotateX(point, rotation.x);
-    point = self.rotateY(point, rotation.y);
-    point = self.rotateZ(point, rotation.z);
-    
-    var x = self.projection(point.x, point.z, width/2.0, 100.0, distance);
-    var y = self.projection(point.y, point.z, height/2.0, 100.0, distance);            
+    var coordinates = pov.rotatePoint(point);
         
-    self.coords.x = Math.floor(x);
-    self.coords.y = Math.floor(y);
+    self.coords.x = Math.floor(coordinates.x);
+    self.coords.y = Math.floor(coordinates.y);
 }
 
 Geosound.prototype.updateShapeCoordinates = function()
@@ -411,40 +401,5 @@ Geosound.prototype.styleSearchedSoundShape = function(soundShape)
             }      
         }
     }
-};
-
-Geosound.prototype.projection = function(xy, z, xyOffset, zOffset, distance) 
-{   
-    return ((distance * xy) / (z - zOffset)) + xyOffset;
-}
-
-Geosound.prototype.rotateX = function(point, radians) 
-{
-    var self = this;
-
-    point.y = (point.y * Math.cos(radians)) + (point.z * Math.sin(radians) * -1.0);
-    point.z = (point.y * Math.sin(radians)) + (point.z * Math.cos(radians));
-    
-    return point;
-};
-
-Geosound.prototype.rotateY = function(point, radians)
-{
-    var self = this;
-        
-    point.x = (point.x * Math.cos(radians)) + (point.z * Math.sin(radians) * -1.0);
-    point.z = (point.x * Math.sin(radians)) + (point.z * Math.cos(radians));
-
-    return point;
-};
-
-Geosound.prototype.rotateZ = function(point, radians)
-{
-    var self = this;
-    
-    point.x = (point.x * Math.cos(radians)) + (point.y * Math.sin(radians) * -1.0);
-    point.y = (point.x * Math.sin(radians)) + (point.y * Math.cos(radians));
-
-    return point;
 };
 })(jQuery);

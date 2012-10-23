@@ -1,11 +1,9 @@
 ;(function($){
 	var geosounds = window.geosounds = new function() 
 	{
-        this.sphere;                    // an object that contains the entire 3D space TODO: move this out of this file
-        this.map_points      = [];      // array of points from map.js
-        this.points_2D       = [];      // array of all 2D points, coordinates are calculated every frame
+        this.map_points = [];           // array of points from map.js
         this.map_points_count;          // keeps track of map sound count. this is used to determine whether a new sound was added
-        this.points_layer;              // kinteticJS layer to hold all sound shapes
+        this.layer;                     // kinteticJS layer to hold all sound shapes
         this.collection = [];
 
 
@@ -13,8 +11,7 @@
         {
             var self = this;
             
-            self.sphere         = new self.Sphere3D();
-            self.points_layer   = new Kinetic.Layer();
+            self.layer = new Kinetic.Layer();
                         
             for(var i=0; i<self.map_points.length; i++)
             {
@@ -22,7 +19,7 @@
             }
             self.map_points_count = self.map_points.length;
                 
-            ffinterface.stage.add(self.points_layer);
+            ffinterface.stage.add(self.layer);
         };
 
 
@@ -30,7 +27,7 @@
         {
             var self = this;
             
-            self.points_layer.clear();            
+            self.layer.clear();            
         };
 
 
@@ -52,7 +49,7 @@
         this.draw = function()
         {
             var self = this;
-            self.points_layer.draw();
+            self.layer.draw();
         };
 
 
@@ -76,8 +73,8 @@
             map_point.index = self.collection.length;
                         
             // the new sound coordinates
-            map_point.x = self.reverse_projection(map_point.x, map_point.z, ffinterface.width/2.0, 100.0, pov.distance);
-            map_point.y = self.reverse_projection(map_point.y, map_point.z, ffinterface.height/2.0, 100.0, pov.distance);
+            map_point.x = pov.reverse_projection(map_point.x, map_point.z, ffinterface.width/2.0, 100.0);
+            map_point.y = pov.reverse_projection(map_point.y, map_point.z, ffinterface.height/2.0, 100.0);
 
             // create the sound
             geosound = new Geosound(map_point);
@@ -108,7 +105,7 @@
         {
              var self = this;
 
-             var allSoundsShapes = self.points_layer.getChildren();		    
+             var allSoundsShapes = self.layer.getChildren();		    
 
              for(var i=0; i<allSoundsShapes.length; i++)
              {
@@ -136,7 +133,7 @@
         {
             var self = this;
 
-            var allSoundsShapes = self.points_layer.getChildren();		    
+            var allSoundsShapes = self.layer.getChildren();		    
 
             for(var i=0; i<allSoundsShapes.length; i++)
             {
@@ -159,7 +156,7 @@
 		{
 		    var self = this;
 		    
-            var allSoundsShapes = self.points_layer.getChildren();		    
+            var allSoundsShapes = self.layer.getChildren();		    
 
             for(var i=0; i<allSoundsShapes.length; i++)
             {
@@ -177,28 +174,8 @@
                 }
             }
         };
-        
-        
-        this.Sphere3D = function(radius) 
-        {
-            var self = this;
-            
-            this.point       = new Array();
-            this.connections = new Array();
-            this.radius      = (typeof(radius) == "undefined") ? 10.0 : radius;
-            this.radius      = (typeof(radius) != "number") ? 10.0 : radius;
-        }
 
-        
-        this.projection = function(xy, z, xyOffset, zOffset, distance) {
-            return ((distance * xy) / (z - zOffset)) + xyOffset;
-        }
-        
-        this.reverse_projection = function(xy_2d, z_3d, xyOffset, zOffset, distance)
-        {
-            return ((xy_2d * z_3d) - (xy_2d * zOffset) - (xyOffset * z_3d) + (xyOffset * zOffset)) / distance;
-        }                      
-        
+
         this.deg_to_rad = function(degrees)
         {
             return degrees * Math.PI / 180.0;

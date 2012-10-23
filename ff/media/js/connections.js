@@ -107,27 +107,5 @@
             }
             return geosounds.sphere.connections;
         };
-        
-        
-        this.clearConnections = function() 
-        {
-            var self = this;
-            
-            pov.clear();
-            self.collection = [];
-            self.layer.removeChildren();
-            
-            if (ffinterface.constellation > 0 && !pov.is_animating)
-            {
-                for (var i=0; i<CONSTELLATIONS.length; i++)
-                {
-                    if (CONSTELLATIONS[i].pk == ffinterface.constellation)
-                    {
-                        var constellation = CONSTELLATIONS[i].fields;
-                        ffinterface.drawConstellation(constellation, true, true, function() {});                        
-                    }
-                }
-            }
-        };         
 	};
 })(jQuery);

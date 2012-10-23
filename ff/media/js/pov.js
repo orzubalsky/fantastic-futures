@@ -216,6 +216,67 @@ var pov = window.pov = new function()
     };
 
 
+    this.projection = function(xy, z, xyOffset, zOffset) 
+    {   
+        var self = this;
+        
+        return ((self.distance * xy) / (z - zOffset)) + xyOffset;
+    }
+    
+    
+    this.reverse_projection = function(xy_2d, z_3d, xyOffset, zOffset)
+    {
+        var self = this;
+        
+        return ((xy_2d * z_3d) - (xy_2d * zOffset) - (xyOffset * z_3d) + (xyOffset * zOffset)) / self.distance;
+    };
+    
+    
+    this.rotatePoint = function(point)
+    {
+        var self = this;
+
+        point = self.rotateX(point);
+        point = self.rotateY(point);
+        point = self.rotateZ(point);
+        
+        var x = self.projection(point.x, point.z, ffinterface.width/2.0, 100.0);
+        var y = self.projection(point.y, point.z, ffinterface.height/2.0, 100.0);
+        
+        return {x: x, y: y};
+    };
+
+    this.rotateX = function(point) 
+    {
+        var self = this;
+
+        point.y = (point.y * Math.cos(self.rotation.x)) + (point.z * Math.sin(self.rotation.x) * -1.0);
+        point.z = (point.y * Math.sin(self.rotation.x)) + (point.z * Math.cos(self.rotation.x));
+
+        return point;
+    };
+
+    this.rotateY = function(point)
+    {
+        var self = this;
+
+        point.x = (point.x * Math.cos(self.rotation.y)) + (point.z * Math.sin(self.rotation.y) * -1.0);
+        point.z = (point.x * Math.sin(self.rotation.y)) + (point.z * Math.cos(self.rotation.y));
+
+        return point;
+    };
+
+    this.rotateZ = function(point)
+    {
+        var self = this;
+
+        point.x = (point.x * Math.cos(self.rotation.z)) + (point.y * Math.sin(self.rotation.z) * -1.0);
+        point.y = (point.x * Math.sin(self.rotation.z)) + (point.y * Math.cos(self.rotation.z));
+
+        return point;
+    };
+    
+
     this.deg_to_rad = function(degrees)
     {
         return degrees * Math.PI / 180.0;
