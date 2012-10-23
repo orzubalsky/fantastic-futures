@@ -27,8 +27,8 @@
             this.searchForm();
             this.WIDTH  = $('#interface').width();
             this.HEIGHT = $('#interface').height();
-            site.ajaxUpload.init();
-            site.map.init();
+            ajaxUpload.init();
+            map.init();
             this.debug();
         };
 
@@ -50,7 +50,7 @@
                 }
                 else 
                 {
-                    site.ffinterface.search_results = { 'Geosounds': [], 'Constellations': [] }; 
+                    ffinterface.search_results = { 'Geosounds': [], 'Constellations': [] }; 
                 }
             });
 		};
@@ -60,7 +60,7 @@
             var self = this;
             if (data.success == true)
             {
-                site.ffinterface.search_results = data.results;
+                ffinterface.search_results = data.results;
             }
 		};
 		
@@ -127,7 +127,7 @@
         	    e.preventDefault();        	    
         	  $("#addSound").fadeToggle("fast", "linear");
 			   $("#clickLayer").fadeToggle("fast", "linear");
-              site.pov.resetRotation();        	  
+              pov.resetRotation();        	  
         	});
         	$("#addConstellationText").click(function(e) {
         	    e.preventDefault();        	    
@@ -139,13 +139,13 @@
         	  $("#error").fadeToggle("fast", "linear");
         	});
         	$("#constellationMenu h2").live('mouseenter', function() {
-                site.ffinterface.previewAllConstellations();
+                ffinterface.previewAllConstellations();
         	  $("#constellationMenuContent").fadeToggle("fast", "linear");
         	  $("#constellationMenu #scrollUp").fadeToggle("fast", "linear");
         	  $("#constellationMenu #scrollDown").fadeToggle("fast", "linear");
         	});		
         	$("#constellationMenu h2").live('mouseleave', function() {
-                site.connections.clearConnections();        	    
+                connections.clearConnections();        	    
         	});        	
         	$("#constellationMenu").live('mouseleave', function() {
         	  $("#constellationMenuContent").fadeToggle("fast", "linear");
@@ -175,19 +175,19 @@
         	    e.preventDefault();
         	    
                 var id = lib.getId($(this).attr('id'));
-                site.ffinterface.previewConstellation(id, true, function() {}); 
+                ffinterface.previewConstellation(id, true, function() {}); 
             });
             $('#constellationMenuContent a').live('click', function (e)
             { 
         	    e.preventDefault();
         	    
                 var id = lib.getId($(this).attr('id'));
-                site.ffinterface.loadConstellation(id, true); 
+                ffinterface.loadConstellation(id, true); 
             });            
             $('#constellationMenuContent a').live('mouseleave', function (e)            
             {
                 e.preventDefault();
-                site.connections.clearConnections();
+                connections.clearConnections();
             });        	       	
         	$('#contactUs a').click(function(e)
         	{
@@ -260,29 +260,29 @@
             	$('#addConstellationForm input, #addConstellationForm textarea').removeClass('error');
             	$('#addConstellationForm .errors').empty();
             		            	    
-                var connections = site.ffinterface.getActiveConnections();                
+                var connections = ffinterface.getActiveConnections();                
             	$('#addConstellationForm input[name=connection_count]').val(connections.length);
-            	$('#addConstellationForm input[name=zoom]').val(site.pov.zoom);
+            	$('#addConstellationForm input[name=zoom]').val(pov.zoom);
             	
                 var data = $(this).serialize();
 
                 Dajaxice.futures.submit_constellation(self.addConstellation_callback, {
                     'form'          : data, 
                     'connections'   : connections,
-                    'rotation'      : site.pov.rotation
+                    'rotation'      : pov.rotation
                 });
         	});    
             $('#customZoomIn').live('click', function(e) 
         	{
         	    e.preventDefault();
         	    
-        	    site.pov.changeZoom(0.2);
+        	    pov.changeZoom(0.2);
         	});
             $('#customZoomOut').live('click', function(e) 
         	{
         	    e.preventDefault();
         	    
-        	    site.ffinterface.changeZoom(-0.2);
+        	    ffinterface.changeZoom(-0.2);
         	});        	
 		};
 		
@@ -311,7 +311,7 @@
             	                $('#addSoundForm button.time').removeClass('selected').val('0');
             	                
                                 // 6. show sound on map
-                                site.map.addSound(data.geojson);
+                                map.addSound(data.geojson);
                                 
                                 // 7. hide map            	                
             	                

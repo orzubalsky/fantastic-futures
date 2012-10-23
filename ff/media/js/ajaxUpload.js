@@ -1,5 +1,5 @@
 ;(function($){
-	var ajaxUpload = window.site.ajaxUpload = new function() {
+	var ajaxUpload = window.ajaxUpload = new function() {
 	    this.csrfToken;
 		this.init = function() {
 			this.csrfToken = $('#addSoundForm input[name="csrfmiddlewaretoken"]').val();

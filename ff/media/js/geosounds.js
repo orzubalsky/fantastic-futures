@@ -1,5 +1,5 @@
 ;(function($){
-	var geosounds = window.site.geosounds = new function() 
+	var geosounds = window.geosounds = new function() 
 	{
         this.sphere;                    // an object that contains the entire 3D space TODO: move this out of this file
         this.map_points      = [];      // array of points from map.js
@@ -22,7 +22,7 @@
             }
             self.map_points_count = self.map_points.length;
                 
-            site.ffinterface.stage.add(self.points_layer);
+            ffinterface.stage.add(self.points_layer);
         };
 
 
@@ -76,11 +76,11 @@
             map_point.index = self.collection.length;
                         
             // the new sound coordinates
-            map_point.x = self.reverse_projection(map_point.x, map_point.z, site.ffinterface.width/2.0, 100.0, site.pov.distance);
-            map_point.y = self.reverse_projection(map_point.y, map_point.z, site.ffinterface.height/2.0, 100.0, site.pov.distance);
+            map_point.x = self.reverse_projection(map_point.x, map_point.z, ffinterface.width/2.0, 100.0, pov.distance);
+            map_point.y = self.reverse_projection(map_point.y, map_point.z, ffinterface.height/2.0, 100.0, pov.distance);
 
             // create the sound
-            geosound = new site.Geosound(map_point);
+            geosound = new Geosound(map_point);
             
             // add sound to collection array
             self.collection.push(geosound);
@@ -115,7 +115,7 @@
                  var soundShape = allSoundsShapes[i];            
               
                  // if the sound is connected to connections it's always "active"
-                 if (site.geosounds.collection[i].soundShapeConnectsToExistingConnection())
+                 if (geosounds.collection[i].soundShapeConnectsToExistingConnection())
                  {
                      soundShape.getAttrs().active = true;
 
@@ -124,7 +124,7 @@
                      {
                          var radius = self.map(soundShape.getAttrs().data.volume, 0.2, 0.8, 5, 20, true);		                	         
                          var volume = self.map(radius, 5, 20, 0.2, 0.9);            	         
-                         var player = new site.Player(soundShape.getAttrs().id, soundShape.getAttrs().index, soundShape.getAttrs().data.filename, volume);
+                         var player = new Player(soundShape.getAttrs().id, soundShape.getAttrs().index, soundShape.getAttrs().data.filename, volume);
                          soundShape.setAttrs({player: player});
                          soundShape.getAttrs().player.init();
                      }

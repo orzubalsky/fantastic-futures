@@ -1,5 +1,5 @@
 ;(function($){
-	var playhead = window.site.playhead = new function() 
+	var playhead = window.playhead = new function() 
 	{
         this.layer;                      // kinteticJS layer to animate the circular playhead
         this.playhead           = 0;     // this is actually the radius of the circular playhead
@@ -15,17 +15,17 @@
             self.layer = new Kinetic.Layer();
             
             var playhead = new Kinetic.Circle({
-                x               : site.ffinterface.width / 2,
-                y               : site.ffinterface.height / 2,
+                x               : ffinterface.width / 2,
+                y               : ffinterface.height / 2,
                 alpha           : 0.8,
                 radius          : 0,
-                fill            : {image: site.ffinterface.images.playhead_fill, offset: [0, 0]}, //stripes
+                fill            : {image: ffinterface.images.playhead_fill, offset: [0, 0]}, //stripes
                 stroke          : "#efefef",
                 strokeWidth     : .25,
             });
 
             self.layer.add(playhead);
-            site.ffinterface.stage.add(self.layer);
+            ffinterface.stage.add(self.layer);
 
             self.playerToggleControl();
         };
@@ -72,7 +72,7 @@
                 // check if a form is open
                 var formActive = ($('#clickLayer').css('display') == 'block') ? true : false;
                 
-                if (site.connections.getActiveConnections().length > 0 && !formActive)
+                if (connections.getActiveConnections().length > 0 && !formActive)
                 {
         	        var key = e.which || e.keyCode || e.keyChar;
 
@@ -90,7 +90,7 @@
         {
             var self = this;
             
-            var sounds = site.geosounds.points_layer.getChildren();
+            var sounds = geosounds.points_layer.getChildren();
             for (var i=0; i<sounds.length; i++)
             {
                 var sound = sounds[i];

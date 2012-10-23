@@ -1,5 +1,5 @@
 ;(function($){
-	var connections = window.site.connections = new function() 
+	var connections = window.connections = new function() 
 	{
         this.layer;         // kinteticJS layer to hold all connection lines
         this.collection = [];
@@ -13,10 +13,10 @@
             
             for (var i=0; i<self.collection.length; i++)
             {                
-                site.ffinterface.addConnectionToLayer(self.sphere.connections[i]);
+                ffinterface.addConnectionToLayer(self.sphere.connections[i]);
             }          
         
-            site.ffinterface.stage.add(self.layer);            
+            ffinterface.stage.add(self.layer);            
         };
 
 
@@ -36,8 +36,8 @@
                 var connection = self.collection[i];
                 var child = self.layer.getChildren()[i];
 
-                var p1 = site.geosounds.collection[connection.index_1];
-                var p2 = site.geosounds.collection[connection.index_2];
+                var p1 = geosounds.collection[connection.index_1];
+                var p2 = geosounds.collection[connection.index_2];
 
                 child.setPoints([ {x: p1.x, y: p1.y}, {x: p2.x, y: p2.y} ]);
             }       
@@ -59,13 +59,13 @@
             c = self.newConnectionFromTwoSoundShapes(soundShape_1, soundShape_2);
 
             // start playing both sounds when the connection is made
-            var sound_1 = site.geosounds.points_layer.getChildren()[c.index_1];
-            var sound_2 = site.geosounds.points_layer.getChildren()[c.index_2];
+            var sound_1 = geosounds.points_layer.getChildren()[c.index_1];
+            var sound_2 = geosounds.points_layer.getChildren()[c.index_2];
             sound_1.getAttrs().player.play();
             sound_2.getAttrs().player.play();    
 
             // now show all of the other possible connections by highlighting the other sounds                    
-            site.geosounds.styleAllInactiveSoundShapes('white');		    
+            geosounds.styleAllInactiveSoundShapes('white');		    
 		};
 
         
@@ -73,14 +73,14 @@
         {
             var self = this;
 
-            c = new site.Connection();
+            c = new Connection();
 
             c.sound_1 = soundShape_1.getAttrs().id;
             c.sound_2 = soundShape_2.getAttrs().id;
             c.index_1 = soundShape_1.getAttrs().index;
             c.index_2 = soundShape_2.getAttrs().index;
            
-            site.connections.collection.push(c);  
+            connections.collection.push(c);  
             
             c.init();
             
@@ -92,9 +92,9 @@
         {
             var self = this;
             
-            for (var i=0; i<site.geosounds.sphere.connections.length; i++)
+            for (var i=0; i<geosounds.sphere.connections.length; i++)
             {
-                var c = site.geosounds.sphere.connections[i];
+                var c = geosounds.sphere.connections[i];
                 
                 var sound_1 = self.points_layer.getChildren()[c.index_1];
                 var sound_2 = self.points_layer.getChildren()[c.index_2];
@@ -105,7 +105,7 @@
                 c.sound_1_volume = Math.floor(c.sound_1_volume*100) / 100;
                 c.sound_2_volume = Math.floor(c.sound_2_volume*100) / 100;                
             }
-            return site.geosounds.sphere.connections;
+            return geosounds.sphere.connections;
         };
         
         
@@ -113,18 +113,18 @@
         {
             var self = this;
             
-            site.pov.clear();
+            pov.clear();
             self.collection = [];
             self.layer.removeChildren();
             
-            if (site.ffinterface.constellation > 0 && !site.pov.is_animating)
+            if (ffinterface.constellation > 0 && !pov.is_animating)
             {
                 for (var i=0; i<CONSTELLATIONS.length; i++)
                 {
-                    if (CONSTELLATIONS[i].pk == site.ffinterface.constellation)
+                    if (CONSTELLATIONS[i].pk == ffinterface.constellation)
                     {
                         var constellation = CONSTELLATIONS[i].fields;
-                        site.ffinterface.drawConstellation(constellation, true, true, function() {});                        
+                        ffinterface.drawConstellation(constellation, true, true, function() {});                        
                     }
                 }
             }

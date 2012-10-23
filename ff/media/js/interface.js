@@ -1,5 +1,5 @@
 ;(function($){
-	var ffinterface = window.site.ffinterface = new function() 
+	var ffinterface = window.ffinterface = new function() 
 	{
 	    this.running = false;           // represents the high level state of the entire interface
 	    this.frameRate;                 // refresh rate
@@ -43,7 +43,7 @@
 
                 setTimeout(function() 
                 {
-                    site.pov.randomize();
+                    pov.randomize();
                     self.running = true;                    
                 }, 400);
             });
@@ -56,13 +56,13 @@
             
             self.stage = new Kinetic.Stage({container: "interface", width: self.width, height: self.height });
 
-            site.playhead.init();
+            playhead.init();
             
-            site.pov.init();
+            pov.init();
             
-            site.geosounds.init();
+            geosounds.init();
             
-            site.connections.init();
+            connections.init();
                                     
             $("#loadingGif").fadeToggle("fast", "linear");
         }
@@ -73,10 +73,10 @@
             var self = this;
             
             // first clear the current connections
-            site.connections.clearConnections();
+            connections.clearConnections();
             
-            site.playhead.is_playing = false;
-            site.playhead.togglePlayerSounds();
+            playhead.is_playing = false;
+            playhead.togglePlayerSounds();
             
             for (var i=0; i<CONSTELLATIONS.length; i++)
             {
@@ -95,36 +95,36 @@
             for (var j=0; j<constellation.connections.length; j++)
             {
                 var db_connection = constellation.connections[j].fields;
-                var connection = new site.Connection();
+                var connection = new Connection();
 
                 connection.sound_1 = db_connection.sound_1;
                 connection.sound_2 = db_connection.sound_2;
                 
-                connection.index_1 = site.geosounds.getPointIndexFromId(db_connection.sound_1);             
-                connection.index_2 = site.geosounds.getPointIndexFromId(db_connection.sound_2);
+                connection.index_1 = geosounds.getPointIndexFromId(db_connection.sound_1);             
+                connection.index_2 = geosounds.getPointIndexFromId(db_connection.sound_2);
                 
                 if (volumes)
                 {
-                    var sound_1 = site.geosounds.points_layer.getChildren()[connection.index_1];
+                    var sound_1 = geosounds.points_layer.getChildren()[connection.index_1];
                     var sound_1_halo = sound_1.getChildren()[0];
                     var volume_1 = db_connection.sound_1_volume;
                     var radius_1 = self.map(volume_1, 0.2, 0.9, 5, 20);
                     sound_1_halo.setRadius(radius_1);                            
 
-                    var sound_2 = site.geosounds.points_layer.getChildren()[connection.index_2];
+                    var sound_2 = geosounds.points_layer.getChildren()[connection.index_2];
                     var sound_2_halo = sound_2.getChildren()[0];
                     var volume_2 = db_connection.sound_2_volume;
                     var radius_2 = self.map(volume_1, 0.2, 0.9, 5, 20);
                     sound_2_halo.setRadius(radius_2);
                 }
 
-                site.connections.collection.push(connection);
+                connections.collection.push(connection);
                 connection.init();
             }        
             
             if (rotate)
             {
-                site.pov.rotateTo(constellation.rotation_x, constellation.rotation_y, constellation.rotation_z, constellation.zoom, 25, function() 
+                pov.rotateTo(constellation.rotation_x, constellation.rotation_y, constellation.rotation_z, constellation.zoom, 25, function() 
                 {
                     callback();
                 });
@@ -136,7 +136,7 @@
             var self = this;
             
             // first clear the current connections
-            site.connections.clearConnections();
+            connections.clearConnections();
             
             for (var i=0; i<CONSTELLATIONS.length; i++)
             {
@@ -158,13 +158,13 @@
                 self.loading_constellation = false;
                                 
                 // set active state for all connected sounds
-                site.geosounds.setActiveStateForAllSounds();
+                geosounds.setActiveStateForAllSounds();
                 
                 // reset addButton, so the loaded constellation could be altered and saved
                 self.addButton = 0;
                 
                 // start the player
-                site.playhead.is_playing = true;
+                playhead.is_playing = true;
             });
 
          };
@@ -178,24 +178,24 @@
             self.clear();
             
             // update point of view according to rotation and zoom
-            site.pov.update();
+            pov.update();
             
             // update playhead position
-            site.playhead.update();
+            playhead.update();
             
-            site.geosounds.update();
+            geosounds.update();
             
             // update state of each connection
-            site.connections.update();
+            connections.update();
         }
         
         this.clear = function()
         {
             var self = this;
 
-            site.geosounds.clear();
-            site.connections.clear();
-            site.playhead.clear();
+            geosounds.clear();
+            connections.clear();
+            playhead.clear();
         };
 
 
@@ -203,9 +203,9 @@
         {
             var self = this;
             
-            site.geosounds.draw();
-            site.connections.draw();
-            site.playhead.draw();
+            geosounds.draw();
+            connections.draw();
+            playhead.draw();
         };
 
 

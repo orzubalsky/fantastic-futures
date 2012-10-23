@@ -1,6 +1,6 @@
 ;(function($){
 
-site.Connection = function()
+Connection = function()
 {
     this.sound_1 = 0;
     this.sound_2 = 0;
@@ -10,7 +10,7 @@ site.Connection = function()
     this.sound_2_volume = 0.0;
 };
 
-site.Connection.prototype.init = function()
+Connection.prototype.init = function()
 {
     var self = this;
 
@@ -18,12 +18,12 @@ site.Connection.prototype.init = function()
     self.setup();    
 };
 
-site.Connection.prototype.setup = function()
+Connection.prototype.setup = function()
 {	
     var self = this;
         
-    var p1 = site.geosounds.collection[self.index_1];
-    var p2 = site.geosounds.collection[self.index_2];
+    var p1 = geosounds.collection[self.index_1];
+    var p2 = geosounds.collection[self.index_2];
     		    		    
     var line = new Kinetic.Line({
         points          : [p1.x, p1.y, p2.x, p2.y],
@@ -32,11 +32,11 @@ site.Connection.prototype.setup = function()
         lineCap         : "round",
         lineJoin        : "round"
     });
-    site.connections.layer.add(line);  
+    connections.layer.add(line);  
 };
 
 
-site.Connection.prototype.update = function()
+Connection.prototype.update = function()
 {
     var self = this;
     

@@ -1,5 +1,5 @@
 ;(function($){
-var pov = window.site.pov = new function() 
+var pov = window.pov = new function() 
 {
     this.layer;
     this.base_distance      = 2000;     // used as a constant to multiply by current zoom
@@ -23,7 +23,7 @@ var pov = window.site.pov = new function()
         self.rotation        = { x: 0, y: 0, z: 0 };
         self.target_rotation = { x: 0, y: 0, z: 0 };
         
-        site.pov.setupStageDragging();
+        pov.setupStageDragging();
     };
 
 
@@ -154,11 +154,11 @@ var pov = window.site.pov = new function()
             // stop any rotation animation that was running
             self.clear();
 
-            var mousePos = site.ffinterface.stage.getMousePosition();
+            var mousePos = ffinterface.stage.getMousePosition();
 
             var s = 10;
-            var x = ((mousePos.x * 2*s) - site.ffinterface.width*s) / site.ffinterface.width;
-            var y = ((mousePos.y * 2*s) - site.ffinterface.height*s) / site.ffinterface.height;
+            var x = ((mousePos.x * 2*s) - ffinterface.width*s) / ffinterface.width;
+            var y = ((mousePos.y * 2*s) - ffinterface.height*s) / ffinterface.height;
 
             rotationYAmount = self.deg_to_rad(Math.abs(x)) / self.zoom;
             rotationXAmount = self.deg_to_rad(Math.abs(y)) / self.zoom;
@@ -192,8 +192,8 @@ var pov = window.site.pov = new function()
         var rotationCanvas = new Kinetic.Rect({
             x       : 0,
             y       : 0,
-            width   : site.ffinterface.width,
-            height  : site.ffinterface.height,
+            width   : ffinterface.width,
+            height  : ffinterface.height,
             fill    : "transparent",
             draggable: true,
             dragBounds: { top: 0, right: 0, bottom: 0, left: 0 }
@@ -202,17 +202,17 @@ var pov = window.site.pov = new function()
         rotationCanvas.on("mousedown", function() 
         {
             // reset the interface last click variable 
-            site.ffinterface.lastClick = -1;
+            ffinterface.lastClick = -1;
             
             // reset the style of all sounds
-            site.geosounds.styleAllInactiveSoundShapes('black');
+            geosounds.styleAllInactiveSoundShapes('black');
 
             //hide all sound text
             $(".soundText").fadeOut(200);
         });
 
         self.layer.add(rotationCanvas);
-        site.ffinterface.stage.add(self.layer);
+        ffinterface.stage.add(self.layer);
     };
 
 

@@ -1,5 +1,5 @@
 ;(function($){
-	var map = window.site.map = new function() 
+	var map = window.map = new function() 
 	{	
 	    this.width           = $('#interface').width();
 	    this.height          = $('#interface').height();
@@ -13,7 +13,7 @@
             // output an error if the browser doesn't support canvas (the entire site is based on canvases)
             if (!OpenLayers.CANVAS_SUPPORTED) 
             {
-                site.outputError('Your browser does not support canvas, nothing to see here!');
+                outputError('Your browser does not support canvas, nothing to see here!');
             }
             
             // add the 4326 to dymaxiom transformation function
@@ -121,14 +121,14 @@
 					lib.log("start sound loadend: "+currentTime.getTime());
                    
                    // save coordinates                   
-                   site.ffinterface.map_points = [];
+                   ffinterface.map_points = [];
                    for(var i=0; i<layer.features.length; i++)
                    {
                        self.pushPointToInterface(layer.features[i], layer);
                    }
-                   if (site.ffinterface.running == false) 
+                   if (ffinterface.running == false) 
                    {                       
-                       site.ffinterface.init(); 
+                       ffinterface.init(); 
                    }
                    	if ($("#map").css("opacity")>0){
        					$("#map").fadeOut(1000);
@@ -163,7 +163,7 @@
                 is_recent   : feature.data.is_recent,
                 just_added  : feature.data.just_added
             };
-            site.geosounds.map_points.push(map_point);
+            geosounds.map_points.push(map_point);
         };
         
         this.getGeometryFromFeature = function(feature, layer)
