@@ -87,27 +87,6 @@
             c.init();
             
             return c;
-        };
-        
-        
-        this.getActiveConnections = function()
-        {
-            var self = this;
-            
-            for (var i=0; i<self.collection.length; i++)
-            {
-                var c = self.collection[i];
-                
-                var sound_1 = self.layer.getChildren()[c.index_1];
-                var sound_2 = self.layer.getChildren()[c.index_2];
-                
-                c.sound_1_volume = self.map(sound_1.getChildren()[0].getAttrs().radius.x, 5, 20, 0.2, 0.9);
-                c.sound_2_volume = self.map(sound_2.getChildren()[0].getAttrs().radius.x, 5, 20, 0.2, 0.9);
-                
-                c.sound_1_volume = Math.floor(c.sound_1_volume*100) / 100;
-                c.sound_2_volume = Math.floor(c.sound_2_volume*100) / 100;                
-            }
-            return self.collection;
-        };
+        };        
 	};
 })(jQuery);

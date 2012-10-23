@@ -141,29 +141,21 @@ Geosound.prototype.setup = function()
                  else 
                  {                            
                      // 2. this is a connection made in succession, right after another was just made
-                     if (self.isConnected == false && geosounds.soundIsConnected(geosounds.lastClick) == true)
+                     // 3. this a connection made after resetting he lastClick variable, 
+                     //    clicking on a sound that isn't conneted, 
+                     //    and connecting it to a sound which is connected                     
+                     // 4. this a connection made after resetting he lastClick variable, 
+                     //    clicking on a sound that *is* conneted, 
+                     //    and connecting it to a sound which isn't connected                     
+                     if ((self.isConnected == false && geosounds.soundIsConnected(geosounds.lastClick) == true)
+                     ||
+                     (self.isConnected == true && geosounds.soundIsConnected(geosounds.lastClick) == false)
+                     ||
+                     (self.isConnected == true && geosounds.soundIsConnected(geosounds.lastClick) == true))
                      {
                          // make the connection between this sound and the one last clicked
                          c = connections.add(geosounds.lastClick, self.id, true);
                      }
-                     
-                     // 3. this a connection made after resetting he lastClick variable, 
-                     //    clicking on a sound that isn't conneted, 
-                     //    and connecting it to a sound which is connected
-                     if (self.isConnected == true && geosounds.soundIsConnected(geosounds.lastClick) == false)
-                     {
-                         // make the connection between this sound and the one last clicked
-                         c = connections.add(geosounds.lastClick, self.id, true);
-                     }  
-                     
-                     // 4. this a connection made after resetting he lastClick variable, 
-                     //    clicking on a sound that *is* conneted, 
-                     //    and connecting it to a sound which isn't connected
-                     if (self.isConnected == true && geosounds.soundIsConnected(geosounds.lastClick) == true)
-                     {
-                         // make the connection between this sound and the one last clicked
-                         c = connections.add(geosounds.lastClick, self.id, true);
-                     }  
                  }
                  
                  // show add constellation link upon making the first connection 

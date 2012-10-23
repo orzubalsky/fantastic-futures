@@ -256,15 +256,14 @@
             	$('#addConstellationForm input, #addConstellationForm textarea').removeClass('error');
             	$('#addConstellationForm .errors').empty();
             		            	    
-                var connections = connections.getActiveConnections();                
-            	$('#addConstellationForm input[name=connection_count]').val(connections.length);
+            	$('#addConstellationForm input[name=connection_count]').val(connections.collection.length);
             	$('#addConstellationForm input[name=zoom]').val(pov.zoom);
             	
                 var data = $(this).serialize();
 
                 Dajaxice.futures.submit_constellation(self.addConstellation_callback, {
                     'form'          : data, 
-                    'connections'   : connections,
+                    'connections'   : connections.collection,
                     'rotation'      : pov.rotation
                 });
         	});    

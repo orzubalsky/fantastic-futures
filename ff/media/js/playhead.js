@@ -123,7 +123,7 @@
                 // check if a form is open
                 var formActive = ($('#clickLayer').css('display') == 'block') ? true : false;
                 
-                if (connections.getActiveConnections().length > 0 && !formActive)
+                if (connections.collection.length > 0 && !formActive)
                 {
         	        var key = e.which || e.keyCode || e.keyChar;
 
