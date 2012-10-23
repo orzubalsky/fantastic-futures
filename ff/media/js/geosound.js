@@ -13,6 +13,7 @@ Geosound = function(map_point)
     this.story      = map_point.story;
     this.isNew      = map_point.is_recent;
     this.justAdded  = map_point.just_added;
+    this.filename   = map_point.filename;
     this.player     = '';
     this.volume     = map_point.volume;
     this.active     = false;    
@@ -118,7 +119,7 @@ Geosound.prototype.setup = function()
               if (self.player == '')
               {
                   var volume = self.map(radius, 5, 20, 0.2, 0.9);            	         
-                  var player = new Player(self.id, self.index, self.data.filename, volume);
+                  var player = new Player(self.id, self.index, self.filename, volume);
                   self.player =  player;
                   self.player.init();
               }
@@ -156,17 +157,17 @@ Geosound.prototype.setup = function()
              /* SOUND CONNECTION LOGIC */
              
              // if this is the first sound clicked in order to make a connection
-             if (ffinterface.lastClick == -1) 
+             if (geosounds.lastClick == -1) 
              {
                  // if there are connections, you can only connect the sound to them
-                 if (ffinterface.getActiveConnections().length > 0)
+                 if (connections.getActiveConnections().length > 0)
                  {
-                     ffinterface(this, 'white');                            
+                     //ffinterface(this, 'white');                            
                  }
                  else 
                  {
                      // if there aren't, this is the first sound ever clicked, and anything is possible!
-                     ffinterface('white');
+                     //ffinterface('white');
                  }                        
              }
              else
@@ -174,13 +175,13 @@ Geosound.prototype.setup = function()
                  // this is the second sound clicked on, several scenarios are possible:
                  
                  // 1. this is the first connection made
-                 if (ffinterface.getActiveConnections().length == 0)
+                 if (connections.getActiveConnections().length == 0)
                  {
                      // make the connection between this sound and the one last clicked
-                     c = ffinterface.connectTwoSoundShapes(ffinterface.lastClick, this);
+                     c = connections.connectTwoSoundShapes(geosounds.lastClick, this);
                      
                      // expand the playhead so the radius is as big as the sound that's closest to the center
-                     var sound_1_distance_from_center = ffinterface.dist(ffinterface.lastClick.getX(), ffinterface.lastClick.getY(), ffinterface.width/2, ffinterface.height/2);                            
+                     var sound_1_distance_from_center = ffinterface.dist(geosounds.lastClick.getX(), geosounds.lastClick.getY(), ffinterface.width/2, ffinterface.height/2);                            
                      var sound_2_distance_from_center = ffinterface.dist(this.getX(), this.getY(), ffinterface.width/2, ffinterface.height/2);                            
                      var closest_distance             = (sound_1_distance_from_center < sound_2_distance_from_center) ? sound_1_distance_from_center : sound_2_distance_from_center;
                      var playhead                     = ffinterface.playhead_layer.getChildren()[0];
@@ -192,28 +193,28 @@ Geosound.prototype.setup = function()
                  else 
                  {                            
                      // 2. this is a connection made in succession, right after another was just made
-                     if (self.soundShapeConnectsToExistingConnection(this) == false && self.soundShapeConnectsToExistingConnection(ffinterface.lastClick) == true)
+                     if (self.soundShapeConnectsToExistingConnection(this) == false && self.soundShapeConnectsToExistingConnection(geosounds.lastClick) == true)
                      {
                          // make the connection between this sound and the one last clicked
-                         c = ffinterface.connectTwoSoundShapes(ffinterface.lastClick, this);                                
+                         c = connections.connectTwoSoundShapes(geosounds.lastClick, this);                                
                      }
                      
                      // 3. this a connection made after resetting he lastClick variable, 
                      //    clicking on a sound that isn't conneted, 
                      //    and connecting it to a sound which is connected
-                     if (self.soundShapeConnectsToExistingConnection(this) == true && self.soundShapeConnectsToExistingConnection(ffinterface.lastClick) == false)
+                     if (self.soundShapeConnectsToExistingConnection(this) == true && self.soundShapeConnectsToExistingConnection(geosounds.lastClick) == false)
                      {
                          // make the connection between this sound and the one last clicked
-                         c = ffinterface.connectTwoSoundShapes(ffinterface.lastClick, this);                                
+                         c = connections.connectTwoSoundShapes(geosounds.lastClick, this);                                
                      }  
                      
                      // 4. this a connection made after resetting he lastClick variable, 
                      //    clicking on a sound that *is* conneted, 
                      //    and connecting it to a sound which isn't connected
-                     if (self.soundShapeConnectsToExistingConnection(this) == true && self.soundShapeConnectsToExistingConnection(ffinterface.lastClick) == true)
+                     if (self.soundShapeConnectsToExistingConnection(this) == true && self.soundShapeConnectsToExistingConnection(geosounds.lastClick) == true)
                      {
                          // make the connection between this sound and the one last clicked
-                         c = ffinterface.connectTwoSoundShapes(ffinterface.lastClick, this);                                
+                         c = connections.connectTwoSoundShapes(geosounds.lastClick, this);                                
                      }  
                  }
                  
@@ -226,7 +227,7 @@ Geosound.prototype.setup = function()
              }
 
              // store the sound which was clicked in the interface lastClick variable
-             ffinterface.lastClick = this;
+             geosounds.lastClick = this;
          }
          else 
          {

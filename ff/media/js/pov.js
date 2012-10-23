@@ -8,7 +8,7 @@ var pov = window.pov = new function()
     this.target_rotation;
     this.is_animating       = false;    // represents the state of rotation & zooming
     this.zoom               = 1.0;
-    this.target_zoom        = 1.0;
+    this.target_zoom;
     this.zoom_max           = 15.0;
     this.zoom_min           = 1.0;
     this.callback = '';
@@ -94,7 +94,7 @@ var pov = window.pov = new function()
         var self = this;
         
         self.target_rotation = '';
-        self.target_zoom = '';
+        self.target_zoom = self.zoom;
         self.callback = '';
     };
 
@@ -106,7 +106,7 @@ var pov = window.pov = new function()
         var rotate_to = lib.random(90,30);
         var zoom_to = lib.random(150,50) / 100;
 
-        // self.rotateTo(self.deg_to_rad(rotate_to), self.deg_to_rad(rotate_to), self.deg_to_rad(0) ,zoom_to, 90, function() {});
+        self.rotateTo(self.deg_to_rad(rotate_to), self.deg_to_rad(rotate_to), self.deg_to_rad(0) ,zoom_to, 90, function() {});
     };
 
 

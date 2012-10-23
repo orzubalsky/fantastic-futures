@@ -3,6 +3,7 @@
 	{
         this.map_points = [];           // array of points from map.js
         this.map_points_count;          // keeps track of map sound count. this is used to determine whether a new sound was added
+	    this.lastClick       = -1;      // holds the sound shape object that was clicked on last        
         this.layer;                     // kinteticJS layer to hold all sound shapes
         this.collection = [];
 

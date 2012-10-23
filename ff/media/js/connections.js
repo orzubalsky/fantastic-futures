@@ -13,7 +13,7 @@
             
             for (var i=0; i<self.collection.length; i++)
             {                
-                ffinterface.addConnectionToLayer(self.sphere.connections[i]);
+                ffinterface.addConnectionToLayer(self.collection[i]);
             }          
         
             ffinterface.stage.add(self.layer);            
@@ -59,8 +59,8 @@
             c = self.newConnectionFromTwoSoundShapes(soundShape_1, soundShape_2);
 
             // start playing both sounds when the connection is made
-            var sound_1 = geosounds.points_layer.getChildren()[c.index_1];
-            var sound_2 = geosounds.points_layer.getChildren()[c.index_2];
+            var sound_1 = geosounds.layer.getChildren()[c.index_1];
+            var sound_2 = geosounds.layer.getChildren()[c.index_2];
             sound_1.getAttrs().player.play();
             sound_2.getAttrs().player.play();    
 
@@ -92,12 +92,12 @@
         {
             var self = this;
             
-            for (var i=0; i<geosounds.sphere.connections.length; i++)
+            for (var i=0; i<self.collection.length; i++)
             {
-                var c = geosounds.sphere.connections[i];
+                var c = self.collection[i];
                 
-                var sound_1 = self.points_layer.getChildren()[c.index_1];
-                var sound_2 = self.points_layer.getChildren()[c.index_2];
+                var sound_1 = self.layer.getChildren()[c.index_1];
+                var sound_2 = self.layer.getChildren()[c.index_2];
                 
                 c.sound_1_volume = self.map(sound_1.getChildren()[0].getAttrs().radius.x, 5, 20, 0.2, 0.9);
                 c.sound_2_volume = self.map(sound_2.getChildren()[0].getAttrs().radius.x, 5, 20, 0.2, 0.9);
@@ -105,7 +105,7 @@
                 c.sound_1_volume = Math.floor(c.sound_1_volume*100) / 100;
                 c.sound_2_volume = Math.floor(c.sound_2_volume*100) / 100;                
             }
-            return geosounds.sphere.connections;
+            return self.collection;
         };
 	};
 })(jQuery);

@@ -73,13 +73,13 @@
                 
                 if (volumes)
                 {
-                    var sound_1 = geosounds.points_layer.getChildren()[connection.index_1];
+                    var sound_1 = geosounds.layer.getChildren()[connection.index_1];
                     var sound_1_halo = sound_1.getChildren()[0];
                     var volume_1 = db_connection.sound_1_volume;
                     var radius_1 = self.map(volume_1, 0.2, 0.9, 5, 20);
                     sound_1_halo.setRadius(radius_1);                            
 
-                    var sound_2 = geosounds.points_layer.getChildren()[connection.index_2];
+                    var sound_2 = geosounds.layer.getChildren()[connection.index_2];
                     var sound_2_halo = sound_2.getChildren()[0];
                     var volume_2 = db_connection.sound_2_volume;
                     var radius_2 = self.map(volume_1, 0.2, 0.9, 5, 20);
