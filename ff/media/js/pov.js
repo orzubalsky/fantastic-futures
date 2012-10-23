@@ -2,6 +2,7 @@
 var pov = window.pov = new function() 
 {
     this.layer;
+    this.shape;
     this.base_distance      = 2000;     // used as a constant to multiply by current zoom
     this.distance           = 2000;     // POV for 3D sphere	    
     this.rotation;                      // 3D rotation for the sphere, in radians. {x: 0.0, y: 0.0, z:0.0 }
@@ -23,7 +24,7 @@ var pov = window.pov = new function()
         self.rotation        = { x: 0, y: 0, z: 0 };
         self.target_rotation = { x: 0, y: 0, z: 0 };
         
-        pov.setupStageDragging();
+        self.setupStageDragging();
     };
 
 
@@ -189,7 +190,7 @@ var pov = window.pov = new function()
     {
         var self = this;
 
-        var rotationCanvas = new Kinetic.Rect({
+        self.shape = new Kinetic.Rect({
             x       : 0,
             y       : 0,
             width   : ffinterface.width,
@@ -199,10 +200,10 @@ var pov = window.pov = new function()
             dragBounds: { top: 0, right: 0, bottom: 0, left: 0 }
         });
         
-        rotationCanvas.on("mousedown", function() 
+        self.shape.on("mousedown", function() 
         {
             // reset the interface last click variable 
-            ffinterface.lastClick = -1;
+            geosounds.lastClick = -1;
             
             // reset the style of all sounds
             geosounds.styleAllInactiveSoundShapes('black');
@@ -211,7 +212,7 @@ var pov = window.pov = new function()
             $(".soundText").fadeOut(200);
         });
 
-        self.layer.add(rotationCanvas);
+        self.layer.add(self.shape);
         ffinterface.stage.add(self.layer);
     };
 

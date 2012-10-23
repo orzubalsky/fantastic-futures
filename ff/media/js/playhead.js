@@ -65,6 +65,8 @@
         
         this.adjustRadiusForConnection = function(c)
         {
+            var self = this;
+            
             var sound_1 = geosounds.collection[c.sound_1];
             var sound_2 = geosounds.collection[c.sound_2];
                                  
@@ -79,6 +81,38 @@
             self.is_playing = true;            
         };
         
+        
+        this.pointIsWithin = function(x,y)
+        {
+            var self = this;
+            
+            var distance_from_center = self.dist(x, y, ffinterface.width/2, ffinterface.height/2);
+            
+            if (distance_from_center <= self.shape.getRadius().x)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        };
+        
+        this.pointIsOn = function(x,y)
+        {
+            var self = this;
+            
+            var distance_from_center = self.dist(x, y, ffinterface.width/2, ffinterface.height/2);
+            
+            if (distance_from_center == self.shape.getRadius().x)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        };        
 
         this.playerToggleControl = function()
         {
