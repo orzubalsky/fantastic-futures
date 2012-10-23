@@ -1,18 +1,18 @@
 ;(function($){
 	var playhead = window.site.playhead = new function() 
 	{
-        this.playhead_layer;            // kinteticJS layer to animate the circular playhead
-        this.playhead = 0;              // this is actually the radius of the circular playhead
-		this.is_playing = false;        // this is used to check whether the player is playing or paused
-		this.playheadCount=0;  
-		this.playheadIntervals=20;		//this is how often the playhead gets redrawn. A high number=less frequency of redrawing            
+        this.layer;                      // kinteticJS layer to animate the circular playhead
+        this.playhead           = 0;     // this is actually the radius of the circular playhead
+		this.is_playing         = false; // this is used to check whether the player is playing or paused
+		this.playheadCount      = 0;  
+		this.playheadIntervals  =20;     //this is how often the playhead gets redrawn. A high number=less frequency of redrawing            
 
 
         this.init = function()
         {
             var self = this;
             
-            self.playhead_layer      = new Kinetic.Layer();
+            self.layer = new Kinetic.Layer();
             
             var playhead = new Kinetic.Circle({
                 x               : site.ffinterface.width / 2,
@@ -24,8 +24,8 @@
                 strokeWidth     : .25,
             });
 
-            self.playhead_layer.add(playhead);
-            site.ffinterface.stage.add(self.playhead_layer);
+            self.layer.add(playhead);
+            site.ffinterface.stage.add(self.layer);
 
             self.playerToggleControl();
         };
@@ -35,7 +35,7 @@
         {
             var self = this;
             
-            self.playhead_layer.clear();
+            self.layer.clear();
         };
 
 
@@ -43,7 +43,7 @@
         {
             var self = this;
             
-            var playhead    = self.playhead_layer.getChildren()[0];
+            var playhead    = self.layer.getChildren()[0];
             var radius      = playhead.getRadius();
 
             if (self.is_playing)
@@ -52,14 +52,14 @@
                 playhead.setRadius(radius);
             }
             
-            return radius;          
+            return radius;
         };
         
         
         this.draw = function()
         {
             var self = this;
-            self.playhead_layer.draw();
+            self.layer.draw();
         };
         
 

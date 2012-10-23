@@ -286,12 +286,14 @@ site.Geosound.prototype.projectTo2D = function()
     var width = site.ffinterface.width;
     var height = site.ffinterface.height;    
     
-    self.rotateX(rotation.x);
-    self.rotateY(rotation.y);
-    self.rotateZ(rotation.z);
+    var point = {x: self.x, y: self.y, z: self.z};
     
-    var x = self.projection(self.x, self.z, width/2.0, 100.0, distance);
-    var y = self.projection(self.y, self.z, height/2.0, 100.0, distance);            
+    point = self.rotateX(point, rotation.x);
+    point = self.rotateY(point, rotation.y);
+    point = self.rotateZ(point, rotation.z);
+    
+    var x = self.projection(point.x, point.z, width/2.0, 100.0, distance);
+    var y = self.projection(point.y, point.z, height/2.0, 100.0, distance);            
         
     self.coords.x = Math.floor(x);
     self.coords.y = Math.floor(y);
@@ -416,27 +418,33 @@ site.Geosound.prototype.projection = function(xy, z, xyOffset, zOffset, distance
     return ((distance * xy) / (z - zOffset)) + xyOffset;
 }
 
-site.Geosound.prototype.rotateX = function(radians) 
+site.Geosound.prototype.rotateX = function(point, radians) 
 {
     var self = this;
 
-    self.y = (self.y * Math.cos(radians)) + (self.z * Math.sin(radians) * -1.0);
-    self.z = (self.y * Math.sin(radians)) + (self.z * Math.cos(radians));
+    point.y = (point.y * Math.cos(radians)) + (point.z * Math.sin(radians) * -1.0);
+    point.z = (point.y * Math.sin(radians)) + (point.z * Math.cos(radians));
+    
+    return point;
 };
 
-site.Geosound.prototype.rotateY = function(radians)
+site.Geosound.prototype.rotateY = function(point, radians)
 {
     var self = this;
         
-    self.x = (self.x * Math.cos(radians)) + (self.z * Math.sin(radians) * -1.0);
-    self.z = (self.x * Math.sin(radians)) + (self.z * Math.cos(radians));
+    point.x = (point.x * Math.cos(radians)) + (point.z * Math.sin(radians) * -1.0);
+    point.z = (point.x * Math.sin(radians)) + (point.z * Math.cos(radians));
+
+    return point;
 };
 
-site.Geosound.prototype.rotateZ = function(radians)
+site.Geosound.prototype.rotateZ = function(point, radians)
 {
     var self = this;
     
-    self.x = (self.x * Math.cos(radians)) + (self.y * Math.sin(radians) * -1.0);
-    self.y = (self.x * Math.sin(radians)) + (self.y * Math.cos(radians));
+    point.x = (point.x * Math.cos(radians)) + (point.y * Math.sin(radians) * -1.0);
+    point.y = (point.x * Math.sin(radians)) + (point.y * Math.cos(radians));
+
+    return point;
 };
 })(jQuery);
