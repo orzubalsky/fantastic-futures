@@ -260,10 +260,10 @@
             	$('#addConstellationForm input[name=zoom]').val(pov.zoom);
             	
                 var data = $(this).serialize();
-
+       
                 Dajaxice.futures.submit_constellation(self.addConstellation_callback, {
                     'form'          : data, 
-                    'connections'   : connections.collection,
+                    'connections'   : active_connections,
                     'rotation'      : pov.rotation
                 });
         	});    
