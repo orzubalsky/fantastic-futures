@@ -25,6 +25,9 @@ Geosound = function(map_point)
     this.minRadius  = 5;
     this.maxRadius  = 20;
     this.isConnected = false;
+    this.isPlaying   = false;
+    this.isSearched  = false;
+    
 };
 
 Geosound.prototype.init = function()
@@ -48,14 +51,12 @@ Geosound.prototype.setup = function()
 
     // radius value for halo is calculated according to the sound's default volume
     var radius = self.radiusFromVolume();
-    
+
     // Kinetic group to store coordinates and meta data about the sound
     self.shape = new Kinetic.Group({
         x           : self.coords.x,
         y           : self.coords.y,
         alpha       : 0.4,
-        draggable   : true,
-        dragBounds: { top: 0, right: 0, bottom: 0, left: 0 },
     });	
 
     self.shape.on("mouseover", function() 
@@ -69,7 +70,7 @@ Geosound.prototype.setup = function()
             'top'   : (self.coords.y-110) + 'px',
             'left'  : (self.coords.x-27) + 'px'
         })
-        .stop().fadeIn(400);
+        .stop().fadeIn(100);
 
         if (self.story == ""){
             $('.story').css('display','none');
@@ -91,7 +92,7 @@ Geosound.prototype.setup = function()
         $('#container').css({'cursor':'default'});
 
         // hide the sound text div
-        $('.soundText').fadeOut(400);
+        $('.soundText').fadeOut(100);
 
         // reset the sound style
         if (!self.active)
@@ -108,18 +109,18 @@ Geosound.prototype.setup = function()
     self.shape.on("mousedown", function() 
     {
          self.setActiveState();
-         
+     
          if (self.active) 
          {
               // change the "core" color
               self.core().setFill('#005fff');
-             
+         
              // wait 500ms and then start animating the halo/volume
              self.volumeInteraction(500);
-                                 
-             
+                             
+         
              /* SOUND CONNECTION LOGIC */
-             
+         
              // if this is the first sound clicked in order to make a connection
              if (geosounds.lastClick == -1) 
              {
@@ -128,13 +129,13 @@ Geosound.prototype.setup = function()
              else
              {
                  // this is the second sound clicked on, several scenarios are possible:
-                 
+             
                  // 1. this is the first connection made
                  if (connections.collection.length == 0)
                  {
                      // make the connection between this sound and the one last clicked
                      c = connections.add(geosounds.lastClick, self.id, true);
-                     
+                 
                      // expand the playhead so the radius is as big as the sound that's closest to the center
                      playhead.adjustRadiusForConnection(c);
                  }
@@ -157,17 +158,17 @@ Geosound.prototype.setup = function()
                          c = connections.add(geosounds.lastClick, self.id, true);
                      }
                  }
-                 
+             
                  // show add constellation link upon making the first connection 
                  if (constellations.addButton == false)
                  {
                      $('#addConstellationText').fadeToggle("fast", "linear");
                      constellations.addButton = true;
                  }
-                 
+             
                  // now show all of the other possible connections by highlighting the other sounds                    
                  geosounds.styleAllInactiveSoundShapes('white');
-                 
+             
                  // the sound is now connected!
                  self.isConnected = true;
              }
@@ -180,20 +181,19 @@ Geosound.prototype.setup = function()
          {
              // reset core color to original
              self.core().setFill('#000');
-             
+         
              // remove audio player instance
              self.player.destroy();
          }
      });		    
 
-
-    // volume halo ellipse
-    var halo = new Kinetic.Circle({
+     // volume halo ellipse
+     var halo = new Kinetic.Circle({
         radius        : radius,
         fill          : "#ccc",
         stroke        : "white",
-        strokeWidth   : 0,
-    });
+        strokeWidth   : 0.25,
+     });
 
     // core ellipse for interaction
     var core = new Kinetic.Circle({
@@ -215,7 +215,6 @@ Geosound.prototype.setup = function()
     }
 };
 
-
 Geosound.prototype.update = function()
 {
     var self = this;
@@ -223,6 +222,28 @@ Geosound.prototype.update = function()
     self.projectTo2D();
     self.updateShapeCoordinates();
     self.updateStyle();
+    self.checkIfSearched();
+    self.applyStyles();
+};
+
+Geosound.prototype.applyStyles = function()
+{
+    var self = this;
+    
+    self.halo().setFill('#ccc');        
+    
+    if (self.isPlaying) { self.core().setFill("#005fff"); }
+    
+    if (!self.isPlaying) { self.core().setFill("#000"); }
+
+    if (self.isNew) { self.halo().setFill("#333"); }
+    
+    if (self.isSearched)
+    {
+       // var searchScore = Math.floor(self.map(searched_sound.score, 0.3, 0.7, 0, 255));                            
+       // self.halo().setFill('rgb('+(searchScore)+','+(searchScore)+','+(0)+')');
+       self.halo().setFill('rgb(255,255,0)');        
+    }
 };
 
 Geosound.prototype.projectTo2D = function()
@@ -292,79 +313,40 @@ Geosound.prototype.updateStyle = function()
                  {
                      self.player.stop();  
                      self.player.play();
-                     self.core().setFill("#005fff");	//style sound that is playing
+                     self.isPlaying = true;
                  }
              }
 
-             if (self.active == true && !self.player.$player.data("jPlayer").status.paused)
-             {                    
-         	    self.core().setFill("#005fff");	//style sound that is playing
-             }
-             else 
-             {
-         	    self.core().setFill("#000");	//style sound that isn't playing
-             }
+             self.isPlaying = (self.active == true && !self.player.$player.data("jPlayer").status.paused) ? true : false; 
          }
          else 
          {
              if (self.active == true && pov.is_animating)
-             {
-                 if (self.player != '')
-                 {
-                     self.player.stop();
-                 }
-                 self.core().setFill("#000");	//style sound that isn't playing
+             { 
+                 (self.player != '') ? self.player.stop() : '';
+                 self.isPlaying = false;
              }                    	                    
          }
      }
 };
 
 
-Geosound.prototype.styleSearchedSoundShape = function(soundShape)
+Geosound.prototype.checkIfSearched = function()
 {
     var self = this;
     var searched_sounds = ffinterface.search_results.Geosounds;
     
     if (searched_sounds.length > 0)
     {
-        for (var j=0; j<searched_sounds.length; j++)
+        for (var i=0; i<searched_sounds.length; i++)
         {
-            var searched_sound = searched_sounds[j];
-            var range = 1;
-
-            if (self.id == searched_sound.id)
-            {
-                var searchScore = Math.floor(self.map(searched_sound.score, 0.3, 0.7, 0, 255));                            
-                self.halo().setFill('rgb('+(searchScore)+','+(searchScore)+','+(0)+')');
-                self.halo().setFill('rgb(255,255,0)');
-                break;
-            }
-            else 
-            {
-                if (self.isNew)
-                {
-                    self.halo().setFill("#333");    
-                }
-                else 
-                {
-                    self.halo().setFill("#ccc");        //turns halo grey after the page loads                        
-                }	
-            }
+            var searched_sound = searched_sounds[i];
+            self.isSearched = (self.id == searched_sound.id) ? true : false;
         }
     }
-    else
+    else 
     {
-        if (!self.justAdded)
-        {                    
-            if (self.isNew)
-            {
-                self.halo().setFill("#333");                                
-            }
-            else 
-            {
-                self.halo().setFill("#ccc");       //turns halo grey after the page loads                          
-            }      
-        }
+        self.isSearched = false;
     }
 };
 
