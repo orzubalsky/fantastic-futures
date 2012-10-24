@@ -164,8 +164,6 @@ Geosound.prototype.setup = function()
 
              // store the id of the sound which was clicked in the interface lastClick variable
              geosounds.lastClick = self.id;
-             lib.log(geosounds.lastClick);
-             lib.log(geosounds.soundIsConnected(geosounds.lastClick));
          }
          else 
          {
@@ -197,8 +195,7 @@ Geosound.prototype.setup = function()
     // if this sound was just added, color it in blue for 5 seconds
     if (self.justAdded)
     {
-        self.halo().setFill('#005fff');
-        setTimeout(function() { self.halo().setFill('#666'); }, 5000);
+        setTimeout(function() { self.justAdded = false }, 5000);
     }
 };
 
@@ -228,6 +225,9 @@ Geosound.prototype.applyStyles = function()
        // self.halo().setFill('rgb('+(searchScore)+','+(searchScore)+','+(0)+')');
        this.halo().setFill('rgb(255,255,0)');
     }
+    
+    // if this sound was just added, color it in blue for 5 seconds
+    if (this.justAdded) { this.halo().setFill('#005fff'); }    
         
     if (geosounds.lastClick != -1)
     {

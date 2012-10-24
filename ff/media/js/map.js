@@ -108,7 +108,7 @@
     			layer.events.register("loadend", layer, function() 
     			{	
                    // save coordinates                   
-                   ffinterface.map_points = [];
+                   geosounds.map_points = [];
                    for(var i=0; i<layer.features.length; i++)
                    {
                        self.pushPointToInterface(layer.features[i], layer);

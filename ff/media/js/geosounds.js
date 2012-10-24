@@ -17,7 +17,10 @@ var geosounds = window.geosounds = new function()
             this.add(this.map_points[i]);
         }
         this.map_points_count = this.map_points.length;
-            
+        
+        lib.log("count: " + this.map_points_count);
+        lib.log("length: " + this.map_points.length);
+        
         ffinterface.stage.add(this.layer);
     };
 
@@ -45,7 +48,7 @@ var geosounds = window.geosounds = new function()
     };
     
     this.drawJustAddedSounds = function()
-    {        
+    {
         if (this.map_points.length > this.map_points_count)
         {
             this.map_points_count = this.map_points.length;
