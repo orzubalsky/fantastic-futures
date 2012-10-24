@@ -133,19 +133,13 @@ var pov = window.pov = new function()
             var rotation_x = this.rotation.x;
             var rotation_y = this.rotation.y;
             
-            this.target_rotation = { 
+            this.rotation = this.target_rotation = { 
                 x: rotation_x += rotationXAmount,
                 y: rotation_y += rotationYAmount,
                 z: 0,
             };
             
-            this.rotation.x = (this.rotation.x >= this.deg_to_rad(360)) ? this.deg_to_rad(0) : this.rotation.x;
-            this.rotation.y = (this.rotation.y >= this.deg_to_rad(360)) ? this.deg_to_rad(0) : this.rotation.y;
-            this.rotation.z = (this.rotation.z >= this.deg_to_rad(360)) ? this.deg_to_rad(0) : this.rotation.z;
-            
-            this.target_rotation.x = (this.target_rotation.x >= this.deg_to_rad(360)) ? this.deg_to_rad(0) : this.target_rotation.x;
-            this.target_rotation.y = (this.target_rotation.y >= this.deg_to_rad(360)) ? this.deg_to_rad(0) : this.target_rotation.y;
-            this.target_rotation.z = (this.target_rotation.z >= this.deg_to_rad(360)) ? this.deg_to_rad(0) : this.target_rotation.z;                        
+            this.rotate();
         }
     };
 

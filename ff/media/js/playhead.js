@@ -79,7 +79,7 @@
     {        
         var distance_from_center = this.dist(x, y, ffinterface.width/2, ffinterface.height/2);
         
-        return (distance_from_center == self.shape.getRadius().x) ? true : false;
+        return (distance_from_center == this.shape.getRadius().x) ? true : false;
     };        
 
     this.playerToggleControl = function()
