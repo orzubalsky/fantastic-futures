@@ -58,10 +58,8 @@ var pov = window.pov = new function()
     };
 
     this.resetRotation = function()
-    {
-        var rotation = this.rotation;
-        
-        self.rotateTo(0,0,0, 1.0, 25, function() 
+    {        
+        this.rotateTo(0,0,0, 1.0, 25, function() 
         {
             $('#interface').fadeOut(2000);
             $('#map').css('opacity','1');
