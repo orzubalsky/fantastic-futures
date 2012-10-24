@@ -220,6 +220,7 @@ Geosound.prototype.update = function()
 
 Geosound.prototype.applyStyles = function()
 {    
+    this.core().setFill('black');
     this.halo().setFill('#ccc'); 
     
     if (this.isPlaying) { this.core().setFill("#005fff"); }

@@ -111,7 +111,7 @@ var pov = window.pov = new function()
         var rotate_to = lib.random(90,30);
         var zoom_to = lib.random(150,50) / 100;
         
-        // this.rotateTo(self.deg_to_rad(rotate_to), self.deg_to_rad(rotate_to), self.deg_to_rad(0) ,zoom_to, 90, function() {});
+        this.rotateTo(this.deg_to_rad(rotate_to), this.deg_to_rad(rotate_to), this.deg_to_rad(0) ,zoom_to, 90, function() {});
     };
 
     this.rotateInteraction = function()
