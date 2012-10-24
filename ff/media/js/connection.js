@@ -18,6 +18,10 @@ Connection.prototype.setup = function()
 {
     var s1 = geosounds.collection[this.sound_1];
     var s2 = geosounds.collection[this.sound_2];
+    
+    // change variable to reflect the sounds are connected
+    s1.isConnected = true;
+    s2.isConnected = true;    
     		    		    
     this.shape = new Kinetic.Line({
         points          : [s1.coords.x, s1.coords.y, s2.coords.x, s2.coords.y],

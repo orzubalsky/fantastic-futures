@@ -53,7 +53,6 @@ var pov = window.pov = new function()
             {
                 this.callback();
             }
-            this.callback = '';
         }
     };
 

@@ -31,8 +31,8 @@
         } 
     };
 
-    this.previewOne = function(id, rotate, callback)
-    {
+    this.previewOne = function(id, rotate, pace, callback)
+    {        
         // first clear the current connections
         this.clear();
 
@@ -44,12 +44,12 @@
             if (CONSTELLATIONS[i].pk == id)
             {
                 var constellation = CONSTELLATIONS[i].fields;
-                this.drawOne(constellation, rotate, true, callback());
+                this.drawOne(constellation, rotate, true, pace, callback);
             }
         }
     };
     
-    this.drawOne = function(constellation, rotate, volumes, callback) 
+    this.drawOne = function(constellation, rotate, volumes, pace, callback) 
     {
         for (var i=0; i<constellation.connections.length; i++)
         {
@@ -68,7 +68,7 @@
         
         if (rotate)
         {
-            pov.rotateTo(constellation.rotation_x, constellation.rotation_y, constellation.rotation_z, constellation.zoom, 25, function() 
+            pov.rotateTo(constellation.rotation_x, constellation.rotation_y, constellation.rotation_z, constellation.zoom, pace, function() 
             {
                 callback();
             });
@@ -88,17 +88,17 @@
         }
     };
     
-     this.loadOne = function(id, rotate)
+     this.loadOne = function(id)
      {
         this.loading_constellation = true;
         this.constellation = id;
-        this.previewOne(id, rotate, function() 
+        this.previewOne(id, true, 12, function() 
         {                                
             // after rotation/zoom is done, set loading_constellation to reflect the current state
             this.loading_constellation = false;
                             
             // set active state for all connected sounds
-            geosounds.setActiveStateForAllSounds();
+            geosounds.setActiveStateForConnectedSounds();
             
             // reset addButton, so the loaded constellation could be altered and saved
             this.addButton = false;

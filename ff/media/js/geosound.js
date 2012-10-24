@@ -154,12 +154,6 @@ Geosound.prototype.setup = function()
                      $('#addConstellationText').fadeToggle("fast", "linear");
                      constellations.addButton = true;
                  }
-
-                 // the sound is now connected!
-                 self.isConnected = true;
-                 
-                 // and the other one too
-                 geosounds.collection[geosounds.lastClick].isConnected = true;
              }
 
              // store the id of the sound which was clicked in the interface lastClick variable
@@ -311,7 +305,7 @@ Geosound.prototype.setActiveState = function()
     // if the sound is connected to connections it's always "active"
     // if it's not connected, the active state is toggled with every mouse click         
     this.active = (this.isConnected) ? true : !this.active;
-    
+
     if (this.active) 
     {
          // create a player instance for this sound

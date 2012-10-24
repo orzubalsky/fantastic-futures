@@ -18,9 +18,6 @@ var geosounds = window.geosounds = new function()
         }
         this.map_points_count = this.map_points.length;
         
-        lib.log("count: " + this.map_points_count);
-        lib.log("length: " + this.map_points.length);
-        
         ffinterface.stage.add(this.layer);
     };
 
@@ -74,12 +71,15 @@ var geosounds = window.geosounds = new function()
         geosound.init();             
     };
 
-    this.setActiveStateForAllSounds = function()
+    this.setActiveStateForConnectedSounds = function()
     {
          for (var id in this.collection)
          {
              var geosound = this.collection[id];
-             geosound.setActiveState();       
+             if (geosound.isConnected)
+             {
+                 geosound.setActiveState();       
+             }
          }
     };
     

@@ -171,14 +171,14 @@
         	    e.preventDefault();
         	    
                 var id = lib.getId($(this).attr('id'));
-                constellations.previewOne(id, true, function() {}); 
+                constellations.previewOne(id, true, 25, function() { return true; }); 
             });
             $('#constellationMenuContent a').live('click', function (e)
             { 
         	    e.preventDefault();
         	    
                 var id = lib.getId($(this).attr('id'));
-                constellations.loadOne(id, true); 
+                constellations.loadOne(id); 
             });            
             $('#constellationMenuContent a').live('mouseleave', function (e)            
             {
