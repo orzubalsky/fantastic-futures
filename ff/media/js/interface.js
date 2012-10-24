@@ -9,6 +9,7 @@ var ffinterface = window.ffinterface = new function()
 	this.search_results = { 'Geosounds': [], 'Constellations': [] }; 
 	this.justAddedCountdown = 0;
 	this.images;
+	this.frame=0;
 
     /* set up the interface and run it */
     this.init = function()
@@ -63,6 +64,8 @@ var ffinterface = window.ffinterface = new function()
     this.update = function()
     {      
         var self = this;
+        
+        self.frame += 1;
 
         // clear all layers
         self.clear();

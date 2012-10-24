@@ -4,10 +4,10 @@ Geosound = function(map_point)
 {
     this.id         = map_point.id;
     this.index      = map_point.index;    
-    this.x          = map_point.x
-    this.y          = map_point.y;
+    this.x          = map_point.x_3d
+    this.y          = map_point.y_3d;
     this.z          = map_point.z;
-    this.coords     = {x: 0, y: 0};
+    this.coords     = {x: map_point.x, y: map_point.y};
     this.name       = map_point.created_by;
     this.location   = map_point.location;
     this.story      = map_point.story;
@@ -35,15 +35,11 @@ Geosound.prototype.init = function()
     var self = this;
 
     // calculate coordinates in 2D space
-    var coordinates = self.projectTo2D();
-        
-    // add sound shape to the geosounds layer
-    self.setup();    
-    
-    // call update once to populate 2D coordinates
-    self.update();
-};
+    self.projectTo2D();
 
+    // add sound shape to the geosounds layer
+    self.setup();
+};
 
 Geosound.prototype.setup = function()
 {	
@@ -254,8 +250,8 @@ Geosound.prototype.projectTo2D = function()
     
     var coordinates = pov.rotatePoint(point);
         
-    self.coords.x = Math.floor(coordinates.x);
-    self.coords.y = Math.floor(coordinates.y);
+    self.coords.x = coordinates.x;
+    self.coords.y = coordinates.y;
 }
 
 Geosound.prototype.updateShapeCoordinates = function()
@@ -330,7 +326,6 @@ Geosound.prototype.updateStyle = function()
      }
 };
 
-
 Geosound.prototype.checkIfSearched = function()
 {
     var self = this;
@@ -349,7 +344,6 @@ Geosound.prototype.checkIfSearched = function()
         self.isSearched = false;
     }
 };
-
 
 Geosound.prototype.volumeInteraction = function(timeoutMs)
 {

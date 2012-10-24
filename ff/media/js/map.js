@@ -134,8 +134,8 @@
             var self = this;            
             var coordinates = self.getGeometryFromFeature(feature, layer);
             var map_point = {
-                x           : coordinates[0], 
-                y           : coordinates[1], 
+                x           : Math.floor(coordinates[0]), 
+                y           : Math.floor(coordinates[1]), 
                 id          : feature.data.id,
                 title       : feature.data.title,
                 location    : feature.data.location,

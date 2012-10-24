@@ -9,7 +9,7 @@ var pov = window.pov = new function()
     this.target_rotation;
     this.is_animating       = false;    // represents the state of rotation & zooming
     this.zoom               = 1.0;
-    this.target_zoom;
+    this.target_zoom        = 1.0;
     this.zoom_max           = 15.0;
     this.zoom_min           = 1.0;
     this.callback = '';
@@ -25,26 +25,27 @@ var pov = window.pov = new function()
         self.target_rotation = { x: 0, y: 0, z: 0 };
         
         self.setup();
-        self.update();
     };
     
     this.update = function()
-    {
+    {        
         var self = this;
+                
         var rotation = self.rotation;
         var target   = self.target_rotation;
         var zoom     = self.zoom;
         var target_zoom = self.target_zoom;
-                    
+        
         // stage drag rotation calculation
         self.rotateInteraction();
-
+                
         // stage zoom calculation
         self.zoomInteraction();
 
         // determine whether anything should be animating
         self.is_animating = (rotation.x == target.x && rotation.y == target.y && rotation.z == target.z && zoom == target_zoom) ? false : true;
 
+        /*
         if (self.is_animating && target != '') 
         {
             self.rotate();
@@ -59,6 +60,7 @@ var pov = window.pov = new function()
             }
             self.callback = '';
         }
+        */
     };
     
 
@@ -126,7 +128,7 @@ var pov = window.pov = new function()
         var rotate_to = lib.random(90,30);
         var zoom_to = lib.random(150,50) / 100;
         
-        self.rotateTo(self.deg_to_rad(rotate_to), self.deg_to_rad(rotate_to), self.deg_to_rad(0) ,zoom_to, 90, function() {});
+        // self.rotateTo(self.deg_to_rad(rotate_to), self.deg_to_rad(rotate_to), self.deg_to_rad(0) ,zoom_to, 90, function() {});
     };
 
     this.rotateInteraction = function()
@@ -146,12 +148,23 @@ var pov = window.pov = new function()
 
             rotationYAmount = self.deg_to_rad(Math.abs(x)) / self.zoom;
             rotationXAmount = self.deg_to_rad(Math.abs(y)) / self.zoom;
-
+            
+            var rotation_x = self.rotation.x;
+            var rotation_y = self.rotation.y;
+            
             self.target_rotation = { 
-                x: self.rotation.x += rotationXAmount,
-                y: self.rotation.y += rotationYAmount,
+                x: rotation_x += rotationXAmount,
+                y: rotation_y += rotationYAmount,
                 z: 0,
             };
+            
+            self.rotation.x = (self.rotation.x >= self.deg_to_rad(360)) ? self.deg_to_rad(0) : self.rotation.x;
+            self.rotation.y = (self.rotation.y >= self.deg_to_rad(360)) ? self.deg_to_rad(0) : self.rotation.y;
+            self.rotation.z = (self.rotation.z >= self.deg_to_rad(360)) ? self.deg_to_rad(0) : self.rotation.z;
+            
+            self.target_rotation.x = (self.target_rotation.x >= self.deg_to_rad(360)) ? self.deg_to_rad(0) : self.target_rotation.x;
+            self.target_rotation.y = (self.target_rotation.y >= self.deg_to_rad(360)) ? self.deg_to_rad(0) : self.target_rotation.y;
+            self.target_rotation.z = (self.target_rotation.z >= self.deg_to_rad(360)) ? self.deg_to_rad(0) : self.target_rotation.z;                        
         }
     };
 
@@ -213,7 +226,7 @@ var pov = window.pov = new function()
     {   
         var self = this;
         
-        return ((self.distance * xy) / (z - zOffset)) + xyOffset;
+        return Math.floor(((self.distance * xy) / (z - zOffset)) + xyOffset);
     };
     
     this.reverse_projection = function(xy_2d, z_3d, xyOffset, zOffset)
@@ -230,11 +243,13 @@ var pov = window.pov = new function()
         point = self.rotateX(point);
         point = self.rotateY(point);
         point = self.rotateZ(point);
-        
+                
         var x = self.projection(point.x, point.z, ffinterface.width/2.0, 100.0);
         var y = self.projection(point.y, point.z, ffinterface.height/2.0, 100.0);
         
-        return {x: x, y: y};
+        var result = {x: x, y: y};
+        
+        return result;
     };
 
     this.rotateX = function(point) 
