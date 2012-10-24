@@ -80,38 +80,6 @@ var geosounds = window.geosounds = new function()
          }
     };
     
-    this.styleConnectableSounds = function(id)
-    {        
-        // if there are no connections, this is the first sound ever clicked, and anything is possible!            
-        if (connections.collection.length == 0 && !this.soundIsConnected(id))
-        {
-            this.styleAllInactiveSoundShapes('white');                            
-        }
-                    
-        // if there are connections and this sound is connected, you can connect to other inactive sounds
-        if (connections.collection.length > 0 && this.soundIsConnected(id))
-        {
-            this.styleAllInactiveSoundShapes('white');
-        }
-        
-        // if there are connections and this is an unconnected sound, you can connect to existing connected sounds
-        if (connections.collection.length > 0 && !this.soundIsConnected(id))
-        {                
-            this.styleAllOtherActiveSoundShapes(id, 'white');
-        }
-    };
-
-    this.styleAllOtherActiveSoundShapes = function(clickedSoundId, color)
-    {
-        for (var id in this.collection)
-        {
-            var geosound = this.collection[id];
-            
-            // only apply the style change to sounds which are active and aren't this specific sound
-            (geosound.active && id != clickedSoundId) ? geosound.core().setFill(color) : geosound.core().setFill('black');
-        }		    
-	};
-	
 	this.styleAllInactiveSoundShapes = function(color)
 	{	    
         for (var id in this.collection)

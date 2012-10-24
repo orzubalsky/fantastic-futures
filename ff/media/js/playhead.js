@@ -83,7 +83,9 @@
     };        
 
     this.playerToggleControl = function()
-    {        
+    {
+        var self = this;
+        
         $(window).keypress(function(e) 
         {
             // check if a form is open
@@ -96,8 +98,8 @@
     	        // return, backspace, escape, space
                 if (key == 8 || key == 13 || key == 27 || key == 32)
                 {
-                    this.is_playing = !this.is_playing;                        
-                    this.togglePlayerSounds();
+                    self.is_playing = !self.is_playing;                        
+                    self.togglePlayerSounds();
                 }		            
             }
         });

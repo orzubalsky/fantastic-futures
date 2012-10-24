@@ -115,12 +115,7 @@ Geosound.prototype.setup = function()
          
              /* SOUND CONNECTION LOGIC */
          
-             // if this is the first sound clicked in order to make a connection
-             if (geosounds.lastClick == -1) 
-             {
-                  geosounds.styleConnectableSounds(self);
-             }
-             else
+             if (geosounds.lastClick != -1) 
              {
                  // this is the second sound clicked on, several scenarios are possible:
              
@@ -159,23 +154,21 @@ Geosound.prototype.setup = function()
                      $('#addConstellationText').fadeToggle("fast", "linear");
                      constellations.addButton = true;
                  }
-             
-                 // now show all of the other possible connections by highlighting the other sounds                    
-                 geosounds.styleAllInactiveSoundShapes('white');
-             
+
                  // the sound is now connected!
                  self.isConnected = true;
+                 
+                 // and the other one too
+                 geosounds.collection[geosounds.lastClick].isConnected = true;
              }
 
              // store the id of the sound which was clicked in the interface lastClick variable
              geosounds.lastClick = self.id;
-
+             lib.log(geosounds.lastClick);
+             lib.log(geosounds.soundIsConnected(geosounds.lastClick));
          }
          else 
          {
-             // reset core color to original
-             self.core().setFill('#000');
-         
              // remove audio player instance
              self.player.destroy();
          }
@@ -233,8 +226,65 @@ Geosound.prototype.applyStyles = function()
     {
        // var searchScore = Math.floor(self.map(searched_sound.score, 0.3, 0.7, 0, 255));                            
        // self.halo().setFill('rgb('+(searchScore)+','+(searchScore)+','+(0)+')');
-       this.halo().setFill('rgb(255,255,0)');        
+       this.halo().setFill('rgb(255,255,0)');
     }
+        
+    if (geosounds.lastClick != -1)
+    {
+        if (this.id == geosounds.lastClick)
+        {
+            this.core().setFill('black');
+        }
+        else
+        {
+            if (geosounds.soundIsConnected(geosounds.lastClick))
+            {
+                if (this.isConnected && this.active)
+                {
+                    this.core().setFill('black');
+                }
+                if (this.isConnected && !this.active)
+                {
+                    this.core().setFill('black');
+                }
+                if (!this.isConnected && this.active)
+                {
+                    this.core().setFill('black');
+                }                
+                if (!this.isConnected && !this.active)
+                {
+                    this.core().setFill('white');
+                }
+            }
+            else
+            {
+                if (this.isConnected && this.active && connections.collection.length > 0)
+                {
+                    this.core().setFill('white');
+                }
+                if (this.isConnected && this.active && connections.collection.length == 0)
+                {
+                    this.core().setFill('black');
+                }
+                if (this.isConnected && !this.active)
+                {
+                    this.core().setFill('black');
+                }
+                if (!this.isConnected && this.active)
+                {
+                    this.core().setFill('black');
+                }                
+                if (!this.isConnected && !this.active && connections.collection.length == 0)
+                {
+                    this.core().setFill('white');
+                }
+                if (!this.isConnected && !this.active && connections.collection.length > 0)
+                {
+                    this.core().setFill('black');
+                }
+            }
+        }
+    }    
 };
 
 Geosound.prototype.projectTo2D = function()
@@ -279,36 +329,28 @@ Geosound.prototype.updateStyle = function()
      var soundIsWithinPlayhead = playhead.pointIsWithin(this.coords.x, this.coords.y);
      var playheadTouchesSound  = playhead.pointIsOn(this.coords.x, this.coords.y);
      
-     if (geosounds.lastClick != -1)
+     // when sound shape is inside playhead
+     if (soundIsWithinPlayhead)
      {
-         // a sound was clicked, so we want to show what sounds could be connected to it
-         geosounds.styleConnectableSounds(geosounds.lastClick);         
-     }
-     else
-     { 
-         // when sound shape is inside playhead
-         if (soundIsWithinPlayhead)
-         {
-             // play sound from the beginning when playhead hits sound shape
-             if (playheadTouchesSound)
-             {                    
-                 if (this.active == true)
-                 {
-                     this.player.stop();  
-                     this.player.play();
-                     this.isPlaying = true;
-                 }
+         // play sound from the beginning when playhead hits sound shape
+         if (playheadTouchesSound)
+         {                    
+             if (this.active == true)
+             {
+                 this.player.stop();  
+                 this.player.play();
+                 this.isPlaying = true;
              }
-             this.isPlaying = (this.active == true && !this.player.$player.data("jPlayer").status.paused) ? true : false; 
          }
-         else 
-         {
-             if (this.active == true && pov.is_animating)
-             { 
-                 (this.player != '') ? this.player.stop() : '';
-                 this.isPlaying = false;
-             }                    	                    
-         }
+         this.isPlaying = (this.active == true && !this.player.$player.data("jPlayer").status.paused) ? true : false; 
+     }
+     else 
+     {
+         if (this.active == true && pov.is_animating)
+         { 
+             (this.player != '') ? this.player.stop() : '';
+             this.isPlaying = false;
+         }                    	                    
      }
 };
 
