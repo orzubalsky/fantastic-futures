@@ -7,9 +7,8 @@ var ffinterface = window.ffinterface = new function()
     this.height;                    // window height
     this.stage;                     // kineticJS stage 
 	this.search_results = { 'Geosounds': [], 'Constellations': [] }; 
-	this.justAddedCountdown = 0;
 	this.images;
-	this.frame=0;
+	this.frame = 0;
 
     /* set up the interface and run it */
     this.init = function()
@@ -62,42 +61,34 @@ var ffinterface = window.ffinterface = new function()
     };
 
     this.update = function()
-    {      
-        var self = this;
-        
-        self.frame += 1;
+    {              
+        this.frame += 1;
 
         // clear all layers
-        self.clear();
+        this.clear();
         
         pov.update();
         playhead.update();
         geosounds.update();
         connections.update();
     };
-    
-    this.clear = function()
-    {
-        var self = this;
-
-        geosounds.clear();
-        connections.clear();
-        playhead.clear();
-    };
 
     this.draw = function()
-    {
-        var self = this;
-        
+    {        
         geosounds.draw();
         connections.draw();
         playhead.draw();
     };
 
+    this.clear = function()
+    {
+        geosounds.clear();
+        connections.clear();
+        playhead.clear();
+    };
+
     this.loadImages = function(sources, callback) 
     {
-        var self = this;
-
         var images = {};
         var loadedImages  = 0;
         var numImages     = 0;

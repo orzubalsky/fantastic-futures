@@ -42,31 +42,26 @@ Player.prototype.updateVolume = function(volume)
 
 Player.prototype.updatePlayhead = function(position)
 {
-    var self = this;
-    self.$player.jPlayer('playHead', position);
+    this.$player.jPlayer('playHead', position);
 };
 
 Player.prototype.play = function()
 {
-    var self = this;
-    self.$player.jPlayer("play");
+    this.$player.jPlayer("play");
 };
 
 Player.prototype.stop = function()
 {
-    var self = this;
-    self.$player.jPlayer('stop');
+    this.$player.jPlayer('stop');
 };
 
 Player.prototype.pause = function()
 {
-    var self = this;
-    self.$player.jPlayer('pause');
+    this.$player.jPlayer('pause');
 };
 
 Player.prototype.destroy = function()
 {
-    var self = this;
-    self.$player.jPlayer('destory');
+    this.$player.jPlayer('destory');
 };
 })(jQuery);

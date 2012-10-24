@@ -32,13 +32,11 @@ Geosound = function(map_point)
 
 Geosound.prototype.init = function()
 {
-    var self = this;
-
     // calculate coordinates in 2D space
-    self.projectTo2D();
+    this.projectTo2D();
 
     // add sound shape to the geosounds layer
-    self.setup();
+    this.setup();
 };
 
 Geosound.prototype.setup = function()
@@ -212,85 +210,73 @@ Geosound.prototype.setup = function()
 };
 
 Geosound.prototype.update = function()
-{
-    var self = this;
-    
-    self.projectTo2D();
-    self.updateShapeCoordinates();
-    self.updateStyle();
-    self.checkIfSearched();
-    self.applyStyles();
+{    
+    this.projectTo2D();
+    this.updateShapeCoordinates();
+    this.updateStyle();
+    this.checkIfSearched();
+    this.applyStyles();
 };
 
 Geosound.prototype.applyStyles = function()
-{
-    var self = this;
+{    
+    this.halo().setFill('#ccc'); 
     
-    self.halo().setFill('#ccc');        
+    if (this.isPlaying) { this.core().setFill("#005fff"); }
     
-    if (self.isPlaying) { self.core().setFill("#005fff"); }
-    
-    if (!self.isPlaying) { self.core().setFill("#000"); }
+    if (!this.isPlaying) { this.core().setFill("#000"); }
 
-    if (self.isNew) { self.halo().setFill("#333"); }
+    if (this.isNew) { this.halo().setFill("#333"); }
     
-    if (self.isSearched)
+    if (this.isSearched)
     {
        // var searchScore = Math.floor(self.map(searched_sound.score, 0.3, 0.7, 0, 255));                            
        // self.halo().setFill('rgb('+(searchScore)+','+(searchScore)+','+(0)+')');
-       self.halo().setFill('rgb(255,255,0)');        
+       this.halo().setFill('rgb(255,255,0)');        
     }
 };
 
 Geosound.prototype.projectTo2D = function()
-{
-    var self = this;
-    
-    var point = {x: self.x, y: self.y, z: self.z};
+{    
+    var point = {x: this.x, y: this.y, z: this.z};
     
     var coordinates = pov.rotatePoint(point);
         
-    self.coords.x = coordinates.x;
-    self.coords.y = coordinates.y;
+    this.coords.x = coordinates.x;
+    this.coords.y = coordinates.y;
 }
 
 Geosound.prototype.updateShapeCoordinates = function()
 {
-    var self = this;
-
-    self.shape.setX(self.coords.x);
-    self.shape.setY(self.coords.y);
+    this.shape.setX(this.coords.x);
+    this.shape.setY(this.coords.y);
 };
 
 Geosound.prototype.setActiveState = function()
-{
-    var self = this;
-    
+{    
     // radius value for halo is calculated according to the sound's default volume
-    var radius = self.radiusFromVolume();
+    var radius = this.radiusFromVolume();
         
     // if the sound is connected to connections it's always "active"
     // if it's not connected, the active state is toggled with every mouse click         
-    self.active = (self.isConnected) ? true : !self.active;
+    this.active = (this.isConnected) ? true : !this.active;
     
-    if (self.active) 
+    if (this.active) 
     {
          // create a player instance for this sound
-         if (self.player == '')
+         if (this.player == '')
          {
-             var volume = self.volumeFromRadius(radius);
-             self.player = new Player(self.id, self.index, self.filename, volume);
-             self.player.init();
+             var volume = this.volumeFromRadius(radius);
+             this.player = new Player(this.id, this.index, this.filename, volume);
+             this.player.init();
          }
      }
 };
 
 Geosound.prototype.updateStyle = function()
 {
-     var self = this;
-
-     var soundIsWithinPlayhead = playhead.pointIsWithin(self.coords.x, self.coords.y);
-     var playheadTouchesSound  = playhead.pointIsOn(self.coords.x, self.coords.y);
+     var soundIsWithinPlayhead = playhead.pointIsWithin(this.coords.x, this.coords.y);
+     var playheadTouchesSound  = playhead.pointIsOn(this.coords.x, this.coords.y);
      
      if (geosounds.lastClick != -1)
      {
@@ -305,22 +291,21 @@ Geosound.prototype.updateStyle = function()
              // play sound from the beginning when playhead hits sound shape
              if (playheadTouchesSound)
              {                    
-                 if (self.active == true)
+                 if (this.active == true)
                  {
-                     self.player.stop();  
-                     self.player.play();
-                     self.isPlaying = true;
+                     this.player.stop();  
+                     this.player.play();
+                     this.isPlaying = true;
                  }
              }
-
-             self.isPlaying = (self.active == true && !self.player.$player.data("jPlayer").status.paused) ? true : false; 
+             this.isPlaying = (this.active == true && !this.player.$player.data("jPlayer").status.paused) ? true : false; 
          }
          else 
          {
-             if (self.active == true && pov.is_animating)
+             if (this.active == true && pov.is_animating)
              { 
-                 (self.player != '') ? self.player.stop() : '';
-                 self.isPlaying = false;
+                 (this.player != '') ? this.player.stop() : '';
+                 this.isPlaying = false;
              }                    	                    
          }
      }
@@ -328,7 +313,6 @@ Geosound.prototype.updateStyle = function()
 
 Geosound.prototype.checkIfSearched = function()
 {
-    var self = this;
     var searched_sounds = ffinterface.search_results.Geosounds;
     
     if (searched_sounds.length > 0)
@@ -336,12 +320,12 @@ Geosound.prototype.checkIfSearched = function()
         for (var i=0; i<searched_sounds.length; i++)
         {
             var searched_sound = searched_sounds[i];
-            self.isSearched = (self.id == searched_sound.id) ? true : false;
+            this.isSearched = (this.id == searched_sound.id) ? true : false;
         }
     }
     else 
     {
-        self.isSearched = false;
+        this.isSearched = false;
     }
 };
 
@@ -371,35 +355,29 @@ Geosound.prototype.volumeInteraction = function(timeoutMs)
 
 Geosound.prototype.halo = function()
 {
-    var self = this;
-    return self.shape.getChildren()[0];
+    return this.shape.getChildren()[0];
 };
 
 Geosound.prototype.core = function()
 {
-    var self = this;
-    return self.shape.getChildren()[1];
+    return this.shape.getChildren()[1];
 };
 
 Geosound.prototype.setVolume = function(volume)
-{
-    var self = this;
-    
-    self.volume = volume;
-    var radius = self.radiusFromVolume()
-    self.halo().setRadius(radius);
+{    
+    this.volume = volume;
+    var radius = this.radiusFromVolume()
+    this.halo().setRadius(radius);
 };
 
 Geosound.prototype.volumeFromRadius = function(radius)
 {
-    var self = this;
-    return self.map(radius, self.minRadius, self.maxRadius, self.minVolume, self.maxVolume);
+    return this.map(radius, this.minRadius, this.maxRadius, this.minVolume, this.maxVolume);
 };
 
 Geosound.prototype.radiusFromVolume = function()
 {
-    var self = this;
-    return self.map(self.volume, self.minVolume, self.maxVolume, self.minRadius, self.maxRadius, true);    
+    return this.map(this.volume, this.minVolume, this.maxVolume, this.minRadius, this.maxRadius, true);    
 };
 
 Geosound.prototype.map = function(value, istart, istop, ostart, ostop, confine) 

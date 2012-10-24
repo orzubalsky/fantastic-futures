@@ -11,36 +11,29 @@ Connection = function(id_1, id_2)
 
 Connection.prototype.init = function()
 {
-    var self = this;
-
-    self.setup();    
+    this.setup();    
 };
 
 Connection.prototype.setup = function()
 {
-    var self = this;
-
-    var s1 = geosounds.collection[self.sound_1];
-    var s2 = geosounds.collection[self.sound_2];
+    var s1 = geosounds.collection[this.sound_1];
+    var s2 = geosounds.collection[this.sound_2];
     		    		    
-    self.shape = new Kinetic.Line({
+    this.shape = new Kinetic.Line({
         points          : [s1.coords.x, s1.coords.y, s2.coords.x, s2.coords.y],
         stroke          : "#005fff",
         strokeWidth     : 0.25,
         lineCap         : "round",
         lineJoin        : "round"
     });
-    connections.layer.add(self.shape);  
+    connections.layer.add(this.shape);  
 };
-
 
 Connection.prototype.update = function()
 {
-    var self = this;
+    var s1 = geosounds.collection[this.sound_1];
+    var s2 = geosounds.collection[this.sound_2];
 
-    var s1 = geosounds.collection[self.sound_1];
-    var s2 = geosounds.collection[self.sound_2];
-
-    self.shape.setPoints([ {x: s1.coords.x, y: s1.coords.y}, {x: s2.coords.x, y: s2.coords.y} ]);
+    this.shape.setPoints([ {x: s1.coords.x, y: s1.coords.y}, {x: s2.coords.x, y: s2.coords.y} ]);
 };
 })(jQuery);
