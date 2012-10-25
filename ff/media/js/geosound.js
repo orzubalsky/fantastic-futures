@@ -206,9 +206,7 @@ Geosound.prototype.applyStyles = function()
 {    
     this.core().setFill('black');
     this.halo().setFill('#ccc'); 
-    
-    if (this.isPlaying) { this.core().setFill("#005fff"); }
-    
+        
     if (!this.isPlaying) { this.core().setFill("#000"); }
 
     if (this.isNew) { this.halo().setFill("#333"); }
@@ -278,7 +276,10 @@ Geosound.prototype.applyStyles = function()
                 }
             }
         }
-    }    
+    }
+
+    if (this.isPlaying) { this.core().setFill("#005fff"); }
+ 
 };
 
 Geosound.prototype.projectTo2D = function()
