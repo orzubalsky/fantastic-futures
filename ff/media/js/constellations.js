@@ -28,7 +28,7 @@
         this.clear();
 
         playhead.is_playing = false;
-        playhead.togglePlayerSounds();
+        geosounds.togglePlayerSounds();
 
         for (var i=0; i<CONSTELLATIONS.length; i++)
         {

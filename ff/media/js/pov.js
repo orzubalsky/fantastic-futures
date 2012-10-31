@@ -60,9 +60,10 @@ var pov = window.pov = new function()
     {        
         this.rotateTo(0,0,0, 1.0, 25, function() 
         {
-            $('#interface').fadeOut(2000);
+            $('#interface').fadeOut(1000);
             $('#map').css('opacity','1');
-            $('#map').fadeIn(500);                
+            $('#map').fadeIn(500);
+            this.callback = '';
         });
     };
 

@@ -56,5 +56,21 @@ var connections = window.connections = new function()
         }
         return c;
 	};
+	
+	this.decycled = function()
+	{
+        var active_connections = [];
+        for (var i=0; i<this.collection.length; i++)
+        {
+            var c = connections.collection[i];
+            active_connections.push({
+                sound_1         : c.sound_1,
+                sound_2         : c.sound_2,
+                sound_1_volume  : c.sound_1_volume,
+                sound_2_volume  : c.sound_2_volume
+            });
+        }
+        return active_connections;   
+	};
 };
 })(jQuery);
