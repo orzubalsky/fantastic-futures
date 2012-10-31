@@ -261,12 +261,9 @@
             	
                 var data = $(this).serialize();
                 
-                var active_connections = JSON.decycle(connections.collection);
-                lib.log(active_connections);
-       
                 Dajaxice.futures.submit_constellation(self.addConstellation_callback, {
                     'form'          : data, 
-                    'connections'   : active_connections,
+                    'connections'   : connections.decycled(),
                     'rotation'      : pov.rotation
                 });
         	});    
