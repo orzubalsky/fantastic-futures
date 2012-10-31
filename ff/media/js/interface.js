@@ -48,38 +48,46 @@ var ffinterface = window.ffinterface = new function()
         });
     };
 
+    /* this function is called once before the update-draw loop starts (open frameworks style) */
     this.setup = function()
     {   
         var self = this;
         
+        // create a kineticJS stage that will hold all layers (pov, geosounds, connections, playhead)
         self.stage = new Kinetic.Stage({container: "interface", width: self.width, height: self.height });
 
-        playhead.init();            
+        // do all necessary setting up for each module
+        playhead.init();
         pov.init();
         geosounds.init();
         connections.init();
-                                
+
+        // hide loading gif
         $("#loadingGif").fadeToggle("fast", "linear");
     };
 
+    /* do all position calculations, and position related calculations here */
     this.update = function()
     {
-        // clear all layers
+        // clear all kineticJS layers
         this.clear();
         
+        // update each module
         pov.update();
         playhead.update();
         geosounds.update();
         connections.update();
     };
 
+    /* draw the kineticJS shapes */
     this.draw = function()
-    {        
+    {
         geosounds.draw();
         connections.draw();
         playhead.draw();
     };
 
+    /* clear the kineticJS layers. this should be called before updating positions, etc */
     this.clear = function()
     {
         geosounds.clear();
@@ -87,6 +95,7 @@ var ffinterface = window.ffinterface = new function()
         playhead.clear();
     };
 
+    /* load images from given sources, and execute a callback function when done */
     this.loadImages = function(sources, callback) 
     {
         var images = {};
