@@ -293,8 +293,14 @@ Geosound.prototype.projectTo2D = function()
 
 Geosound.prototype.updateShapeCoordinates = function()
 {
-    this.shape.setX(this.coords.x);
-    this.shape.setY(this.coords.y);
+    if (this.shape.getX() != this.coords.x)
+    {
+        this.shape.setX(this.coords.x);
+    }
+    if (this.shape.getY() != this.coords.y)
+    {
+        this.shape.setY(this.coords.y);
+    }
 };
 
 Geosound.prototype.setActiveState = function()
