@@ -8,16 +8,17 @@ var ffinterface = window.ffinterface = new function()
     this.stage;                     // kineticJS stage 
 	this.search_results = { 'Geosounds': [], 'Constellations': [] }; 
 	this.images;
-	this.frame = 0;
 
     /* set up the interface and run it */
     this.init = function()
     {
         var self = this;
         
+        // get the dimensions of the canvas elements that render the interface
 	    self.width  = $('#interface').width();
 	    self.height = $('#interface').height();            
         
+        // an array of static images that have to be loaded before anything else happens
         var sources = {
             playhead_fill : STATIC_URL + 'images/stripes_5.png',
             loading_gif   : STATIC_URL + 'images/loading_greystripes.gif'
@@ -38,6 +39,7 @@ var ffinterface = window.ffinterface = new function()
             // run update-draw loop
             setInterval(function() { self.update(); self.draw(); }, self.framerate);
 
+            // after 100ms, rotate the interface randomly
             setTimeout(function() 
             {
                 pov.randomize();
@@ -61,9 +63,7 @@ var ffinterface = window.ffinterface = new function()
     };
 
     this.update = function()
-    {              
-        this.frame += 1;
-
+    {
         // clear all layers
         this.clear();
         
