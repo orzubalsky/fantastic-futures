@@ -78,21 +78,21 @@ var site = window.site = new function() {
 			speed=3;
 		}
 	
-       $('#scrollUp').mouseenter(function() {
+       $('#scrollUp').live('mouseenter', function() {
 			this.iid = setInterval(function() {
 			   // do something 
 			   $('#constellationMenuContent').scrollTo('-='+speed+'px', { axis: 'y'});
 			}, 25);
-		}).mouseleave(function(){
+		}).live('mouseleave', function(){
 			this.iid && clearInterval(this.iid);
 		});
 
-      	$('#scrollDown').mouseenter(function() {
+      	$('#scrollDown').live('mouseenter', function() {
 			this.iid = setInterval(function() {
 			   // do something 
 			   $('#constellationMenuContent').scrollTo('+='+speed+'px', { axis: 'y'});
 			}, 25);
-		}).mouseleave(function(){
+		}).live('mouseleave', function(){
 			this.iid && clearInterval(this.iid);
 		});
 	};
