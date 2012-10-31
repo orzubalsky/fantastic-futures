@@ -106,5 +106,19 @@ var geosounds = window.geosounds = new function()
         }
         return false;
     };
+    
+    this.togglePlayerSounds = function() 
+    {
+        for (var id in this.collection)
+        {
+            var geosound = this.collection[id];
+            
+            if (geosound.active)
+            {
+                var player = geosound.player;
+                (playhead.is_playing) ? player.play() : player.pause();                            
+            }
+        }		    
+    };    
 };
 })(jQuery);

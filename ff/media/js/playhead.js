@@ -1,5 +1,5 @@
 ;(function($){
-	var playhead = window.playhead = new function() 
+var playhead = window.playhead = new function() 
 {
     this.layer;                      // kinteticJS layer to animate the circular playhead
     this.shape;
@@ -98,25 +98,11 @@
     	        // return, backspace, escape, space
                 if (key == 8 || key == 13 || key == 27 || key == 32)
                 {
-                    self.is_playing = !self.is_playing;                        
-                    self.togglePlayerSounds();
+                    self.is_playing = !self.is_playing;       
+                    geosounds.togglePlayerSounds();                 
                 }		            
             }
         });
-    };
-
-    this.togglePlayerSounds = function() 
-    {        
-        var sounds = geosounds.layer.getChildren();
-        for (var i=0; i<sounds.length; i++)
-        {
-            var sound = sounds[i];
-            if (sound.getAttrs().active)
-            {
-                var player = sound.getAttrs().player;
-                (this.is_playing) ? player.play() : player.pause();                            
-            }
-        }		    
     };
     
     this.dist = function(x1,y1,x2,y2)
