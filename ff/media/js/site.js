@@ -100,100 +100,137 @@
 		{
 		    var self = this;
 
-        	$("#clickLayer").click(function(e){
+        	$("#clickLayer").click(function(e)
+        	{
         	    e.preventDefault();
-				if ($("#map").css("opacity")>0){
+				
+				if ($("#map").css("opacity")>0)
+				{
 					$("#map").fadeOut(1000);
 	                $("#interface").fadeIn(1000);
 				}
 				$(".tran1").fadeOut(1000);
 				$("#clickLayer").hide();
-				$('#feedback').animate(
-        	        {
-        	            right: -322
-        	        }, 1000
-				);
+				$('#feedback').animate({
+        	        right: -322
+        	    }, 1000);
 			});
-        	$("#logo").click(function(e) {
+			
+        	$("#logo").click(function(e)
+        	{
                 e.preventDefault();
-        	  $("#about").fadeToggle("fast", "linear");
-			  $("#clickLayer").fadeToggle("fast", "linear");
+                
+                $("#about").fadeToggle("fast", "linear");
+                $("#clickLayer").fadeToggle("fast", "linear");
         	});
-        	$("#addSoundText").click(function(e) {
-        	    e.preventDefault();        	    
-        	  $("#addSound").fadeToggle("fast", "linear");
-			   $("#clickLayer").fadeToggle("fast", "linear");
-              pov.resetRotation();        	  
+        	
+        	$("#addSoundText").click(function(e)
+        	{
+                e.preventDefault();        	    
+                
+                $("#addSound").fadeToggle("fast", "linear");
+                $("#clickLayer").fadeToggle("fast", "linear");
+                
+                pov.resetRotation();        	  
         	});
-        	$("#addConstellationText").click(function(e) {
-        	    e.preventDefault();        	    
-        	  $("#addConstellation").fadeToggle("fast", "linear");
-			  $("#clickLayer").fadeToggle("fast", "linear");
+        	
+        	$("#addConstellationText").click(function(e)
+        	{
+                e.preventDefault();        	    
+                
+                $("#addConstellation").fadeToggle("fast", "linear");
+                $("#clickLayer").fadeToggle("fast", "linear");
         	});
-        	$("#errorText").click(function(e) {
-        	    e.preventDefault();        	    
-        	  $("#error").fadeToggle("fast", "linear");
+        	
+        	$("#errorText").click(function(e)
+        	{
+                e.preventDefault();        	    
+                
+                $("#error").fadeToggle("fast", "linear");
         	});
-        	$("#constellationMenu h2").live('mouseenter', function() {
+        	
+        	$("#constellationMenu h2").live('mouseenter', function()
+        	{
                 constellations.preview();
-        	  $("#constellationMenuContent").fadeToggle("fast", "linear");
-        	  $("#constellationMenu #scrollUp").fadeToggle("fast", "linear");
-        	  $("#constellationMenu #scrollDown").fadeToggle("fast", "linear");
-        	});		
-        	$("#constellationMenu h2").live('mouseleave', function() {
+                
+                $("#constellationMenuContent").fadeToggle("fast", "linear");
+                $("#constellationMenu #scrollUp").fadeToggle("fast", "linear");
+                $("#constellationMenu #scrollDown").fadeToggle("fast", "linear");
+        	});
+        	
+        	$("#constellationMenu h2").live('mouseleave', function()
+        	{
                 constellations.clear();
-        	});        	
-        	$("#constellationMenu").live('mouseleave', function() {
-        	  $("#constellationMenuContent").fadeToggle("fast", "linear");
-        	  $("#constellationMenu #scrollUp").fadeToggle("fast", "linear");
-        	  $("#constellationMenu #scrollDown").fadeToggle("fast", "linear");
-        	}); 
-			$("#aboutLinks #toggleAr").click(function(e) {
-        	    e.preventDefault();			    
-				$("#about .description.english").fadeToggle("fast", "linear", function(){
-					$("#about .description.arabic").fadeToggle("fast", "linear");
+        	});
+        	
+        	$("#constellationMenu").live('mouseleave', function()
+        	{
+                $("#constellationMenuContent").fadeToggle("fast", "linear");
+                $("#constellationMenu #scrollUp").fadeToggle("fast", "linear");
+                $("#constellationMenu #scrollDown").fadeToggle("fast", "linear");
+        	});
+        	
+			$("#aboutLinks #toggleAr").click(function(e)
+			{
+                e.preventDefault();			    
+
+                $("#about .description.english").fadeToggle("fast", "linear", function()
+                {
+                    $("#about .description.arabic").fadeToggle("fast", "linear");
+                });
+				
+				$("#aboutLinks #toggleAr").fadeToggle("fast", "linear", function()
+				{
+                    $("#aboutLinks #toggleEn").fadeToggle("fast", "linear");
 				});
-				$("#aboutLinks #toggleAr").fadeToggle("fast", "linear", function(){
-	        	  $("#aboutLinks #toggleEn").fadeToggle("fast", "linear");
+			});
+			
+			$("#aboutLinks #toggleEn").click(function(e)
+			{
+                e.preventDefault();			    
+                
+                $("#about .description.arabic").fadeToggle("fast", "linear", function()
+                {
+                    $("#about .description.english").fadeToggle("fast", "linear");
 				});
-			}); 
-			$("#aboutLinks #toggleEn").click(function(e) {
-        	    e.preventDefault();			    
-				$("#about .description.arabic").fadeToggle("fast", "linear", function(){
-					$("#about .description.english").fadeToggle("fast", "linear");
+				
+				$("#aboutLinks #toggleEn").fadeToggle("fast", "linear", function()
+				{
+                    $("#aboutLinks #toggleAr").fadeToggle("fast", "linear");
 				});
-				$("#aboutLinks #toggleEn").fadeToggle("fast", "linear", function(){
-	        	  $("#aboutLinks #toggleAr").fadeToggle("fast", "linear");
-				});
-			});	      	
-            $('#constellationMenuContent a').live('mouseenter', function (e)
+			});
+
+            $('#constellationMenuContent a').live('mouseenter', function(e)
             { 
-        	    e.preventDefault();
+                e.preventDefault();
         	    
                 var id = lib.getId($(this).attr('id'));
                 constellations.previewOne(id, true, 25, function() { return true; }); 
             });
+            
             $('#constellationMenuContent a').live('click', function (e)
             { 
         	    e.preventDefault();
         	    
                 var id = lib.getId($(this).attr('id'));
                 constellations.loadOne(id); 
-            });            
+            });
+            
             $('#constellationMenuContent a').live('mouseleave', function (e)            
             {
                 e.preventDefault();
                 constellations.clear();
-            });        	       	
+            });
+            
         	$('#contactUs a').click(function(e)
         	{
-        	    e.preventDefault();
-        	    $('#feedback').animate(
-        	        {
-        	            right: 0
-        	        }, 1000
-        	    );
+                e.preventDefault();
+        	    
+        	    $('#feedback').animate({
+                    right: 0
+                }, 1000);
         	});
+        	
         	$('#feedbackForm').submit(function(e)
         	{
         	    e.preventDefault();
@@ -201,6 +238,7 @@
                 var data = $(this).serialize();
                 Dajaxice.futures.submit_feedback(self.feedback_callback, {'form':data});
         	});
+        	
         	$('#addSoundForm .time').click(function(e) 
         	{
         	    e.preventDefault();
@@ -216,6 +254,7 @@
                     $(this).removeClass('selected').val(0);        	        
         	    }
         	});
+        	
             $('#addSoundForm').submit(function(e)
             {                
                 e.preventDefault();
@@ -249,6 +288,7 @@
                     Dajaxice.futures.submit_sound(self.addSound_callback, {'form':data, 'tags':tags});
                 });            
             });
+            
             $('#addConstellationForm').submit(function(e) 
         	{
         	    e.preventDefault();
@@ -266,13 +306,15 @@
                     'connections'   : connections.decycled(),
                     'rotation'      : pov.rotation
                 });
-        	});    
+        	});
+        	    
             $('#customZoomIn').live('click', function(e) 
         	{
         	    e.preventDefault();
         	    
         	    pov.changeZoom(0.2);
         	});
+        	
             $('#customZoomOut').live('click', function(e) 
         	{
         	    e.preventDefault();
