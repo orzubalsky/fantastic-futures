@@ -16,17 +16,17 @@ Geosound = function(map_point)
     this.filename   = map_point.filename;                   // mp3 filename
     this.player     = '';                                   // Player instance for the sound
     this.volume     = map_point.volume;                     // volume can be in the range 0.0 - 1.0
-    this.active     = false;                                // a connected sound is considered active
+    this.active     = false;                                // a connected or clicked on sound is considered active
     this.timeout    = '';                                   // for object specific timing -- volume animation & justAdded flag
     this.interval   = '';                                   // for object specific timing -- volume animation
     this.shape      = '';                                   // kineticJS shape
+    this.isConnected = false;
+    this.isPlaying   = false;
+    this.isSearched  = false;
     this.minVolume  = 0.2;
     this.maxVolume  = 0.9;
     this.minRadius  = 5;
     this.maxRadius  = 20;
-    this.isConnected = false;
-    this.isPlaying   = false;
-    this.isSearched  = false;
 };
 
 /* call this function after creating a new geosound */
@@ -354,14 +354,6 @@ Geosound.prototype.updateStyle = function()
              }
          }
          this.isPlaying = (this.active == true && !this.player.$player.data("jPlayer").status.paused) ? true : false; 
-     }
-     else 
-     {
-         if (this.active == true && pov.is_animating)
-         { 
-             (this.player != '') ? this.player.stop() : '';
-             this.isPlaying = false;
-         }                    	                    
      }
 };
 
