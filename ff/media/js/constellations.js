@@ -42,6 +42,8 @@
     
     this.drawOne = function(constellation, rotate, volumes, pace, callback) 
     {
+        geosounds.disconnectAllSounds();
+        
         for (var i=0; i<constellation.connections.length; i++)
         {
             var db_connection = constellation.connections[i].fields;
@@ -96,6 +98,8 @@
             
             // start the player
             playhead.is_playing = true;
+            
+            pov.callback = '';
         });
      };
 };

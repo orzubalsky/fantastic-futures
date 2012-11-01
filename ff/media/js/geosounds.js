@@ -117,6 +117,16 @@ var geosounds = window.geosounds = new function()
             (!geosound.active) ? geosound.core().setFill(color) : geosound.core().setFill('black');
         }
     };
+    
+    /* set isConnected to false to all sounds */    
+    this.disconnectAllSounds = function()
+    {
+        for (var id in this.collection)
+        {
+            var geosound = this.collection[id];
+            geosound.isConnected = false;
+        }
+    };
 
     /* check whether a geosound is a part of a connection */
     this.soundIsConnected = function(id)
