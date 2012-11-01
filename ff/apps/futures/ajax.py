@@ -71,7 +71,6 @@ def submit_constellation(request, form, connections, rotation):
         new_constellation = validForm.save_ajax(rotation)
         
         for c in connections:
-            print c
             sound_1 = GeoSound.objects.get(pk=int(c['sound_1']))
             sound_2 = GeoSound.objects.get(pk=int(c['sound_2']))
             sound_1_volume = float(c['sound_1_volume'])

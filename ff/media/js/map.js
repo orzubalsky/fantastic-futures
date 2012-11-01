@@ -1,5 +1,5 @@
 ;(function($){
-	var map = window.site.map = new function() 
+	var map = window.map = new function() 
 	{	
 	    this.width           = $('#interface').width();
 	    this.height          = $('#interface').height();
@@ -13,7 +13,7 @@
             // output an error if the browser doesn't support canvas (the entire site is based on canvases)
             if (!OpenLayers.CANVAS_SUPPORTED) 
             {
-                site.outputError('Your browser does not support canvas, nothing to see here!');
+                outputError('Your browser does not support canvas, nothing to see here!');
             }
             
             // add the 4326 to dymaxiom transformation function
@@ -25,29 +25,19 @@
 			
 			// Create new map
 			self.map = self.createMap();
-			var currentTime = new Date();
-			lib.log("created map: "+currentTime.getTime());    
 			       
             // add base layers to map
 			self.map.addLayers( [ triFill, countries ] );
-			var currentTime = new Date();
-			lib.log("added base layers to map: "+currentTime.getTime());
 			
 			// initial zoom
 			self.map.zoomTo(2.5);
-			var currentTime = new Date();
-			lib.log("initialize zoom: "+currentTime.getTime());
 
             // add features to the dymax layer
             self.addDymaxFeaturesToLayer(triFill);
-			var currentTime = new Date();
-			lib.log("add features to the dymax layer: "+currentTime.getTime());
        
 		    // add sounds layer
             self.soundLayer = self.get_data_layers();
             self.map.addLayers(self.soundLayer);
-			var currentTime = new Date();
-			lib.log("add sounds layer: "+currentTime.getTime());
         };
         
         this.createMap = function() 
@@ -117,27 +107,22 @@
     			} ); 					
     			layer.events.register("loadend", layer, function() 
     			{	
-					var currentTime = new Date();
-					lib.log("start sound loadend: "+currentTime.getTime());
-                   
                    // save coordinates                   
-                   site.ffinterface.map_points = [];
+                   geosounds.map_points = [];
                    for(var i=0; i<layer.features.length; i++)
                    {
                        self.pushPointToInterface(layer.features[i], layer);
                    }
-                   if (site.ffinterface.running == false) 
+                   if (ffinterface.running == false) 
                    {                       
-                       site.ffinterface.init(); 
+                       ffinterface.init(); 
                    }
-                   	if ($("#map").css("opacity")>0){
-       					$("#map").fadeOut(1000);
-       	                $("#interface").fadeIn(1000);
+                   if ($("#map").css("opacity")>0)
+                   {
+                       $("#map").fadeOut(1000);
+                       $("#interface").fadeIn(1000);
        				}
        				$(".tran1").fadeOut(1000);
-
-					var currentTime = new Date();
-					lib.log("interface loaded: "+currentTime.getTime());
     			});                
     	        layers.push(layer);
     	        
@@ -150,8 +135,8 @@
             var self = this;            
             var coordinates = self.getGeometryFromFeature(feature, layer);
             var map_point = {
-                x           : coordinates[0], 
-                y           : coordinates[1], 
+                x           : Math.floor(coordinates[0]), 
+                y           : Math.floor(coordinates[1]), 
                 id          : feature.data.id,
                 title       : feature.data.title,
                 location    : feature.data.location,
@@ -163,7 +148,7 @@
                 is_recent   : feature.data.is_recent,
                 just_added  : feature.data.just_added
             };
-            site.ffinterface.map_points.push(map_point);
+            geosounds.map_points.push(map_point);
         };
         
         this.getGeometryFromFeature = function(feature, layer)

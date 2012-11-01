@@ -18,6 +18,10 @@ h2 {
 	line-height:12px;
 	color: #005fff;
 }
+
+#container {
+    
+}
 #clickLayer {
 	position:absolute;
 	height:100%;
