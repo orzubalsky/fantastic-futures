@@ -323,7 +323,7 @@ Geosound.prototype.setActiveState = function()
     // if the sound is connected to connections it's always "active"
     // if it's not connected, the active state is toggled with every mouse click         
     this.active = (this.isConnected) ? true : !this.active;
-
+    
     if (this.active) 
     {
          // create a player instance for this sound
