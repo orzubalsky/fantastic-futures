@@ -8,16 +8,17 @@ var ffinterface = window.ffinterface = new function()
     this.stage;                     // kineticJS stage 
 	this.search_results = { 'Geosounds': [], 'Constellations': [] }; 
 	this.images;
-	this.frame = 0;
 
     /* set up the interface and run it */
     this.init = function()
     {
         var self = this;
         
+        // get the dimensions of the canvas elements that render the interface
 	    self.width  = $('#interface').width();
 	    self.height = $('#interface').height();            
         
+        // an array of static images that have to be loaded before anything else happens
         var sources = {
             playhead_fill : STATIC_URL + 'images/stripes_5.png',
             loading_gif   : STATIC_URL + 'images/loading_greystripes.gif'
@@ -38,6 +39,7 @@ var ffinterface = window.ffinterface = new function()
             // run update-draw loop
             setInterval(function() { self.update(); self.draw(); }, self.framerate);
 
+            // after 100ms, rotate the interface randomly
             setTimeout(function() 
             {
                 pov.randomize();
@@ -46,40 +48,46 @@ var ffinterface = window.ffinterface = new function()
         });
     };
 
+    /* this function is called once before the update-draw loop starts (open frameworks style) */
     this.setup = function()
     {   
         var self = this;
         
+        // create a kineticJS stage that will hold all layers (pov, geosounds, connections, playhead)
         self.stage = new Kinetic.Stage({container: "interface", width: self.width, height: self.height });
 
-        playhead.init();            
+        // do all necessary setting up for each module
+        playhead.init();
         pov.init();
         geosounds.init();
         connections.init();
-                                
+
+        // hide loading gif
         $("#loadingGif").fadeToggle("fast", "linear");
     };
 
+    /* do all position calculations, and position related calculations here */
     this.update = function()
-    {              
-        this.frame += 1;
-
-        // clear all layers
+    {
+        // clear all kineticJS layers
         this.clear();
         
+        // update each module
         pov.update();
         playhead.update();
         geosounds.update();
         connections.update();
     };
 
+    /* draw the kineticJS shapes */
     this.draw = function()
-    {        
+    {
         geosounds.draw();
         connections.draw();
         playhead.draw();
     };
 
+    /* clear the kineticJS layers. this should be called before updating positions, etc */
     this.clear = function()
     {
         geosounds.clear();
@@ -87,6 +95,7 @@ var ffinterface = window.ffinterface = new function()
         playhead.clear();
     };
 
+    /* load images from given sources, and execute a callback function when done */
     this.loadImages = function(sources, callback) 
     {
         var images = {};
