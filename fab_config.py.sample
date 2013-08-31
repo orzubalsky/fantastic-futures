@@ -3,7 +3,11 @@ class Config(object):
 	test_project_dir = '/path/to/project'
 	productino_project_dir = '/path/to/project'	
     hosts = [ '0.0.0.0', ]
-    fab_username = ''
-    fab_password = ''
     server_settings_file = '/path/to/settings/file.py'
     apache_conf_file = '/path/to/apache/file.conf'    
+    local_username = ''
+    local_password = ''
+    testing_username = ''
+    testing_password = ''
+    production_username = ''
+    production_password = ''    
