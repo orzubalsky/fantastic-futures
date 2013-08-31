@@ -24,3 +24,5 @@ ff/media/uploads/
 
 # ignore analytics html template
 ff/apps/futures/templates/analytics.html
+
+ff/tmp
