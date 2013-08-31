@@ -10,6 +10,12 @@ develop-eggs/
 eggs/
 parts/
 
+# ignore settings files:
+ff/settings/*.py
+!ff/settings/__init__.py
+fab_config.py
+apache.conf
+
 # ignore static files (for now):
 ff/static/
 
@@ -18,6 +24,3 @@ ff/media/uploads/
 
 # ignore analytics html template
 ff/apps/futures/templates/analytics.html
-
-# ignore sql data dump:
-sample_data.json
