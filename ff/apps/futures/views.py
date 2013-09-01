@@ -38,6 +38,31 @@ def index(request):
         }, context_instance=RequestContext(request))
 
 
+def view_collection(request, slug):
+    layers = {}
+    layers["sounds"] = {'title': "sounds", 'url': reverse('sound-layer'), }
+    layer_json = json.dumps(layers)
+
+    constellations = Constellation.objects.all()
+    constellations_json = constellations_to_json(constellations)
+    feedback_form = FeedbackForm()
+    add_sound_form = GeoSoundForm()
+    constellation_form = ConstellationForm()
+    search_form = GeoSearchForm()
+
+    return render_to_response(
+        'index.html', {
+            'layers': layer_json,
+            'feedback_form': feedback_form,
+            'add_sound_form': add_sound_form,
+            'constellation_form': constellation_form,
+            'search_form': search_form,
+            'google_api_key': settings.GOOGLE_API_KEY,
+            'constellations': constellations,
+            'constellations_json': constellations_json,
+        }, context_instance=RequestContext(request))
+
+
 def view_sound(request, sound_slug):
     pass
 
