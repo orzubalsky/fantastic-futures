@@ -17,7 +17,11 @@
   <script type="text/javascript">
     var STATIC_URL = '{{ STATIC_URL }}';
     var DATA_LAYERS = {{ layers|safe }};
+    {% if map_setting %}
     var MAP_SETTING = {{ map_setting|safe }};
+    {% else %}
+    var MAP_SETTING = {};    
+    {% endif %}
   </script>
   {% include "analytics.html" %}
 </head>

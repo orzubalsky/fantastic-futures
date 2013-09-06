@@ -14,13 +14,14 @@ var playhead = window.playhead = new function()
         
         // create the playhead shape in the center of the interface
         this.shape = new Kinetic.Circle({
-            x               : ffinterface.width / 2,
-            y               : ffinterface.height / 2,
-            alpha           : 0.8,
-            radius          : 0,
-            fill            : {image: ffinterface.images.playhead_fill, offset: [0, 0]}, //stripes
-            stroke          : "#efefef",
-            strokeWidth     : .25,
+            x                 : ffinterface.width / 2,
+            y                 : ffinterface.height / 2,
+            alpha             : '0.8',
+            radius            : 0,
+            fillPatternImage  : ffinterface.images.playhead_fill, //stripes
+            fillPatternOffset : [0, 0],
+            stroke            : "#efefef",
+            strokeWidth       : .25,
         });
 
         // add playhead shape to layer
