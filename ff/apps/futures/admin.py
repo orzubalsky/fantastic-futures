@@ -97,6 +97,25 @@ class ConstellationAdmin(admin.ModelAdmin):
     }
 
 
+class MapSettingAdmin(GeoAdmin):
+    list_display = (
+        'title',
+        'basemap',
+    )
+    fields = (
+        'title',
+        'basemap',
+        'initial_bounds',
+        'zoom_enabled',
+        'mapdisplay_fill_color',
+        'mapdisplay_fill_opacity',
+        'mapdisplay_stroke_color',
+        'mapdisplay_stroke_opacity',
+        'mapdisplay_point_radius',
+        'mapdisplay_size',
+    )
+
+
 class UserProfileAdmin(admin.ModelAdmin):
     list_display = (
         'display_name',
@@ -122,5 +141,5 @@ admin.site.register(GeoSound, GeoSoundAdmin)
 admin.site.register(Constellation, ConstellationAdmin)
 admin.site.register(UserProfile, UserProfileAdmin)
 admin.site.register(Connection, ConnectionAdmin)
-admin.site.register(MapSetting)
+admin.site.register(MapSetting, MapSettingAdmin)
 admin.site.register(Collection)

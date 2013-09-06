@@ -6,6 +6,7 @@ from django.dispatch import receiver
 from django.core.cache import cache
 from django_countries import CountryField
 from taggit.managers import TaggableManager
+from paintstore.fields import ColorPickerField
 from datetime import *
 from futures.validators import *
 import random
@@ -70,9 +71,8 @@ class MapSetting(Base):
     zoom_enabled = BooleanField(
         default=True
     )
-    mapdisplay_fill_color = CharField(
+    mapdisplay_fill_color = ColorPickerField(
         'Map Graphic Fill Color',
-        max_length=7,
         default='#000000',
         blank=True,
         help_text='The hex value (eg #00FF00 for green)'
@@ -83,9 +83,8 @@ class MapSetting(Base):
         blank=True,
         help_text='Numeric value between 0 and 1'
     )
-    mapdisplay_stroke_color = CharField(
+    mapdisplay_stroke_color = ColorPickerField(
         'Map Graphic Stroke Color',
-        max_length=7,
         default='#000000',
         blank=True,
         help_text='The hex value (eg #00FF00 for green)'
