@@ -40,9 +40,82 @@ class UserProfile(Base):
     slug = SlugField()
 
 
+class MapSetting(Base):
+
+    BASEMAP_CHOICES = (
+        ('dymaxion', 'Dymaxion'),
+        ('openstreetmap', 'OpenStreetMap'),
+        ('googlemaps', 'GoogleMaps'),
+    )
+
+    title = CharField(
+        max_length=100,
+        blank=True,
+        null=True
+    )
+    basemap = CharField(
+        max_length=20,
+        choices=BASEMAP_CHOICES,
+        default='dymaxion',
+        blank=False,
+        null=False,
+    )
+    initial_bounds = PolygonField(
+        'Map Region',
+        blank=True,
+        null=True,
+        help_text='The region specified here will be '
+        'the default view for this project.'
+    )
+    zoom_enabled = BooleanField(
+        default=True
+    )
+    mapdisplay_fill_color = CharField(
+        'Map Graphic Fill Color',
+        max_length=7,
+        default='#000000',
+        blank=True,
+        help_text='The hex value (eg #00FF00 for green)'
+    )
+    mapdisplay_fill_opacity = FloatField(
+        'Map Graphic Fill Opacity',
+        default=1.0,
+        blank=True,
+        help_text='Numeric value between 0 and 1'
+    )
+    mapdisplay_stroke_color = CharField(
+        'Map Graphic Stroke Color',
+        max_length=7,
+        default='#000000',
+        blank=True,
+        help_text='The hex value (eg #00FF00 for green)'
+    )
+    mapdisplay_stroke_opacity = FloatField(
+        'Map Graphic Stroke Opacity',
+        default=1.0,
+        blank=True,
+        help_text='Numeric value between 0 and 1'
+    )
+    mapdisplay_point_radius = IntegerField(
+        'Map Point Radius',
+        max_length=2,
+        blank=True,
+        help_text='The radius of a point on the map'
+    )
+    mapdisplay_size = IntegerField(
+        'Map Graphic Size',
+        default=8,
+        blank=True,
+        null=True,
+        help_text='In pixels'
+    )
+
+
 class Collection(Base):
-    title = CharField(max_length=100, blank=True, null=True)
+    title = CharField(max_length=100, blank=False, null=True)
+    slug = SlugField(max_length=120, blank=False, null=False)
     description = TextField(blank=True, null=True)
+    map_setting = ForeignKey(MapSetting, blank=True, null=True)
 
 
 class GeoSound(Base):

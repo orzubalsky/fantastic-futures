@@ -1,4 +1,4 @@
-from django.shortcuts import render_to_response
+from django.shortcuts import render_to_response, get_object_or_404
 from django.template import RequestContext
 from django.http import HttpResponse
 from django.core.urlresolvers import reverse
@@ -39,11 +39,19 @@ def index(request):
 
 
 def view_collection(request, slug):
+
+    collection = get_object_or_404(collection, slug=slug)
+
     layers = {}
-    layers["sounds"] = {'title': "sounds", 'url': reverse('sound-layer'), }
+    layers["sounds"] = {
+        'title': "sounds",
+        'url': reverse('sound-layer', kwargs={'collection': collection, }),
+    }
     layer_json = json.dumps(layers)
 
-    constellations = Constellation.objects.all()
+    constellations = Constellation.objects.filter(
+        connections__sound_1__collections=collection)
+
     constellations_json = constellations_to_json(constellations)
     feedback_form = FeedbackForm()
     add_sound_form = GeoSoundForm()
@@ -72,10 +80,14 @@ def performance(request):
         'performance.html', {}, context_instance=RequestContext(request))
 
 
-def sound_layer(request):
+def sound_layer(request, collection=None):
 
     # count added sounds, in order to determine how long to cache for later
-    sounds = GeoSound.objects.all()
+    sounds = GeoSound.objects.all().order_by('created')
+
+    if collection is not None:
+        sounds.filter(collections=collection)
+
     just_added = 0
     for s in sounds:
         if s.just_added:
@@ -83,7 +95,7 @@ def sound_layer(request):
 
     # if the cache is cleared, or if a sound was just added, clear the cache
     if cache.get('json_sounds') is None:
-        geo_json = serialize_sound_layer()
+        geo_json = serialize_sound_layer(sounds)
         if just_added > 0:
             # only cache for 60 seconds, so the just_added property isn't stuck
             cache.set('json_sounds', geo_json, 60)
@@ -94,11 +106,9 @@ def sound_layer(request):
     return HttpResponse(geo_json, content_type='application/json', status=200)
 
 
-def serialize_sound_layer():
-    sounds = GeoSound.objects.all().order_by('created')
-
+def serialize_sound_layer(sound_queryset=None):
     results = []
-    for sound in list(sounds):
+    for sound in list(sound_queryset):
         data = sound_to_json(sound)
         results.append(data)
 
