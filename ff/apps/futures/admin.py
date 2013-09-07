@@ -1,4 +1,5 @@
 from futures.models import *
+from futures.forms import *
 from django.contrib.gis import admin
 
 

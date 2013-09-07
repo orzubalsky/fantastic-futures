@@ -5,6 +5,7 @@
 	    this.height          = $('#interface').height();
 	    this.map;
 	    this.soundLayer;
+        this.settings = MAP_SETTING[0].fields;
 	    
         this.init = function()
         {   
@@ -15,27 +16,56 @@
             {
                 outputError('Your browser does not support canvas, nothing to see here!');
             }
+
+            // Create new map
+            self.map = self.createMap();
             
-            // add the 4326 to dymaxiom transformation function
-            OpenLayers.Projection.addTransform( "EPSG:4326", "DYMAX", self.projectForward );
+            if (self.settings.basemap == 'dymaxion')
+            {
+            
+                // add the 4326 to dymaxiom transformation function
+                OpenLayers.Projection.addTransform( "EPSG:4326", "DYMAX", self.projectForward );                
+                
+                // base layers
+                var countries   = self.countriesLayer();
+                var triFill     = self.dymaxTriFill();
 
-			// base layers
-			var countries   = self.countriesLayer();
-			var triFill     = self.dymaxTriFill();
-			
-			// Create new map
-			self.map = self.createMap();
-			       
-            // add base layers to map
-			self.map.addLayers( [ triFill, countries ] );
-			
-			// initial zoom
-			self.map.zoomTo(2.5);
+                // add base layers to map
+                self.map.addLayers( [ triFill, countries ] );
 
-            // add features to the dymax layer
-            self.addDymaxFeaturesToLayer(triFill);
+                // add features to the dymax layer
+                self.addDymaxFeaturesToLayer(triFill);
+
+                // initial zoom
+                self.map.zoomTo(2.5); 
+            } 
+    
+            if (self.settings.basemap == 'openstreetmap')
+            {
+                // create OSM layers
+                var mapnik = new OpenLayers.Layer.OSM();
+                var oam = new OpenLayers.Layer.XYZ(
+                    "OpenAerialMap",
+                    "http://tile.openaerialmap.org/tiles/1.0.0/openaerialmap-900913/${z}/${x}/${y}.png",
+                    {
+                        sphericalMercator: true    
+                    }
+                );
+                var osmarender = new OpenLayers.Layer.OSM(
+                    "OpenStreetMap (Tiles@Home)",
+                    "http://tah.openstreetmap.org/Tiles/tile/${z}/${x}/${y}.png"
+                );
+
+                var fromProjection = new OpenLayers.Projection("EPSG:4326");   // Transform from WGS 1984
+                var toProjection   = new OpenLayers.Projection("EPSG:900913"); // to Spherical Mercator Projection                
+
+                self.map.addLayers([mapnik, oam, osmarender ]);
+                var bounds = OpenLayers.Geometry.fromWKT(self.settings.initial_bounds);
+                var transformed_bounds = bounds.getBounds().transform(fromProjection, toProjection);
+                self.map.zoomToExtent(transformed_bounds);
+            }     
        
-		    // add sounds layer
+            // add sounds layer
             self.soundLayer = self.get_data_layers();
             self.map.addLayers(self.soundLayer);
         };
@@ -44,26 +74,63 @@
         {
             var self = this;
             
-            var map = new OpenLayers.Map("map", {
-				projection: new OpenLayers.Projection("DYMAX"),
-		        maxExtent: new OpenLayers.Bounds(-50,50,860,420),
-				allOverlays: true,
-				controls: [
-				    new OpenLayers.Control.Navigation({
-				        dragPanOptions: {
-				            enableKinetic: false,
-				        },
+            
+            // MAP PROJECTION
+            var projection;
+            if (self.settings.basemap == 'dymaxion')
+            {
+                projection = new OpenLayers.Projection("DYMAX"); 
+                max_extent = new OpenLayers.Bounds(-50,50,860,420);
+
+            }
+
+            var max_extent = new OpenLayers.Bounds(-20037508, -20037508, 20037508, 20037508);
+            var restrictedExtent = max_extent.clone();
+            var maxResolution = 156543.0339;
+        
+            var options = {
+                projection: new OpenLayers.Projection("EPSG:900913"),
+                displayProjection: new OpenLayers.Projection("EPSG:4326"),
+                units: "m",
+                maxResolution: maxResolution,
+                maxExtent: max_extent,
+                restrictedExtent: max_extent,
+                controls: [
+                    new OpenLayers.Control.Navigation({
+                        dragPanOptions: {
+                            enableKinetic: false,
+                        },
                         zoomWheelEnabled : false
-				    }),
-				    new OpenLayers.Control.Attribution(),
-				    /*
-				    new OpenLayers.Control.Zoom({
-				        zoomInId: "customZoomIn",
-				        zoomOutId: "customZoomOut"
-				    })
-				    */
-				],
-			});			
+                    }),
+                    new OpenLayers.Control.Attribution(),
+                 ],
+            };
+
+
+            map = new OpenLayers.Map('map', options);
+
+
+
+   //          var map = new OpenLayers.Map("map", {
+			// 	projection: projection,
+		 //        maxExtent:  new OpenLayers.Bounds(-20037508, -20037508, 20037508, 20037508),
+			// 	allOverlays: true,
+			// 	controls: [
+			// 	    new OpenLayers.Control.Navigation({
+			// 	        dragPanOptions: {
+			// 	            enableKinetic: false,
+			// 	        },
+   //                      zoomWheelEnabled : false
+			// 	    }),
+			// 	    new OpenLayers.Control.Attribution(),
+			// 	    /*
+			// 	    new OpenLayers.Control.Zoom({
+			// 	        zoomInId: "customZoomIn",
+			// 	        zoomOutId: "customZoomOut"
+			// 	    })
+			// 	    */
+			// 	],
+			// });			
 			
 			return map;        
         };
@@ -102,7 +169,12 @@
                         url     : layer_info['url'],
                         format  : new OpenLayers.Format.GeoJSON(),
     	            } ),
-    				style : { 'fillColor' : '#000000', 'fillOpacity' : 1, 'pointRadius' : 2, 'stroke' : false },
+    				style : {
+                        'fillColor' : self.settings.mapdisplay_fill_color,
+                        'fillOpacity' : self.settings.mapdisplay_fill_opacity,
+                        'pointRadius' : self.settings.mapdisplay_point_radius,
+                        'stroke' : false
+                    },
                     renderers: ["Canvas"]				
     			} ); 					
     			layer.events.register("loadend", layer, function() 

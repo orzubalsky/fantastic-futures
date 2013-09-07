@@ -5,6 +5,7 @@ from django.utils.translation import ugettext as _
 from django.core.validators import *
 from futures.models import *
 
+
 class GeoSearchForm(SearchForm):
     from haystack.utils.geo import Point, D
     

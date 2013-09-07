@@ -25,6 +25,14 @@ def index(request):
     constellation_form = ConstellationForm()
     search_form = GeoSearchForm()
 
+    map_setting = MapSetting.objects.filter(title='fmcp')
+    map_setting_json = serializers.serialize(
+        'json',
+        map_setting,
+        indent=4,
+        excludes=('updated', 'created', 'is_active', 'pk'),
+    )
+
     return render_to_response(
         'index.html', {
             'layers': layer_json,
@@ -35,6 +43,7 @@ def index(request):
             'google_api_key': settings.GOOGLE_API_KEY,
             'constellations': constellations,
             'constellations_json': constellations_json,
+            'map_setting': map_setting_json,
         }, context_instance=RequestContext(request))
 
 

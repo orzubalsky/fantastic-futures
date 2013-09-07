@@ -97,7 +97,8 @@ class MapSetting(Base):
     )
     mapdisplay_point_radius = IntegerField(
         'Map Point Radius',
-        max_length=2,
+        max_length=3,
+        default=2,
         blank=True,
         help_text='The radius of a point on the map'
     )
