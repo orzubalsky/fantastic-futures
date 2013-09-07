@@ -42,24 +42,15 @@
     
             if (self.settings.basemap == 'openstreetmap')
             {
-                // create OSM layers
-                var mapnik = new OpenLayers.Layer.OSM();
-                var oam = new OpenLayers.Layer.XYZ(
-                    "OpenAerialMap",
-                    "http://tile.openaerialmap.org/tiles/1.0.0/openaerialmap-900913/${z}/${x}/${y}.png",
-                    {
-                        sphericalMercator: true    
-                    }
-                );
-                var osmarender = new OpenLayers.Layer.OSM(
-                    "OpenStreetMap (Tiles@Home)",
-                    "http://tah.openstreetmap.org/Tiles/tile/${z}/${x}/${y}.png"
-                );
+                // var mapnik = new OpenLayers.Layer.OSM();
+                var stamen = new OpenLayers.Layer.Stamen("toner-lite");
+                stamen.setOpacity(0.4);
 
                 var fromProjection = new OpenLayers.Projection("EPSG:4326");   // Transform from WGS 1984
                 var toProjection   = new OpenLayers.Projection("EPSG:900913"); // to Spherical Mercator Projection                
 
-                self.map.addLayers([mapnik, oam, osmarender ]);
+                self.map.addLayers([stamen, ]);
+                
                 var bounds = OpenLayers.Geometry.fromWKT(self.settings.initial_bounds);
                 var transformed_bounds = bounds.getBounds().transform(fromProjection, toProjection);
                 self.map.zoomToExtent(transformed_bounds);
@@ -79,60 +70,47 @@
             var projection;
             if (self.settings.basemap == 'dymaxion')
             {
-                projection = new OpenLayers.Projection("DYMAX"); 
-                max_extent = new OpenLayers.Bounds(-50,50,860,420);
-
+                var options = {
+                    projection: new OpenLayers.Projection("DYMAX"),
+                    maxExtent: new OpenLayers.Bounds(-50,50,860,420),
+                    controls: [
+                        new OpenLayers.Control.Navigation({
+                            dragPanOptions: {
+                                enableKinetic: false,
+                            },
+                            zoomWheelEnabled : false
+                        }),
+                        new OpenLayers.Control.Attribution(),
+                     ],
+                };
             }
 
-            var max_extent = new OpenLayers.Bounds(-20037508, -20037508, 20037508, 20037508);
-            var restrictedExtent = max_extent.clone();
-            var maxResolution = 156543.0339;
-        
-            var options = {
-                projection: new OpenLayers.Projection("EPSG:900913"),
-                displayProjection: new OpenLayers.Projection("EPSG:4326"),
-                units: "m",
-                maxResolution: maxResolution,
-                maxExtent: max_extent,
-                restrictedExtent: max_extent,
-                controls: [
-                    new OpenLayers.Control.Navigation({
-                        dragPanOptions: {
-                            enableKinetic: false,
-                        },
-                        zoomWheelEnabled : false
-                    }),
-                    new OpenLayers.Control.Attribution(),
-                 ],
-            };
+            if (self.settings.basemap == 'openstreetmap')
+            {
+                var max_extent = new OpenLayers.Bounds(-20037508, -20037508, 20037508, 20037508);
+                var restrictedExtent = max_extent.clone();
+                var maxResolution = 156543.0339;
+            
+                var options = {
+                    projection: new OpenLayers.Projection("EPSG:900913"),
+                    displayProjection: new OpenLayers.Projection("EPSG:4326"),
+                    units: "m",
+                    maxResolution: maxResolution,
+                    maxExtent: max_extent,
+                    restrictedExtent: max_extent,
+                    controls: [
+                        new OpenLayers.Control.Navigation({
+                            dragPanOptions: {
+                                enableKinetic: false,
+                            },
+                            zoomWheelEnabled : false
+                        }),
+                        new OpenLayers.Control.Attribution(),
+                     ],
+                };
+            }
 
-
-            map = new OpenLayers.Map('map', options);
-
-
-
-   //          var map = new OpenLayers.Map("map", {
-			// 	projection: projection,
-		 //        maxExtent:  new OpenLayers.Bounds(-20037508, -20037508, 20037508, 20037508),
-			// 	allOverlays: true,
-			// 	controls: [
-			// 	    new OpenLayers.Control.Navigation({
-			// 	        dragPanOptions: {
-			// 	            enableKinetic: false,
-			// 	        },
-   //                      zoomWheelEnabled : false
-			// 	    }),
-			// 	    new OpenLayers.Control.Attribution(),
-			// 	    /*
-			// 	    new OpenLayers.Control.Zoom({
-			// 	        zoomInId: "customZoomIn",
-			// 	        zoomOutId: "customZoomOut"
-			// 	    })
-			// 	    */
-			// 	],
-			// });			
-			
-			return map;        
+			return new OpenLayers.Map('map', options);
         };
         
         this.addSound = function(geojson)
