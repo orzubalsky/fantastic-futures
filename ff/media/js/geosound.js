@@ -51,7 +51,7 @@ Geosound.prototype.setup = function()
     self.shape = new Kinetic.Group({
         x       : self.coords.x,
         y       : self.coords.y,
-        alpha   : 0.4,
+        opacity : 0.4,
     });	
 
     // MOUSE OVER
