@@ -1,0 +1,40 @@
+[
+    {
+        "pk": 1, 
+        "model": "futures.mapsetting", 
+        "fields": {
+            "mapdisplay_fill_opacity": 1.0, 
+            "mapdisplay_fill_color": "#000000", 
+            "updated": "2013-09-11T03:26:52.878Z", 
+            "mapdisplay_point_radius": 2, 
+            "title": "default", 
+            "created": "2013-09-11T03:26:52.878Z", 
+            "is_active": true, 
+            "mapdisplay_stroke_color": "#000000", 
+            "initial_bounds": "POLYGON ((-176.4008984554171207 79.2339380019301700, -109.6040234647142313 84.4384222098390609, 174.4584764957393759 78.1309180566335328, 178.6772264951543718 -46.3285901239374951, -162.3383984573791849 -61.1091893038610081, -176.4008984554171207 79.2339380019301700))", 
+            "zoom_enabled": true, 
+            "mapdisplay_stroke_opacity": 1.0, 
+            "basemap": "dymaxion", 
+            "mapdisplay_size": 8
+        }
+    }, 
+    {
+        "pk": 2, 
+        "model": "futures.mapsetting", 
+        "fields": {
+            "mapdisplay_fill_opacity": 1.0, 
+            "mapdisplay_fill_color": "#000000", 
+            "updated": "2013-09-11T03:25:47.475Z", 
+            "mapdisplay_point_radius": 2, 
+            "title": "fmcp", 
+            "created": "2013-09-07T03:08:24.180Z", 
+            "is_active": true, 
+            "mapdisplay_stroke_color": "#000000", 
+            "initial_bounds": "POLYGON ((-73.8543400895683106 40.7502822801899285, -73.8359723222372963 40.7502497691576977, -73.8331828248618933 40.7384146975822787, -73.8494906556699675 40.7381220455066142, -73.8543400895683106 40.7502822801899285))", 
+            "zoom_enabled": true, 
+            "mapdisplay_stroke_opacity": 1.0, 
+            "basemap": "openstreetmap", 
+            "mapdisplay_size": 8
+        }
+    }
+]
