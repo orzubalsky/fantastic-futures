@@ -90,7 +90,7 @@ var playhead = window.playhead = new function()
     {
         var distance_from_center = this.dist(x, y, ffinterface.width/2, ffinterface.height/2);
 
-        return (distance_from_center <= this.shape.getRadius().x) ? true : false;
+        return (distance_from_center <= this.shape.getRadius()) ? true : false;
     };
 
     /* determine whether a point is on the playhead's circumference */
@@ -98,7 +98,7 @@ var playhead = window.playhead = new function()
     {
         var distance_from_center = this.dist(x, y, ffinterface.width/2, ffinterface.height/2);
 
-        return (distance_from_center == this.shape.getRadius().x) ? true : false;
+        return (distance_from_center == this.shape.getRadius()) ? true : false;
     };
 
     /* key controls for the player */
