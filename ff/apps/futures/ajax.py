@@ -44,7 +44,7 @@ def submit_feedback(request, form):
     return json.dumps({'success':False, 'errors': feedback_form.errors})
 
 
-@dajaxice_register(method='POST')
+@dajaxice_register(method='GET')
 def submit_sound(request, form, tags):
     add_sound_form = GeoSoundForm(deserialize_form(form))
     if add_sound_form.is_valid():
@@ -62,7 +62,7 @@ def submit_sound(request, form, tags):
     return json.dumps({'success':False, 'errors': add_sound_form.errors})
 
 
-@dajaxice_register(method='POST')
+@dajaxice_register(method='GET')
 def submit_constellation(request, form, connections, rotation):
     constellation_form = ConstellationForm(deserialize_form(form))
     

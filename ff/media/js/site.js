@@ -287,7 +287,6 @@ var site = window.site = new function() {
                         tags.push($(button).attr('name'));
                     }
                 }
-                
                 Dajaxice.futures.submit_sound(self.addSound_callback, {'form':data, 'tags':tags});
             });            
         });

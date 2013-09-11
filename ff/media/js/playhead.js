@@ -18,8 +18,8 @@ var playhead = window.playhead = new function()
             y                 : ffinterface.height / 2,
             opacity           : 0.8,
             radius            : 0,
-            //fillPatternImage  : ffinterface.images.playhead_fill, //stripes
-            //fillPatternOffset : [0, 0],
+            fillPatternImage  : ffinterface.images.playhead_fill, //stripes
+            fillPatternOffset : [0, 0],
             stroke            : "#efefef",
             strokeWidth       : .25,
         });
