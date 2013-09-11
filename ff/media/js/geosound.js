@@ -383,7 +383,7 @@ Geosound.prototype.volumeInteraction = function(timeoutMs)
     self.timeout = setTimeout(function() 
     {
         // since halo is an ellipse, it has x & y values for its radius
-        var radius = self.halo().getRadius().x;
+        var radius = self.halo().getRadius();
         
         // animate the radius in a loop
         self.interval = setInterval(function() 

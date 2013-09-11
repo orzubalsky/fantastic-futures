@@ -29,7 +29,7 @@ var playhead = window.playhead = new function()
         
         // add layer to the one interface stage
         ffinterface.stage.add(this.layer);
-
+        
         // enable playing/pausing the playhead
         this.playerToggleControl();
     };
@@ -45,13 +45,13 @@ var playhead = window.playhead = new function()
     {
         // the playhead radius is stored in the kineticJS shape as an object {x: a, y: b}
         var radius = this.shape.getRadius();
-
+        
         // only update size if the interface is playing
         if (this.is_playing)
         {
             // reset the radius when it reaches the end of the screen
-            radius = (radius.x < ffinterface.width / 2) ? Math.floor(radius.x) + 1 : 0;
-            
+            radius = (radius < ffinterface.width / 2) ? Math.floor(radius) + 1 : 0;
+
             // update the size of the kineticJS shape
             this.shape.setRadius(radius);
         }
