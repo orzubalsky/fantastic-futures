@@ -47,19 +47,29 @@ def index(request):
         }, context_instance=RequestContext(request))
 
 
-def view_collection(request, slug):
+def collection_list(request, slug):
 
-    collection = get_object_or_404(collection, slug=slug)
+    collection = get_object_or_404(Collection, slug=slug)
 
     layers = {}
     layers["sounds"] = {
         'title': "sounds",
-        'url': reverse('sound-layer', kwargs={'collection': collection, }),
+        'url': reverse('sound-collection-layer', kwargs={'slug': collection.slug, }),
     }
     layer_json = json.dumps(layers)
 
     constellations = Constellation.objects.filter(
-        connections__sound_1__collections=collection)
+        connections__sound_1__collections=collection,
+        connections__sound_2__collections=collection
+    )
+
+    map_setting = MapSetting.objects.filter(pk=collection.map_setting.pk)
+    map_setting_json = serializers.serialize(
+        'json',
+        map_setting,
+        indent=4,
+        excludes=('updated', 'created', 'is_active', 'pk'),
+    )
 
     constellations_json = constellations_to_json(constellations)
     feedback_form = FeedbackForm()
@@ -77,6 +87,7 @@ def view_collection(request, slug):
             'google_api_key': settings.GOOGLE_API_KEY,
             'constellations': constellations,
             'constellations_json': constellations_json,
+            'map_setting': map_setting_json,
         }, context_instance=RequestContext(request))
 
 
@@ -89,12 +100,13 @@ def performance(request):
         'performance.html', {}, context_instance=RequestContext(request))
 
 
-def sound_layer(request, collection=None):
+def sound_layer(request, slug=None):
 
     # count added sounds, in order to determine how long to cache for later
     sounds = GeoSound.objects.all().order_by('created')
 
-    if collection is not None:
+    if slug is not None:
+        collection = get_object_or_404(Collection, slug=slug)
         sounds.filter(collections=collection)
 
     just_added = 0
@@ -152,24 +164,20 @@ def sound_to_json(sound_object):
 
 
 def constellations_to_json(constellation_queryset):
-    if cache.get('json_constellations') is None:
-        constellations_json = serializers.serialize(
-            'json',
-            constellation_queryset,
-            indent=4,
-            excludes=('updated', 'created', 'is_active', 'user'),
-            relations= {
-                'connections': {'fields': (
-                    'sound_1',
-                    'sound_2',
-                    'sound_1_volume',
-                    'sound_2_volume'
-                )}
-            }
-        )
-        cache.set('json_constellations', constellations_json, 60*60*24*7)
-    else:
-        constellations_json = cache.get('json_constellations')
+    constellations_json = serializers.serialize(
+        'json',
+        constellation_queryset,
+        indent=4,
+        excludes=('updated', 'created', 'is_active', 'user'),
+        relations= {
+            'connections': {'fields': (
+                'sound_1',
+                'sound_2',
+                'sound_1_volume',
+                'sound_2_volume'
+            )}
+        }
+    )
 
     return constellations_json
 
