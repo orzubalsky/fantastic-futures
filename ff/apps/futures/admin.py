@@ -36,6 +36,14 @@ class GeoSoundAdmin(GeoAdmin):
         'get_tags',
         'is_active'
     )
+    list_editable = (
+        'created_by',
+        'location',
+        'default_volume',
+        'z',
+        'is_active'
+    )
+
     fields = (
         'title',
         'sound',
