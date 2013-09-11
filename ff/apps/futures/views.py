@@ -54,7 +54,10 @@ def collection_list(request, slug):
     layers = {}
     layers["sounds"] = {
         'title': "sounds",
-        'url': reverse('sound-collection-layer', kwargs={'slug': collection.slug, }),
+        'url': reverse(
+            'sound-collection-layer',
+            kwargs={'slug': collection.slug, }
+        ),
     }
     layer_json = json.dumps(layers)
 
@@ -88,6 +91,7 @@ def collection_list(request, slug):
             'constellations': constellations,
             'constellations_json': constellations_json,
             'map_setting': map_setting_json,
+            'collection': collection
         }, context_instance=RequestContext(request))
 
 

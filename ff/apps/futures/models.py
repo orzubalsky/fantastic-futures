@@ -9,6 +9,7 @@ from taggit.managers import TaggableManager
 from paintstore.fields import ColorPickerField
 from datetime import *
 from futures.validators import *
+from futures.utils import unique_slugify
 import random
 
 
@@ -160,7 +161,7 @@ class GeoSound(Base):
     is_recent = property(**is_recent())
     just_added = property(**just_added())
 
-    def save_upload(self, filename, lat, lon, tags, *args, **kwargs):
+    def save_upload(self, filename, lat, lon, tags, collection_slug, *args, **kwargs):
         from django.contrib.gis.geos import Point
 
         "save geosound after ajax uploading an mp3 file"
@@ -176,6 +177,9 @@ class GeoSound(Base):
 
         # create a title for the sound
         self.title = "recorded in %s by %s" % (self.location, self.created_by)
+
+        if self.slug is None or self.slug.__len__() == 0:
+            self.slug = unique_slugify(GeoSound, self.title)
 
         # save sound
         self.sound = filename
@@ -193,6 +197,12 @@ class GeoSound(Base):
             defaults={'title': 'fantastic futures v3'}
         )
         self.collections.add(v3_collection)
+        if collection_slug is not None:
+            try:
+                collection = Collection.objects.get(slug=collection_slug)
+                self.collections.add(collection)
+            except Collection.DoesNotExist:
+                pass
 
         # return the newly created model
         return self

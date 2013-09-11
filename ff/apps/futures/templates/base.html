@@ -22,6 +22,11 @@
     {% else %}
     var MAP_SETTING = {};    
     {% endif %}
+    {% if collection %}
+    var COLLECTION = '{{ collection.slug|safe }}';
+    {% else %}
+    var COLLECTION = null;    
+    {% endif %}    
   </script>
   {% include "analytics.html" %}
 </head>

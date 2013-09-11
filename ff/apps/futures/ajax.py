@@ -53,7 +53,7 @@ def submit_feedback(request, form):
 
 
 @dajaxice_register(method='GET')
-def submit_sound(request, form, tags):
+def submit_sound(request, form, tags, collection_slug=None):
     add_sound_form = GeoSoundForm(deserialize_form(form))
     if add_sound_form.is_valid():
         validForm = add_sound_form.save(commit=False)
@@ -65,7 +65,8 @@ def submit_sound(request, form, tags):
             uploaded_file,
             float(lat),
             float(lon),
-            tags
+            tags,
+            collection_slug
         )
 
         result_data = {
