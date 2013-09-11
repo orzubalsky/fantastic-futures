@@ -25,7 +25,7 @@ def index(request):
     constellation_form = ConstellationForm()
     search_form = GeoSearchForm()
 
-    map_setting = MapSetting.objects.filter(title='fmcp')
+    map_setting = MapSetting.objects.filter(title='default')
     map_setting_json = serializers.serialize(
         'json',
         map_setting,

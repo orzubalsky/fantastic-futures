@@ -76,7 +76,7 @@ Geosound.prototype.setup = function()
         // if the sound isn't active, highlight it
         if (!self.active)
         {
-            self.shape.setAlpha(1);
+            self.shape.setOpacity(1);
         }
     });
 
@@ -96,7 +96,7 @@ Geosound.prototype.setup = function()
         // reset the sound style
         if (!self.active)
         {
-            self.shape.setAlpha(0.4);
+            self.shape.setOpacity(0.4);
         }
     });
 

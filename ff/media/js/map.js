@@ -17,15 +17,15 @@
                 outputError('Your browser does not support canvas, nothing to see here!');
             }
 
+            
+            // add the 4326 to dymaxiom transformation function
+            OpenLayers.Projection.addTransform( "EPSG:4326", "DYMAX", self.projectForward );     
+
             // Create new map
             self.map = self.createMap();
-            
+
             if (self.settings.basemap == 'dymaxion')
-            {
-            
-                // add the 4326 to dymaxiom transformation function
-                OpenLayers.Projection.addTransform( "EPSG:4326", "DYMAX", self.projectForward );                
-                
+            {           
                 // base layers
                 var countries   = self.countriesLayer();
                 var triFill     = self.dymaxTriFill();
@@ -65,14 +65,13 @@
         {
             var self = this;
             
-            
             // MAP PROJECTION
-            var projection;
             if (self.settings.basemap == 'dymaxion')
             {
                 var options = {
                     projection: new OpenLayers.Projection("DYMAX"),
                     maxExtent: new OpenLayers.Bounds(-50,50,860,420),
+                    allOverlays: true,
                     controls: [
                         new OpenLayers.Control.Navigation({
                             dragPanOptions: {
