@@ -16,7 +16,7 @@ var playhead = window.playhead = new function()
         this.shape = new Kinetic.Circle({
             x                 : ffinterface.width / 2,
             y                 : ffinterface.height / 2,
-            alpha             : '0.8',
+            opacity           : '0.8',
             radius            : 0,
             fillPatternImage  : ffinterface.images.playhead_fill, //stripes
             fillPatternOffset : [0, 0],
