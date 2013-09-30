@@ -88,7 +88,16 @@ class ConstellationAdmin(admin.ModelAdmin):
         'location',
         'rotation_x',
         'rotation_y',
-        'rotation_z'
+        'rotation_z',
+        'zoom'
+    )
+    list_editable = (
+        'created_by',
+        'location',
+        'rotation_x',
+        'rotation_y',
+        'rotation_z',
+        'zoom'
     )
     fields = (
         'title',
@@ -99,7 +108,8 @@ class ConstellationAdmin(admin.ModelAdmin):
         'connections',
         'rotation_x',
         'rotation_y',
-        'rotation_z'
+        'rotation_z',
+        'zoom',
     )
     prepopulated_fields = {
         'slug': ('title',)
