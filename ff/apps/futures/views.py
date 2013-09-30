@@ -95,10 +95,6 @@ def collection_list(request, slug):
         }, context_instance=RequestContext(request))
 
 
-def view_sound(request, sound_slug):
-    pass
-
-
 def performance(request):
     return render_to_response(
         'performance.html', {}, context_instance=RequestContext(request))

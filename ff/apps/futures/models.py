@@ -140,7 +140,7 @@ class GeoSound(Base):
     z = FloatField(default=random_z)
     default_volume = FloatField(default=random_default_volume)
     collections = ManyToManyField(Collection, related_name="collections")
-    tags = TaggableManager()
+    tags = TaggableManager(blank=True)
 
     objects = GeoManager()
 
