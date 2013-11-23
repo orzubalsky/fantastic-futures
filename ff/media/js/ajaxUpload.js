@@ -16,7 +16,7 @@
                 element: $('#file-uploader')[0],
                 multiple: false,
                 debug: false,
-                allowedExtensions: ['mp3'],
+                allowedExtensions: ['mp3', 'm4a'],
                 onSubmit: function(id, fileName)
                 {
                     lib.log("submit")
