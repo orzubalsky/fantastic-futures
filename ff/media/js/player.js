@@ -21,7 +21,8 @@ Player.prototype.init = function()
     self.$player.jPlayer({
         ready: function () {
             $(this).jPlayer("setMedia", {
-                mp3: self.file
+                mp3: self.file,
+                m4a: self.file
             });
         },
         volume: self.volume,
