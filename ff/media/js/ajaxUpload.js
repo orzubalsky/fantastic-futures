@@ -64,7 +64,7 @@
                 },
            });
            
-           $('#uploadText').live('click', function(e) 
+           $('#uploadText').on('click', function(e) 
            {
               e.preventDefault();
            });

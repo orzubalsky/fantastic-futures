@@ -54,11 +54,24 @@ Geosound.prototype.setup = function()
         opacity : 0.4,
     });	
 
-    // MOUSE OVER
+    // MOUSE ENTER
     self.shape.on("mouseenter", function() 
     {
+        console.log(self.name + ": enter");
         // change cursor 
         $('#container').css({'cursor':'pointer'});
+
+        // populate the sound text div with this sound's data and position it
+        $('#soundText').removeClass().addClass(self.name).html(self.name+'<br/>'+self.location+'<br/><div class="story">'+self.story+'</div>') 
+        .css({ 
+            'top'   : (self.coords.y-110) + 'px',
+            'left'  : (self.coords.x-27) + 'px'
+        });
+
+        // don't display the story element if there is no description for the geosound
+        if (self.story == ""){
+            $('.story').css('display','none');
+        }
 
         // if the sound isn't active, highlight it
         if (!self.active)
@@ -66,23 +79,15 @@ Geosound.prototype.setup = function()
             self.shape.setOpacity(1);
         }
 
-        // populate the sound text div with this sound's data, position it, and display it
-        $('#soundText').html(self.name+'<br/>'+self.location+'<br/><div class="story">'+self.story+'</div>') 
-        .css({ 
-            'top'   : (self.coords.y-110) + 'px',
-            'left'  : (self.coords.x-27) + 'px'
-        })
-        .stop().show();       
-
-        // don't display the story element if there is no description for the geosound
-        if (self.story == ""){
-            $('.story').css('display','none');
-        } 
+        // display the sound text
+        $('#soundText').show();        
     });
 
-    // MOUSE OUT
+    // MOUSE LEAVE
     self.shape.on("mouseleave", function() 
     {
+        console.log(self.name + ": leave");        
+
         // clear volume halo animation timing variables
         clearTimeout(self.timeout);
         clearInterval(self.interval);
@@ -91,7 +96,10 @@ Geosound.prototype.setup = function()
         $('#container').css({'cursor':'default'});
 
         // hide the sound text div
-        $('#soundText').hide();
+        if ($('#soundText').hasClass(self.name))
+        {
+            $('#soundText').hide();
+        }
 
         // reset the sound style
         if (!self.active)

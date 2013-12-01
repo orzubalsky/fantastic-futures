@@ -38,7 +38,7 @@ var site = window.site = new function() {
     {
         var self = this;
 
-        $('#search input[name=q]').live('input paste', function() 
+        $('#search input[name=q]').on('input paste', function() 
         {
             var value = $(this).val();
             if (value.length > 1)
@@ -70,29 +70,22 @@ var site = window.site = new function() {
        $('#scrollDown').hover( function(){
        		$('#constellationMenuContent').scrollTo('+=10px',500, { axis: 'y'});
        });*/
-
-       
-       if ($.browser.mozilla) {
-      		speed=10;
-		} else { 
-			speed=3;
-		}
 	
-       $('#scrollUp').live('mouseenter', function() {
+       $('#scrollUp').on('mouseenter', function() {
 			this.iid = setInterval(function() {
 			   // do something 
 			   $('#constellationMenuContent').scrollTo('-='+speed+'px', { axis: 'y'});
 			}, 25);
-		}).live('mouseleave', function(){
+		}).on('mouseleave', function(){
 			this.iid && clearInterval(this.iid);
 		});
 
-      	$('#scrollDown').live('mouseenter', function() {
+      	$('#scrollDown').on('mouseenter', function() {
 			this.iid = setInterval(function() {
 			   // do something 
 			   $('#constellationMenuContent').scrollTo('+='+speed+'px', { axis: 'y'});
 			}, 25);
-		}).live('mouseleave', function(){
+		}).on('mouseleave', function(){
 			this.iid && clearInterval(this.iid);
 		});
 	};
@@ -152,7 +145,7 @@ var site = window.site = new function() {
             $("#error").fadeToggle("fast", "linear");
     	});
     	
-    	$("#constellationMenu h2").live('mouseenter', function()
+    	$("#constellationMenu h2").on('mouseenter', function()
     	{
             constellations.preview();
             
@@ -161,12 +154,12 @@ var site = window.site = new function() {
             $("#constellationMenu #scrollDown").fadeToggle("fast", "linear");
     	});
     	
-    	$("#constellationMenu h2").live('mouseleave', function()
+    	$("#constellationMenu h2").on('mouseleave', function()
     	{
             constellations.clear();
     	});
     	
-    	$("#constellationMenu").live('mouseleave', function()
+    	$("#constellationMenu").on('mouseleave', function()
     	{
             $("#constellationMenuContent").fadeToggle("fast", "linear");
             $("#constellationMenu #scrollUp").fadeToggle("fast", "linear");
@@ -203,7 +196,7 @@ var site = window.site = new function() {
 			});
 		});
 
-        $('#constellationMenuContent a').live('mouseenter', function(e)
+        $('#constellationMenuContent a').on('mouseenter', function(e)
         { 
             e.preventDefault();
     	    
@@ -211,7 +204,7 @@ var site = window.site = new function() {
             constellations.previewOne(id, true, 25, function() { return true; }); 
         });
         
-        $('#constellationMenuContent a').live('click', function (e)
+        $('#constellationMenuContent a').on('click', function (e)
         { 
     	    e.preventDefault();
     	    
@@ -219,7 +212,7 @@ var site = window.site = new function() {
             constellations.loadOne(id); 
         });
         
-        $('#constellationMenuContent a').live('mouseleave', function (e)            
+        $('#constellationMenuContent a').on('mouseleave', function (e)            
         {
             e.preventDefault();
             constellations.clear();
@@ -311,14 +304,14 @@ var site = window.site = new function() {
             });
     	});
     	    
-        $('#customZoomIn').live('click', function(e) 
+        $('#customZoomIn').on('click', function(e) 
     	{
     	    e.preventDefault();
     	    
     	    pov.changeZoom(0.2);
     	});
     	
-        $('#customZoomOut').live('click', function(e) 
+        $('#customZoomOut').on('click', function(e) 
     	{
     	    e.preventDefault();
     	    
