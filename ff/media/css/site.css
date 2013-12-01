@@ -52,7 +52,7 @@ h2 {
 	
 }
 /*detail text about a sound*/
-.soundText {
+#soundText {
     color:#666;
     background:url(../images/arrow.png) 25px 25px no-repeat;
     position:absolute;
@@ -62,7 +62,7 @@ h2 {
 	display:none;
 	z-index:2000;
 }
-.soundText .story{
+#soundText .story{
 	position:relative;
 	width:300px;
 	border:dotted #ccc 1px;

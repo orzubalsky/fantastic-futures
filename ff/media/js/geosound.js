@@ -55,33 +55,33 @@ Geosound.prototype.setup = function()
     });	
 
     // MOUSE OVER
-    self.shape.on("mouseover", function() 
+    self.shape.on("mouseenter", function() 
     {
         // change cursor 
         $('#container').css({'cursor':'pointer'});
-
-        // populate the sound text div with this sound's data, position it, and display it
-        $('.soundText').html(self.name+'<br/>'+self.location+'<br/><div class="story">'+self.story+'</div>') 
-        .css({ 
-            'top'   : (self.coords.y-110) + 'px',
-            'left'  : (self.coords.x-27) + 'px'
-        })
-        .stop().fadeIn(100);
-
-        // don't display the story element if there is no description for the geosound
-        if (self.story == ""){
-            $('.story').css('display','none');
-        }
 
         // if the sound isn't active, highlight it
         if (!self.active)
         {
             self.shape.setOpacity(1);
         }
+
+        // populate the sound text div with this sound's data, position it, and display it
+        $('#soundText').html(self.name+'<br/>'+self.location+'<br/><div class="story">'+self.story+'</div>') 
+        .css({ 
+            'top'   : (self.coords.y-110) + 'px',
+            'left'  : (self.coords.x-27) + 'px'
+        })
+        .stop().show();       
+
+        // don't display the story element if there is no description for the geosound
+        if (self.story == ""){
+            $('.story').css('display','none');
+        } 
     });
 
     // MOUSE OUT
-    self.shape.on("mouseout", function() 
+    self.shape.on("mouseleave", function() 
     {
         // clear volume halo animation timing variables
         clearTimeout(self.timeout);
@@ -91,7 +91,7 @@ Geosound.prototype.setup = function()
         $('#container').css({'cursor':'default'});
 
         // hide the sound text div
-        $('.soundText').fadeOut(100);
+        $('#soundText').hide();
 
         // reset the sound style
         if (!self.active)
