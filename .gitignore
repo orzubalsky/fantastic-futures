@@ -11,7 +11,8 @@ eggs/
 parts/
 
 # ignore settings files:
-ff/settings/*.py
+ff/settings/development.py
+ff/settings/server.py
 !ff/settings/__init__.py
 fab_config.py
 apache.conf
