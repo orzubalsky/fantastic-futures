@@ -1,4 +1,5 @@
 from django.shortcuts import get_object_or_404
+from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponse
 from twilio.twiml import Response
 from django_twilio.decorators import twilio_view
@@ -30,6 +31,7 @@ def answer(request, slug=None, location=None):
     return r
 
 
+@csrf_exempt
 def handle_recording(request, slug=None, location=None):
 
     voicemailbox = get_object_or_404(VoicemailBox, slug=slug)
