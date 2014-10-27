@@ -1,4 +1,5 @@
 from django.shortcuts import get_object_or_404
+from django.http import HttpResponse
 from twilio.twiml import Response
 from django_twilio.decorators import twilio_view
 from django.core.urlresolvers import reverse
@@ -38,3 +39,4 @@ def handle_recording(request, slug=None, location=None):
         title='recorded in %s for %s' % (location, voicemailbox.target_location),
         location=voicemailbox.target_location,
     )
+    return HttpResponse()
