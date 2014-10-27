@@ -143,7 +143,7 @@ class Collection(Base):
         from django.core.files import File
         from django.core.files.temp import NamedTemporaryFile
 
-        slug = unique_slugify(GeoSound, self.title)
+        slug = unique_slugify(GeoSound, title)
 
         geosound = GeoSound(
             title=title,
