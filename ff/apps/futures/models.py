@@ -150,27 +150,15 @@ class Collection(Base):
             slug=slug,
             point=point,
         )
+        geosound.save()
+        geosound.collections.add(self)
+
         print geosound
 
         if audio_url is not None:
-
-            import urllib2
-            from django.core.files import File
-            from django.core.files.temp import NamedTemporaryFile
-
-            file_temp = NamedTemporaryFile(delete=True)
-            file_temp.write(urllib2.urlopen(audio_url).read())
-            file_temp.flush()
-
-            filename = "%s.mp3" % slug
-            print filename
-
-            geosound.sound.save(filename, File(file_temp))
-
+            call_command(
+                'save_file_from_url', url=audio_url, object_pk=geosound.pk)
             call_command('collectstatic', interactive=False)
-
-        geosound.save()
-        geosound.collections.add(self)
 
 
 class GeoSound(Base):
