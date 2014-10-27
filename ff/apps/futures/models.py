@@ -174,7 +174,7 @@ class GeoSound(Base):
     def random_default_volume():
         return round(random.uniform(0.2, 0.8), 2)
 
-    sound = FileField(upload_to="uploads", max_length=150)
+    sound = FileField(upload_to="uploads", max_length=150, blank=True, null=True)
     title = CharField(max_length=100, blank=True, null=True)
     location = CharField(max_length=150, blank=True, null=True)
     story = TextField(blank=True, null=True)
