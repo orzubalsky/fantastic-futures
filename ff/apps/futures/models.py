@@ -154,12 +154,13 @@ class Collection(Base):
 
         if audio_url is not None:
 
-            import urllib
+            import urllib2
             from django.core.files import File
             from django.core.files.temp import NamedTemporaryFile
 
             file_temp = NamedTemporaryFile(delete=True)
-            file_temp.write(urllib.urlopen(audio_url).read())
+            file_temp.write(urllib2.urlopen(audio_url).read())
+            file_temp.flush()
 
             filename = "%s.mp3" % slug
             print filename
@@ -167,8 +168,6 @@ class Collection(Base):
             geosound.sound.save(filename, File(file_temp))
 
             call_command('collectstatic', interactive=False)
-
-            file_temp.flush()
 
         geosound.save()
         geosound.collections.add(self)
