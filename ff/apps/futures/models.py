@@ -1,3 +1,4 @@
+from django.contrib.gis.geos import Point
 from django.contrib.gis.db.models import *
 from django.utils.timezone import utc
 from django.contrib.auth.models import User
@@ -111,12 +112,42 @@ class MapSetting(Base):
         help_text='In pixels'
     )
 
+    def get_random_point(self, extent):
+        xmin, ymin, xmax, ymax = extent
+        xrange = xmax - xmin
+        yrange = ymax - ymin
+        randx = xrange * random.random() + xmin
+        randy = yrange * random.random() + ymin
+        return Point(randx, randy, srid=4326)
+
+    def random_point_in_map_bounds(self):
+        polygon = self.initial_bounds
+        point = self.get_random_point(polygon.extent)
+        while not polygon.contains(point):
+            point = random_point(polygon.extent)
+
+        return point
+
 
 class Collection(Base):
     title = CharField(max_length=100, blank=False, null=True)
     slug = SlugField(max_length=120, blank=False, null=False)
     description = TextField(blank=True, null=True)
     map_setting = ForeignKey(MapSetting, blank=True, null=True)
+
+    def add_voicemail(self, title, location, audio_url):
+
+        point = self.map_setting.random_point_in_map_bounds()
+
+        geosound = GeoSound(
+            title=title,
+            sound=audio_url,
+            location=location,
+            slug=unique_slugify(GeoSound, self.title),
+            point=point,
+        )
+        geosound.save()
+        geosound.collections.add(self)
 
 
 class GeoSound(Base):

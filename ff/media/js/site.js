@@ -74,7 +74,7 @@ var site = window.site = new function() {
        $('#scrollUp').on('mouseenter', function() {
 			this.iid = setInterval(function() {
 			   // do something 
-			   $('#constellationMenuContent').scrollTo('-='+speed+'px', { axis: 'y'});
+			   $('#constellationMenuContent').scrollTo('-=4px', { axis: 'y'});
 			}, 25);
 		}).on('mouseleave', function(){
 			this.iid && clearInterval(this.iid);
@@ -83,7 +83,7 @@ var site = window.site = new function() {
       	$('#scrollDown').on('mouseenter', function() {
 			this.iid = setInterval(function() {
 			   // do something 
-			   $('#constellationMenuContent').scrollTo('+='+speed+'px', { axis: 'y'});
+			   $('#constellationMenuContent').scrollTo('+=4px', { axis: 'y'});
 			}, 25);
 		}).on('mouseleave', function(){
 			this.iid && clearInterval(this.iid);

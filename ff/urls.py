@@ -14,7 +14,8 @@ dajaxice_autodiscover()
 urlpatterns = patterns('',
 
     url(r'^admin/', include(admin.site.urls)),
-    url(dajaxice_config.dajaxice_url, include('dajaxice.urls')),    
+    url(dajaxice_config.dajaxice_url, include('dajaxice.urls')),
+    url(r'^voicemail/', include('voicemail.urls')),
     url(r'^', include('futures.urls')),
 )
 
