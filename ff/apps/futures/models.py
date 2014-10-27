@@ -11,7 +11,7 @@ from paintstore.fields import ColorPickerField
 from datetime import *
 from futures.validators import *
 from futures.utils import unique_slugify
-import random
+import random, randint
 
 
 class Base(Model):
@@ -143,7 +143,7 @@ class Collection(Base):
         from django.core.files import File
         from django.core.files.temp import NamedTemporaryFile
 
-        slug = "%s-%s" % (title, random(0, 999999))
+        slug = "%s-%s" % (title, randint(0, 999999))
 
         geosound = GeoSound(
             title=title,
