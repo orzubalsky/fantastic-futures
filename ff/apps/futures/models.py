@@ -152,13 +152,14 @@ class Collection(Base):
 
         file_temp = NamedTemporaryFile(delete=True)
         file_temp.write(urllib.urlopen(audio_url).read())
-        file_temp.flush()
 
-        filename = "%s.mp3" % title
+        filename = "%s.mp3" % geosound.slug
 
         geosound.sound.save(filename, File(file_temp))
         geosound.save()
         geosound.collections.add(self)
+
+        file_temp.flush()
 
 
 class GeoSound(Base):
