@@ -8,15 +8,18 @@ from voicemail.models import VoicemailBox
 @twilio_view
 def answer(request, slug=None, location=None):
 
-    voicemailbox = get_object_or_404(VoicemailBox, slug=slug)
-
     r = Response()
-    r.say('Thanks for calling Fantastic Futures!')
+    r.say(
+        "Thanks for calling Fantastic Futures!"
+        "You are about to record a wonderful sound."
+        "Once you are done, please hang up so your recording "
+        "can start its journey to the website."
+    )
 
     action = reverse(
         'handle-recording',
         kwargs={
-            'slug': voicemailbox.slug,
+            'slug': slug,
             'location': location
         }
     )
