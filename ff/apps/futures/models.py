@@ -5,6 +5,7 @@ from django.contrib.auth.models import User
 from django.db.models.signals import pre_delete, post_save
 from django.dispatch import receiver
 from django.core.cache import cache
+from django.core.management import call_command
 from django_countries import CountryField
 from taggit.managers import TaggableManager
 from paintstore.fields import ColorPickerField
@@ -167,6 +168,8 @@ class Collection(Base):
         geosound.sound.save(filename, File(file_temp))
         geosound.save()
         geosound.collections.add(self)
+
+        call_command('collectstatic', interactive=False)
 
         file_temp.flush()
 
