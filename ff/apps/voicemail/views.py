@@ -10,8 +10,8 @@ def answer(request, slug=None, location=None):
 
     r = Response()
     r.say(
-        "Thanks for calling Fantastic Futures!"
-        "You are about to record a wonderful sound."
+        "Thanks for calling Fantastic Futures, "
+        "You are about to record a wonderful sound, "
         "Once you are done, please hang up so your recording "
         "can start its journey to the website."
     )
@@ -35,18 +35,6 @@ def handle_recording(request, slug=None, location=None):
     r = Response()
 
     voicemailbox = get_object_or_404(VoicemailBox, slug=slug)
-
-    for key in request.POST:
-        value = request.POST[key]
-        print key + ':' + value
-
-    recording_data = {
-        'recording_id': request.POST.get('RecordingSid'),
-        'audio_url': request.POST.get('RecordingUrl'),
-        'from': request.POST.get('From'),
-        'duration': request.POST.get('RecordingDuration'),
-    }
-    print recording_data
 
     voicemailbox.collection.add_voicemail(
         audio_url=request.POST.get('RecordingUrl'),

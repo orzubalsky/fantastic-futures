@@ -139,13 +139,24 @@ class Collection(Base):
 
         point = self.map_setting.random_point_in_map_bounds()
 
+        import urllib
+        from django.core.files import File
+        from django.core.files.temp import NamedTemporaryFile
+
         geosound = GeoSound(
             title=title,
-            sound=audio_url,
             location=location,
             slug=unique_slugify(GeoSound, self.title),
             point=point,
         )
+
+        file_temp = NamedTemporaryFile(delete=True)
+        file_temp.write(urllib.urlopen(audio_url).read())
+        file_temp.flush()
+
+        filename = "%s.mp3" % title
+
+        geosound.sound.save(filename, File(file_temp))
         geosound.save()
         geosound.collections.add(self)
 
