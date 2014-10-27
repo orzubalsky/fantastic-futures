@@ -125,7 +125,7 @@ class MapSetting(Base):
         polygon = self.initial_bounds
         point = self.get_random_point(polygon.extent)
         while not polygon.contains(point):
-            point = self.random_point(polygon.extent)
+            point = self.get_random_point(polygon.extent)
 
         return point
 
