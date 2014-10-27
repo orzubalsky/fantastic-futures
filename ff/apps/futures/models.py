@@ -169,7 +169,7 @@ class Collection(Base):
         geosound.save()
         geosound.collections.add(self)
 
-        call_command('collectstatic', interactive=False)
+        #call_command('collectstatic', interactive=False)
 
         file_temp.flush()
 
