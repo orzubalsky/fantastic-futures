@@ -3,6 +3,7 @@ from optparse import make_option
 from django.core.management.base import BaseCommand
 from django.core.files import File
 from django.core.files.temp import NamedTemporaryFile
+from django.core.cache import cache
 from futures.models import GeoSound
 
 
@@ -47,3 +48,5 @@ class Command(BaseCommand):
         geosound.sound.save(filename, File(file_temp))
         geosound.save()
         print geosound.sound
+
+        cache.clear()
