@@ -139,15 +139,9 @@ class Collection(Base):
     def add_voicemail(self, title, location, audio_url):
 
         point = self.map_setting.random_point_in_map_bounds()
-
         print point
 
-        import urllib
-        from django.core.files import File
-        from django.core.files.temp import NamedTemporaryFile
-
         slug = "%s-%s" % (title, random.randint(0, 999999))
-
         print slug
 
         geosound = GeoSound(
@@ -156,22 +150,28 @@ class Collection(Base):
             slug=slug,
             point=point,
         )
-
         print geosound
 
-        file_temp = NamedTemporaryFile(delete=True)
-        file_temp.write(urllib.urlopen(audio_url).read())
+        if audio_url is not None:
 
-        filename = "%s.mp3" % slug
-        print filename
+            import urllib
+            from django.core.files import File
+            from django.core.files.temp import NamedTemporaryFile
 
-        geosound.sound.save(filename, File(file_temp))
+            file_temp = NamedTemporaryFile(delete=True)
+            file_temp.write(urllib.urlopen(audio_url).read())
+
+            filename = "%s.mp3" % slug
+            print filename
+
+            geosound.sound.save(filename, File(file_temp))
+
+            call_command('collectstatic', interactive=False)
+
+            file_temp.flush()
+
         geosound.save()
         geosound.collections.add(self)
-
-        call_command('collectstatic', interactive=False)
-
-        file_temp.flush()
 
 
 class GeoSound(Base):
