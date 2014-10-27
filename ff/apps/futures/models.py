@@ -143,17 +143,19 @@ class Collection(Base):
         from django.core.files import File
         from django.core.files.temp import NamedTemporaryFile
 
+        slug = unique_slugify(GeoSound, self.title)
+
         geosound = GeoSound(
             title=title,
             location=location,
-            slug=unique_slugify(GeoSound, self.title),
+            slug=slug,
             point=point,
         )
 
         file_temp = NamedTemporaryFile(delete=True)
         file_temp.write(urllib.urlopen(audio_url).read())
 
-        filename = "%s.mp3" % geosound.slug
+        filename = "%s.mp3" % slug
 
         geosound.sound.save(filename, File(file_temp))
         geosound.save()
