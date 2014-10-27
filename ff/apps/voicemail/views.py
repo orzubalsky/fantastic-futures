@@ -29,10 +29,7 @@ def answer(request, slug=None, location=None):
     return r
 
 
-@twilio_view
 def handle_recording(request, slug=None, location=None):
-
-    r = Response()
 
     voicemailbox = get_object_or_404(VoicemailBox, slug=slug)
 
@@ -41,5 +38,3 @@ def handle_recording(request, slug=None, location=None):
         title='recorded in %s for %s' % (location, voicemailbox.target_location),
         location=voicemailbox.target_location,
     )
-
-    return r
