@@ -74,7 +74,7 @@ var geosounds = window.geosounds = new function()
     this.add = function(map_point)
     {
         // the geosound index
-        map_point.index = this.collection.length;
+        map_point.index = Object.keys(this.collection).length;
 
         // the geosound coordinates
         map_point.x_3d = pov.reverse_projection(map_point.x, map_point.z, ffinterface.width/2.0, 100.0);
