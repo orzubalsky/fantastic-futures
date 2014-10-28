@@ -160,6 +160,9 @@ class Collection(Base):
                 'save_file_from_url', url=audio_url, object_pk=geosound.pk)
             call_command('collectstatic', interactive=False)
 
+    def __unicode__(self):
+        return unicode(self.title)
+
 
 class GeoSound(Base):
     class Meta:
@@ -250,7 +253,7 @@ class GeoSound(Base):
         return self
 
     def __unicode__(self):
-        return self.title
+        return unicode(self.title)
 
     def get_tags(self):
         return ",".join([tag.name for tag in self.tags.all()])
@@ -270,7 +273,7 @@ class Connection(Base):
     sound_2_volume = FloatField(default=0.8)
 
     def __unicode__(self):
-        return "%s - %s" % (self.sound_1.title, self.sound_2.title)
+        return u"%s - %s" % (self.sound_1.title, self.sound_2.title)
 
 
 class Constellation(Base):

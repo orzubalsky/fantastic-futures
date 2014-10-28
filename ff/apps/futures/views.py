@@ -102,12 +102,14 @@ def performance(request):
 
 def sound_layer(request, slug=None):
 
-    # count added sounds, in order to determine how long to cache for later
-    sounds = GeoSound.objects.all().order_by('created')
-
     if slug is not None:
         collection = get_object_or_404(Collection, slug=slug)
-        sounds.filter(collections=collection)
+
+        # count added sounds, in order to determine how long to cache for later
+        sounds = GeoSound.objects.filter(collections__exact=collection).order_by('created')
+    else:
+        # count added sounds, in order to determine how long to cache for later
+        sounds = GeoSound.objects.all().order_by('created')
 
     just_added = 0
     for s in sounds:
