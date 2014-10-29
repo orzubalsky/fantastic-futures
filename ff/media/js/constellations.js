@@ -1,5 +1,5 @@
 ;(function($){
-	var constellations = window.constellations = new function() 
+var constellations = window.constellations = new function() 
 {
     this.collection = [];
     this.constellation = -1;                 // current active constellation
@@ -87,20 +87,25 @@
         this.constellation = id;
         this.previewOne(id, true, 12, function() 
         {                                
-            // after rotation/zoom is done, set loading_constellation to reflect the current state
-            constellations.loading_constellation = false;
-                                        
-            // set active state for all connected sounds
-            geosounds.setActiveStateForConnectedSounds();
-            
-            // reset addButton, so the loaded constellation could be altered and saved
-            constellations.addButton = false;
-            
-            // start the player
-            playhead.is_playing = true;
-            
-            pov.callback = '';
+            this.loadedConstellationCallback();
         });
+     };
+
+     this.loadedConstellationCallback = function()
+     {
+        // after rotation/zoom is done, set loading_constellation to reflect the current state
+        constellations.loading_constellation = false;
+                                    
+        // set active state for all connected sounds
+        geosounds.setActiveStateForConnectedSounds();
+        
+        // reset addButton, so the loaded constellation could be altered and saved
+        constellations.addButton = false;
+        
+        // start the player
+        playhead.is_playing = true;
+        
+        pov.callback = '';
      };
 };
 })(jQuery);

@@ -11,6 +11,7 @@ from django.utils import simplejson as json
 from django.utils.safestring import mark_safe
 from futures.ajax_uploader import AjaxFileUploader
 from datetime import *
+import random
 
 
 def index(request):
@@ -45,6 +46,48 @@ def index(request):
             'constellations_json': constellations_json,
             'map_setting': map_setting_json,
         }, context_instance=RequestContext(request))
+
+
+# def random_constellation(sounds_queryset):
+#     """
+#     """
+#     sounds_queryset = GeoSound.objects.filter(is_active=True)
+
+#     # random sounds
+#     max_sounds = 4
+#     if (sounds_queryset.count() < max_sounds):
+#         max_sounds = sounds_queryset.count()
+
+#     total_sounds = random.randint(2, max_sounds)
+
+#     sounds_queryset = sounds_queryset.order_by('?')[0:total_sounds]
+
+#     # make connections
+#     connections = []
+#     for i in range(sounds_queryset.count()-1):
+#         connection = Connection(
+#             sound_1=sounds_queryset[i],
+#             sound_1_volume=0.8,
+#             sound_2=sounds_queryset[i+1],
+#             sound_2_volume=0.8
+#         )
+#         connections.append(connection)
+
+#     constellation = Constellation(
+#         title='random constellation',
+#         created_by='the future',
+#         slug='random-constellation',
+#         connections=[],
+#         rotation_x=round(random.uniform(0.2, 0.8), 2),
+#         rotation_y=round(random.uniform(0.2, 0.8), 2),
+#         rotation_z=round(random.uniform(0.2, 0.8), 2),
+#         zoom=round(random.uniform(0.8, 1.0), 2),
+#     )
+#     return constellation
+
+
+def random_index(queryset):
+    return random.rantint(0, queryset.count()-1)
 
 
 def collection_list(request, slug):

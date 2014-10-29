@@ -354,6 +354,22 @@
 			point.x = convertedPoint.x * 150;
 			point.y = convertedPoint.y * 150;
 			return point;
-		};        
+		};
+
+        this.hide = function()
+        {
+            if ($("#map").css("opacity")>0)
+            {
+                $("#map").fadeOut(1000);
+                $("#interface").fadeIn(1000);
+            }
+            
+            $(".tran1").fadeOut(1000);
+            
+            $("#clickLayer").hide();
+            $('#feedback').animate({
+                right: -322
+            }, 1000);            
+        };      
 	};
 })(jQuery);	

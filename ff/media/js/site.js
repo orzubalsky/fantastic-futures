@@ -98,18 +98,7 @@ var site = window.site = new function() {
     	{
     	    e.preventDefault();
 			
-			if ($("#map").css("opacity")>0)
-			{
-				$("#map").fadeOut(1000);
-                $("#interface").fadeIn(1000);
-			}
-			
-			$(".tran1").fadeOut(1000);
-			
-			$("#clickLayer").hide();
-			$('#feedback').animate({
-    	        right: -322
-    	    }, 1000);
+            map.hide();
 		});
 		
     	$("#logo").click(function(e)

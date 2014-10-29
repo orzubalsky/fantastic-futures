@@ -8,6 +8,7 @@ var ffinterface = window.ffinterface = new function()
     this.stage;                     // kineticJS stage 
 	this.search_results = { 'Geosounds': [], 'Constellations': [] }; 
 	this.images;
+    this.play_radio = true;
 
     /* set up the interface and run it */
     this.init = function()
@@ -42,7 +43,16 @@ var ffinterface = window.ffinterface = new function()
             // after 100ms, rotate the interface randomly
             setTimeout(function() 
             {
-                pov.randomize();
+                if (self.play_radio)
+                {
+                    console.log(radio);
+                    radio.init();
+                }
+                else
+                {
+                    pov.randomize();    
+                }
+                
                 self.running = true;                    
             }, 100);
         });

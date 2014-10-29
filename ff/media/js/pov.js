@@ -106,10 +106,22 @@ var pov = window.pov = new function()
 
     this.randomize = function()
     {
+        var rotation = this.random_rotation();
+        
+        this.rotateTo(rotation.x, rotation.y, rotation.z ,rotation.zoom, 90, function() {});
+    };
+
+    this.random_rotation = function()
+    {
         var rotate_to = lib.random(90,30);
         var zoom_to = lib.random(150,50) / 100;
-        
-        this.rotateTo(this.deg_to_rad(rotate_to), this.deg_to_rad(rotate_to), this.deg_to_rad(0) ,zoom_to, 90, function() {});
+
+        return {
+            'x': this.deg_to_rad(rotate_to),
+            'y': this.deg_to_rad(rotate_to),
+            'z': this.deg_to_rad(0),
+            'zoom': zoom_to
+        }
     };
 
     this.rotateInteraction = function()
