@@ -54,7 +54,6 @@ var playhead = window.playhead = new function()
 
             // update the size of the kineticJS shape
             this.shape.setRadius(radius);
-            console.log(radius);
         }
     };
 

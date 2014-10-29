@@ -56,7 +56,7 @@ var pov = window.pov = new function()
         }
     };
 
-    this.resetRotation = function()
+    this.resetRotation = function(callback)
     {        
         this.rotateTo(0,0,0, 1.0, 25, function() 
         {
@@ -64,6 +64,8 @@ var pov = window.pov = new function()
             $('#map').css('opacity','1');
             $('#map').fadeIn(500);
             this.callback = '';
+
+            callback();
         });
     };
 

@@ -5,28 +5,51 @@ var radio = window.radio = new function()
     this.init = function()
     {        
         var self = this;
-
-        // setInterval(function()
-        // {
-        //     self.play_sequence();
-        // }, 1000);
-
+ 
         self.play_sequence();
     };
 
     this.play_sequence = function()
     {        
-        constellations.clear();
+        var self = this;
 
-        // 1. show map
-        // pov.resetRotation();
+        playhead.is_playing = false;
+        playhead.clear();
+        playhead.shape.setRadius(0);
 
-        // 2. hide map
-        // map.hide();
 
-        // console.log(geosounds.collection);
-        // console.log(geosounds.map_points);
+        // 1. wait 2 seconds before starting
+        setTimeout(function()
+        {
+            // 2. show map
+            pov.resetRotation(function()
+            {
+                constellations.clear();
 
+                setTimeout(function()
+                {
+                    // 3. hide map
+                    map.hide();
+
+                    setTimeout(function()
+                    {   
+                        // 4, play constellation
+                        self.random_constellation();
+                        self.rotate_and_play_constellation();
+
+                        setTimeout(function()
+                        {
+                            self.play_sequence();
+                        }, 10000);
+
+                    }, 500);
+                }, 4000);                
+            });
+        }, 2000);
+    };
+
+    this.random_constellation = function()
+    {
         // 3. create constellation
         // randomize sound indexes
         var max_sounds_in_constellation = (geosounds.map_points_count < 4) ? geosounds.map_points_count: 4;
@@ -66,7 +89,7 @@ var radio = window.radio = new function()
         }
 
 
-        // 3.2. create connections
+        // create connections
         for (var i=0; i<total_sounds_in_constellation-1;i++)
         {
             var s1 = sound_ids[i];
@@ -77,16 +100,18 @@ var radio = window.radio = new function()
 
             connections.add(s1, s2, false);
         }
+    };
 
-        // 3.2. rotate to orientation
+    this.rotate_and_play_constellation = function()
+    {
+        // rotate to orientation
         var rotation = pov.random_rotation();
 
         pov.rotateTo(rotation.x, rotation.y, rotation.z, rotation.zoom, 12, function() 
         {
-            // 4. play constellation for 3 minutes
+            // play constellation for 3 minutes
             constellations.loadedConstellationCallback();
-        });                
-         
+        });           
     };
 
 };
