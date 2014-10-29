@@ -27,6 +27,10 @@
     {% else %}
     var COLLECTION = null;    
     {% endif %}    
+    var DO_PLAY_RADIO = false;
+    {% if do_play_radio %}
+      DO_PLAY_RADIO = true;
+    {% endif %}        
   </script>
   {% include "analytics.html" %}
 </head>

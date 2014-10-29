@@ -8,7 +8,7 @@ var ffinterface = window.ffinterface = new function()
     this.stage;                     // kineticJS stage 
 	this.search_results = { 'Geosounds': [], 'Constellations': [] }; 
 	this.images;
-    this.play_radio = true;
+    this.play_radio = DO_PLAY_RADIO;
 
     /* set up the interface and run it */
     this.init = function()

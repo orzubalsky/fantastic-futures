@@ -40,7 +40,7 @@ var radio = window.radio = new function()
                         setTimeout(function()
                         {
                             self.play_sequence();
-                        }, 10000);
+                        }, 1 * 60 * 1000);
 
                     }, 500);
                 }, 4000);                
@@ -52,27 +52,35 @@ var radio = window.radio = new function()
     {
         // 3. create constellation
         // randomize sound indexes
+        console.log('geosounds.map_points_count', geosounds.map_points_count);
+
         var max_sounds_in_constellation = (geosounds.map_points_count < 4) ? geosounds.map_points_count: 4;
-        // console.log('max_sounds_in_constellation', max_sounds_in_constellation);
+        console.log('max_sounds_in_constellation', max_sounds_in_constellation);
         
         var total_sounds_in_constellation = lib.random(max_sounds_in_constellation-1, 2);
-        // console.log('total_sounds_in_constellation', total_sounds_in_constellation);
+        console.log('total_sounds_in_constellation', total_sounds_in_constellation);
 
         var sound_indexes = [];
 
-        for (var i=0; i<total_sounds_in_constellation; i++)
+        while(sound_indexes.length < total_sounds_in_constellation)
         {
-            // console.log('i', i);
-
             var random_index = lib.random(geosounds.map_points_count, 0);
-            // console.log('random_index', random_index);
-
-            //while (!random_index in sound_ids)
-            //{
-                sound_indexes.push(random_index);
-                // console.log(sound_indexes);
-            //}
+            var found=false;
+          
+            for(var i=0;i<sound_indexes.length;i++)
+            {
+                if(sound_indexes[i]==random_index)
+                {
+                    found=true;
+                    break;
+                }
+            }
+            if(!found)
+            {
+                sound_indexes[sound_indexes.length] = random_index;
+            }
         }
+        console.log(sound_indexes);
 
         // create an array with sound ids
         sound_ids = [];
@@ -93,10 +101,10 @@ var radio = window.radio = new function()
         for (var i=0; i<total_sounds_in_constellation-1;i++)
         {
             var s1 = sound_ids[i];
-            // console.log('s1', s1);
+            console.log('s1', s1);
 
             var s2 = sound_ids[i+1];
-            // console.log('s2', s2);
+            console.log('s2', s2);
 
             connections.add(s1, s2, false);
         }
