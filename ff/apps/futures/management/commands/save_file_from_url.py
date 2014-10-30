@@ -30,12 +30,12 @@ class Command(BaseCommand):
 
             geosound = GeoSound.objects.get(pk=kwargs.get('object_pk'))
 
-            url = kwargs.get('url')
+            url = "%s.mp3" % kwargs.get('url')
 
             file_temp = NamedTemporaryFile(delete=True)
             file_temp.write(urllib2.urlopen(url).read())
             file_temp.flush()
-            filename = "%s.mp3" % geosound.slug
+            filename = geosound.slug
 
         geosound.sound.save(filename, File(file_temp))
         geosound.save()
