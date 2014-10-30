@@ -139,10 +139,8 @@ class Collection(Base):
     def add_voicemail(self, title, location, audio_url):
 
         point = self.map_setting.random_point_in_map_bounds()
-        print point
 
         slug = "%s-%s" % (title, random.randint(0, 999999))
-        print slug
 
         geosound = GeoSound(
             title=title,
@@ -152,8 +150,6 @@ class Collection(Base):
         )
         geosound.save()
         geosound.collections.add(self)
-
-        print geosound
 
         if audio_url is not None:
             call_command(

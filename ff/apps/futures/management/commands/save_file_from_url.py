@@ -26,27 +26,18 @@ class Command(BaseCommand):
     def handle(self, *args, **kwargs):
         """
         """
-        print kwargs.get('url')
-        print kwargs.get('object_pk')
-
         if kwargs.get('url') and kwargs.get('object_pk'):
 
             geosound = GeoSound.objects.get(pk=kwargs.get('object_pk'))
-            print geosound.sound
 
             url = kwargs.get('url')
 
             file_temp = NamedTemporaryFile(delete=True)
             file_temp.write(urllib2.urlopen(url).read())
             file_temp.flush()
-
-            print file_temp
-
             filename = "%s.mp3" % geosound.slug
-            print filename
 
         geosound.sound.save(filename, File(file_temp))
         geosound.save()
-        print geosound.sound
 
         cache.clear()
