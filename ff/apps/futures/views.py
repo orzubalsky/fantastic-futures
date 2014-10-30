@@ -49,6 +49,8 @@ def index(request):
 
 def collection_list(request, slug):
 
+    cache.clear()
+
     collection = get_object_or_404(Collection, slug=slug)
 
     layers = {}
