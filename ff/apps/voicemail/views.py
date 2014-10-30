@@ -26,7 +26,7 @@ def answer(request, slug=None, location=None):
         }
     )
 
-    r.record(action=action, timeout=20, maxLength=360, playBeep=True)
+    r.record(action=action, timeout=240, maxLength=360, playBeep=True)
 
     return r
 
